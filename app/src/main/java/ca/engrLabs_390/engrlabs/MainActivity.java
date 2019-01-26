@@ -1,3 +1,4 @@
+// This is the barebone Project
 package ca.engrLabs_390.engrlabs;
 
 import android.support.v7.app.AppCompatActivity;

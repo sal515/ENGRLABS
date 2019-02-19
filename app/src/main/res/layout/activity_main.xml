@@ -12,6 +12,9 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:orientation="horizontal"
+        android:divider="#000000"
+        android:showDividers="middle"
+        android:dividerPadding="10dp"
         android:weightSum="100">
 
         <Button

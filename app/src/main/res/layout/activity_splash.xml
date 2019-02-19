@@ -20,4 +20,14 @@
         android:textColor="#000000"
         android:textSize="80sp"
         android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="300dp"
+        app:srcCompat="@drawable/baseline_desktop_windows_black_18dp"
+        tools:srcCompat="@drawable/old_personal_computer" />
 </RelativeLayout>

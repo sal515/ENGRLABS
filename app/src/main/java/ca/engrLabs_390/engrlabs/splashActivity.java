@@ -34,14 +34,14 @@ public class splashActivity extends AppCompatActivity {
         image.setAlpha(opacity);
 
         splashText = (TextView) findViewById(R.id.splashText);
-        RotateAnimation animation = new RotateAnimation(0, 1440,RotateAnimation.RELATIVE_TO_SELF, 0.9f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+        RotateAnimation animation = new RotateAnimation(0, 1080,RotateAnimation.RELATIVE_TO_SELF, 0.9f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         //RotateAnimation animation = new RotateAnimation(0,1440,0.5f,0.5f);
         animation.setDuration(800);
         animation.setFillAfter(true);
         splashText.startAnimation(animation);
         Canvas canvas;
 
-        new CountDownTimer(2000, 1) {
+        new CountDownTimer(1700, 1) {
             public void onTick(long millisUntilFinished) {
                 if (textSize < 80){
                     splashText.setTextSize(textSize+=2);
@@ -53,7 +53,7 @@ public class splashActivity extends AppCompatActivity {
             public void onFinish() {
                 startup = false;
                 //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                startActivity(new Intent(getApplicationContext(), canvasActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         }.start();
     }

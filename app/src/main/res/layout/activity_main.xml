@@ -7,14 +7,16 @@
     tools:context=".MainActivity" >
 
     <LinearLayout
+        android:id="@+id/bottomToolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal"
         android:divider="#000000"
-        android:showDividers="middle"
         android:dividerPadding="10dp"
+        android:elevation="0dp"
+        android:orientation="horizontal"
+        android:showDividers="middle"
         android:weightSum="100">
 
         <Button
@@ -23,6 +25,9 @@
             android:layout_height="match_parent"
             android:layout_weight="25"
             android:background="#00000000"
+            android:elevation="0dp"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="1"
             android:text="8"
             android:textSize="30sp" />
 
@@ -32,6 +37,9 @@
             android:layout_height="match_parent"
             android:layout_weight="25"
             android:background="#00000000"
+            android:elevation="0dp"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="1"
             android:text="9"
             android:textSize="30sp" />
 
@@ -41,6 +49,8 @@
             android:layout_height="match_parent"
             android:layout_weight="25"
             android:background="#00000000"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="1"
             android:text="10"
             android:textSize="30sp" />
 
@@ -67,11 +77,22 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="false"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="14dp"
+                android:layout_marginBottom="9dp"
+                android:shadowColor="@android:color/black"
+                android:shadowRadius="1"
                 app:srcCompat="@drawable/magnifying_glass"
                 tools:srcCompat="@drawable/magnifying_glass" />
         </RelativeLayout>
 
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/classList"
+        android:layout_width="match_parent"
+        android:layout_height="578dp"
+        android:layout_above="@+id/bottomToolbar"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="0dp"
+        tools:itemCount="20" />
 
 </RelativeLayout>

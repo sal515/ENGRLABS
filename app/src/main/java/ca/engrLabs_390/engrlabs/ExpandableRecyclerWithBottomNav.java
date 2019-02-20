@@ -25,7 +25,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     // Bottom Navigation Bar variable
     BottomNavigationView navigation;
 
-    // Why recyclerViewVar : https://guides.codepath.com/android/using-the-recyclerview
+    // Why and How recyclerView: https://guides.codepath.com/android/using-the-recyclerview
     // Using a RecyclerView has the following key steps:
     // 1. Add RecyclerView support library to the gradle build file
     // 2. Define a model class to use as the data source
@@ -66,22 +66,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    private void bindingAdapterToRecycleViewer(){
-        ArrayList<recyclerViewData> data;
-        // get the data into an arrayList
-        data = recyclerViewData.createContactsList(10);
-
-        // pass the arrayList to the recyclerViewVar adapter
-        dataAdapter_recyclerView recyclerViewAdapter = new dataAdapter_recyclerView(data);
-
-        // set the custom adapter to the recycler view with the data model passed in
-        recyclerViewVar.setAdapter(recyclerViewAdapter);
-
-        // set the layout manager position the data according to the xml
-        recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
-
-    }
-
     // Bottom Navigation bar OnItemSelectionListener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -108,6 +92,25 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             return false;
         }
     };
+
+
+    private void bindingAdapterToRecycleViewer(){
+        ArrayList<recyclerViewData> data;
+        // get the data into an arrayList
+        data = recyclerViewData.createContactsList(10);
+
+        // pass the arrayList to the recyclerViewVar adapter
+        dataAdapter_recyclerView recyclerViewAdapter = new dataAdapter_recyclerView(data);
+
+        // set the custom adapter to the recycler view with the data model passed in
+        recyclerViewVar.setAdapter(recyclerViewAdapter);
+
+        // set the layout manager position the data according to the xml
+        recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
+
+    }
+
+
 
 
 }

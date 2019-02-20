@@ -7,9 +7,15 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
+import ca.engrLabs_390.engrlabs.recyclerView.dataAdapter_recyclerView;
 
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
@@ -19,6 +25,17 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     // Bottom Navigation Bar variable
     BottomNavigationView navigation;
 
+    // Why recyclerViewVar : https://guides.codepath.com/android/using-the-recyclerview
+    // Using a RecyclerView has the following key steps:
+    // 1. Add RecyclerView support library to the gradle build file
+    // 2. Define a model class to use as the data source
+    // 3. Add a RecyclerView to your activity to display the items
+    // 4. Create a custom row layout XML file to visualize the item
+    // 5. Create a RecyclerView.Adapter and ViewHolder to render the item
+    // 6. Bind the adapter to the data source to populate the RecyclerView
+
+    // RecyclerView Reference variable
+    RecyclerView recyclerViewVar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +45,41 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"
         initializeAllReferences();
         setListeneres();
+
+        // calling the recycler binding function
+        bindingAdapterToRecycleViewer();
+
     }
 
     private void initializeAllReferences() {
         mTextSeletectionTextBox = (TextView) findViewById(R.id.message);
+
         // Initializing the bottom nav bar reference
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        // Initialize RecyclerView variable
+        recyclerViewVar = findViewById(R.id.expandingRecyclerView);
     }
-    private void setListeneres(){
+
+    private void setListeneres() {
         // Setting the bottom nav bar onItemSelection Listener
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    private void bindingAdapterToRecycleViewer(){
+        ArrayList<recyclerViewData> data;
+        // get the data into an arrayList
+        data = recyclerViewData.createContactsList(10);
+
+        // pass the arrayList to the recyclerViewVar adapter
+        dataAdapter_recyclerView recyclerViewAdapter = new dataAdapter_recyclerView(data);
+
+        // set the custom adapter to the recycler view with the data model passed in
+        recyclerViewVar.setAdapter(recyclerViewAdapter);
+
+        // set the layout manager position the data according to the xml
+        recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     // Bottom Navigation bar OnItemSelectionListener

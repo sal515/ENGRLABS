@@ -30,8 +30,10 @@ dependencies {
 
     // adding groupie dependency for Expandable RecyclerView
     implementation 'com.xwray:groupie:2.3.0'
+    // adding kotlin groupie
 
     // adding cardView dependency for Card Based Layout
     implementation 'androidx.cardview:cardview:1.0.0-beta01'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 
 }

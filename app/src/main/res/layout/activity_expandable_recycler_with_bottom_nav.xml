@@ -30,4 +30,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/navigation" />
 
+
+    <!-- For more bottom bar customization check the following link : -->
+    <!-- https://material.io/develop/android/components/bottom-navigation-view/ -->
+
+
 </android.support.constraint.ConstraintLayout>

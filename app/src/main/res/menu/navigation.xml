@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Supports up to 5 items not more -->
+
     <item
         android:id="@+id/navigation_floor_8"
         android:icon="@drawable/ic_floor_8_black_24dp"

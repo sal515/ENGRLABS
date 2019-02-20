@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ENGR LABS</string>
+    <string name="title_activity_expandable_recycler_with_bottom_nav">
+        ExpandableRecyclerWithBottomNav
+    </string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
 </resources>

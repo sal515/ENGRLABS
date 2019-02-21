@@ -12,6 +12,7 @@ import android.widget.Toast;
 // https://guides.codepath.com/android/using-the-recyclerview
 
 import java.util.List;
+import java.util.Queue;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -26,11 +27,14 @@ import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, dataAdapter_recyclerView.ViewHolder> {
 
     // member array to keep track of the state of the rows : https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
-    private SparseBooleanArray hiddenStateArray = new SparseBooleanArray();
-
+    private static SparseBooleanArray hiddenStateArray = new SparseBooleanArray();
 
 
     private Context context;
+    private ViewHolder viewHolder;
+    private Queue<Integer> openedQueue;
+    RecyclerView.LayoutManager layoutManager;
+
 //    // Use groups for hide and visible
 //    private ViewGroup headerGroup;
 //    private ViewGroup expandingGroup;
@@ -70,9 +74,6 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     // Used to cache the views within the item layout for fast access
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private boolean isHidden;
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
 
         private TextView textViewData1;
         private TextView textViewData2;
@@ -92,13 +93,6 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            // !!BAD!! Practice - Blocking recycling of the rows which solves my issue
-            // Found Visible lag with this hack
-//            this.setIsRecyclable(false);
-            // Found Visible lag with this hack
-            // !!BAD!! Practice - Blocking recycling of the rows which solves my issue
-
-
 
             // initialize the context member variable to the context of the activity
             context = itemView.getContext();
@@ -108,14 +102,13 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             textViewData3 = itemView.findViewById(R.id.rowTextView3);
             textViewData4 = itemView.findViewById(R.id.rowTextView4);
 
-            isHidden = true;
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
             expandingGroup = itemView.findViewById(R.id.expandingSection_constraintLayout);
             rowContainer = itemView.findViewById(R.id.recycler_row_constrainet_layout);
 
+            //Start with all the expandable sections closed
             expandingGroup.setVisibility(View.GONE);
-
 
             headerGroup.setOnClickListener(headerSectionListener);
             expandingGroup.setOnClickListener(expandingSectionListener);
@@ -123,54 +116,79 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
         }
 
-
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.headingSection_constraintLayout) {
-                Toast.makeText(context, "Found header section", Toast.LENGTH_SHORT).show();
-                if (isHidden) {
-                    expandingGroup.setVisibility(View.VISIBLE);
-                    isHidden = false;
-                }
-            }
-
-
+            // Just here coz it needs to be overridden due to inheritance; we are using the bottom two
         }
 
         private View.OnClickListener headerSectionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.headingSection_constraintLayout) {
-                    Toast.makeText(context, "Found header section", Toast.LENGTH_SHORT).show();
-                    if (isHidden) {
+                int adapterPosition = getAdapterPosition();
+                if (!(hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.headingSection_constraintLayout) {
+                    if (expandingGroup.getVisibility() == View.GONE) {
+                        hiddenStateArray.put(adapterPosition, true);
                         expandingGroup.setVisibility(View.VISIBLE);
-                        isHidden = false;
-                    } else {
+                    }
+
+                    Toast.makeText(context, "Visible", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    if (expandingGroup.getVisibility() == View.VISIBLE) {
+                        hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
-                        isHidden = true;
+
+                        Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+
                     }
                 }
             }
+
         };
 
         private View.OnClickListener expandingSectionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.expandingSection_constraintLayout) {
-                    if (!isHidden) {
+                int adapterPosition = getAdapterPosition();
+                if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_constraintLayout) {
+                    if (expandingGroup.getVisibility() == View.VISIBLE) {
+                        hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
-                        isHidden = true;
                     }
-                    Toast.makeText(context, "Found expanding section" + v.getId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    if (expandingGroup.getVisibility() == View.VISIBLE) {
+                        hiddenStateArray.put(adapterPosition, false);
+                        expandingGroup.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+
                 }
+
             }
         };
 
 
-        void bind(int position) {
-            if (!hiddenStateArray.get(position, false)) {
-
+        // implementation found from here : https://github.com/Oziomajnr/RecyclerViewCheckBoxExample2/blob/with-sparse-boolean-array/app/src/main/java/ogbe/ozioma/com/recyclerviewcheckboxexample/Adapter.java
+        void onRecycleHideExpandedSections(int position) {
+            if (hiddenStateArray.get(position, false)) {
+                if (expandingGroup.getVisibility() == View.VISIBLE) {
+                    hiddenStateArray.put(position, false);
+                    expandingGroup.setVisibility(View.GONE);
+                }
+                Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
             }
+
+
+            //            else {
+//                if (expandingGroup.getVisibility() == View.VISIBLE) {
+//                    hiddenStateArray.put(getAdapterPosition(), false);
+//                    expandingGroup.setVisibility(View.GONE);
+//                }
+//                Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+//
+//            }
         }
 
     }
@@ -193,7 +211,9 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         View dataOrRowView = inflater.inflate(R.layout.layout_custom_row_expandable_recycler, parent, false);
 
         // return the new holder instance
-        ViewHolder viewHolder = new ViewHolder(dataOrRowView);
+        viewHolder = new ViewHolder(dataOrRowView);
+
+
         return viewHolder;
     }
 
@@ -204,7 +224,9 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         // Get the data model based on position
         // recyclerViewData data = dataArr.get(position);
 
+        // getting the data at the position from the array
         recyclerViewData data = getItem(position);
+
 
         // set item views based on your views and data model
         TextView textView1 = viewHolder.textViewData1;
@@ -212,6 +234,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
         TextView textView2 = viewHolder.textViewData2;
         textView2.setText(data.getOnline());
+
 
     }
 
@@ -221,14 +244,37 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     //        return dataArr.size();
     // }
 
+
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        super.onViewRecycled(holder);
+        // it closes the recycled rows
+         holder.onRecycleHideExpandedSections(holder.getAdapterPosition());
+    }
+
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        // its works on the view that you are about to see - works well for my needs here
+        // holder.expandingGroup.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        // One time thing - once you see it its gone
+        // holder.expandingGroup.setVisibility(View.GONE);
+    }
+
     public void addMoreContacts(List<recyclerViewData> newdata) {
         dataArr.addAll(newdata);
         submitList(dataArr); // DiffUtil takes care of the check
     }
 
 
-
     //==================== ============================= =============================
+
 
 }
 

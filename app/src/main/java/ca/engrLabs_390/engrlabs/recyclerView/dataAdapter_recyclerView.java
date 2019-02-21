@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.R;
 import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
@@ -21,7 +23,39 @@ import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
-public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_recyclerView.ViewHolder> {
+public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, dataAdapter_recyclerView.ViewHolder> {
+
+
+    //==================== Fill Adapter with Data Model =============================
+
+
+    public dataAdapter_recyclerView() {
+        super(DIFF_CALLBACK);
+    }
+
+    // Store a member variable for the data
+    private List<recyclerViewData> dataArr;
+
+    // Pass in the contact array into the constructor
+    // public dataAdapter_recyclerView(ArrayList<recyclerViewData> dataArr) {
+    //    this.dataArr = dataArr;
+    // }
+
+    public static final DiffUtil.ItemCallback<recyclerViewData> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<recyclerViewData>() {
+                @Override
+                public boolean areItemsTheSame(recyclerViewData oldItem, recyclerViewData newItem) {
+                    return oldItem.getmId() == newItem.getmId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(recyclerViewData oldItem, recyclerViewData newItem) {
+                    return (oldItem.getName() == newItem.getName() && oldItem.getOnline() == newItem.getOnline());
+                }
+            };
+
+    //==================== ============================= =============================
+
 
     //==================== Define View Holder =============================
     // Provide a direct reference to each of the views within a data item
@@ -49,17 +83,6 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
 
     //================================================================
 
-    //==================== Fill Adapter with Data Model =============================
-
-    // Store a member variable for the data
-    private ArrayList<recyclerViewData> dataArr;
-
-    // Pass in the contact array into the constructor
-    public dataAdapter_recyclerView(ArrayList<recyclerViewData> dataArr) {
-        this.dataArr = dataArr;
-    }
-
-    //==================== ============================= =============================
 
     //==================== 3 Primary Methods of RecyclerView =============================
 
@@ -84,7 +107,9 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
     @Override
     public void onBindViewHolder(dataAdapter_recyclerView.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        recyclerViewData data = dataArr.get(position);
+        // recyclerViewData data = dataArr.get(position);
+
+        recyclerViewData data = getItem(position);
 
         // set item views based on your views and data model
         TextView textView1 = viewHolder.textViewData1;
@@ -96,9 +121,14 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
     }
 
     // getItemCount to determine the number of items
-    @Override
-    public int getItemCount() {
-        return dataArr.size();
+    // @Override
+    // public int getItemCount() {
+    //        return dataArr.size();
+    // }
+
+    public void addMoreContacts(List<recyclerViewData> newdata) {
+        dataArr.addAll(newdata);
+        submitList(dataArr); // DiffUtil takes care of the check
     }
 
     //==================== ============================= =============================

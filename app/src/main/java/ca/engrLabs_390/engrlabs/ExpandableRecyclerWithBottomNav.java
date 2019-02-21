@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
@@ -24,6 +26,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     // Bottom Navigation Bar variable
     BottomNavigationView navigation;
+
+    // Recycler Adapter variable declaration
+    dataAdapter_recyclerView recyclerViewAdapter;
 
     // Why and How recyclerView: https://guides.codepath.com/android/using-the-recyclerview
     // Using a RecyclerView has the following key steps:
@@ -75,6 +80,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextSeletectionTextBox.setText(R.string.title_home);
+                    recyclerViewAdapter.notifyDataSetChanged();
                     return true;
                 case R.id.navigation_dashboard:
                     mTextSeletectionTextBox.setText(R.string.title_dashboard);
@@ -95,18 +101,27 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
 
     private void bindingAdapterToRecycleViewer(){
-        ArrayList<recyclerViewData> data;
+        List<recyclerViewData> data;
         // get the data into an arrayList
-        data = recyclerViewData.createContactsList(10);
+        data = recyclerViewData.createContactsList(100);
 
         // pass the arrayList to the recyclerViewVar adapter
-        dataAdapter_recyclerView recyclerViewAdapter = new dataAdapter_recyclerView(data);
+        recyclerViewAdapter = new dataAdapter_recyclerView();
 
         // set the custom adapter to the recycler view with the data model passed in
         recyclerViewVar.setAdapter(recyclerViewAdapter);
 
         // set the layout manager position the data according to the xml
         recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
+
+        // setting the data for the adapter to the array created
+        recyclerViewAdapter.submitList(data);
+
+
+        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(1000);
+        itemAnimator.setRemoveDuration(1000);
+        recyclerViewVar.setItemAnimator(itemAnimator);
 
     }
 

@@ -60,7 +60,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     //==================== Define View Holder =============================
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements  {
 
         // Your holder should contain a member variable
         // for any view that will be set as you render a row

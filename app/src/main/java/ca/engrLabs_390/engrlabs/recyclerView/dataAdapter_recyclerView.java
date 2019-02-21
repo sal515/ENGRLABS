@@ -1,17 +1,18 @@
 package ca.engrLabs_390.engrlabs.recyclerView;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 // For more details of recycler or recycler adapter follow the link below:
 // https://guides.codepath.com/android/using-the-recyclerview
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -25,9 +26,20 @@ import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, dataAdapter_recyclerView.ViewHolder> {
 
+    // member array to keep track of the state of the rows : https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
+    private static SparseBooleanArray hiddenStateArray = new SparseBooleanArray();
+
+
+    private Context context;
+    private ViewHolder viewHolder;
+    private Queue<Integer> openedQueue;
+    RecyclerView.LayoutManager layoutManager;
+
+//    // Use groups for hide and visible
+//    private ViewGroup headerGroup;
+//    private ViewGroup expandingGroup;
 
     //==================== Fill Adapter with Data Model =============================
-
 
     public dataAdapter_recyclerView() {
         super(DIFF_CALLBACK);
@@ -60,13 +72,19 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     //==================== Define View Holder =============================
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
 
-        public TextView textViewData1;
-        public TextView textViewData2;
+        private TextView textViewData1;
+        private TextView textViewData2;
+        private TextView textViewData3;
+        private TextView textViewData4;
+
+        // Use groups for hide and visible
+        private ViewGroup headerGroup;
+        private ViewGroup expandingGroup;
+        private ViewGroup rowContainer;
+
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -75,9 +93,104 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             // to access the context from any ViewHolder instance.
             super(itemView);
 
+
+            // initialize the context member variable to the context of the activity
+            context = itemView.getContext();
+
             textViewData1 = itemView.findViewById(R.id.rowTextView1);
             textViewData2 = itemView.findViewById(R.id.rowTextView2);
+            textViewData3 = itemView.findViewById(R.id.rowTextView3);
+            textViewData4 = itemView.findViewById(R.id.rowTextView4);
+
+
+            headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
+            expandingGroup = itemView.findViewById(R.id.expandingSection_constraintLayout);
+            rowContainer = itemView.findViewById(R.id.recycler_row_constrainet_layout);
+
+            //Start with all the expandable sections closed
+            expandingGroup.setVisibility(View.GONE);
+
+            headerGroup.setOnClickListener(headerSectionListener);
+            expandingGroup.setOnClickListener(expandingSectionListener);
+//            rowContainer.setOnClickListener(this);
+
         }
+
+        @Override
+        public void onClick(View v) {
+            // Just here coz it needs to be overridden due to inheritance; we are using the bottom two
+        }
+
+        private View.OnClickListener headerSectionListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = getAdapterPosition();
+                if (!(hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.headingSection_constraintLayout) {
+                    if (expandingGroup.getVisibility() == View.GONE) {
+                        hiddenStateArray.put(adapterPosition, true);
+                        expandingGroup.setVisibility(View.VISIBLE);
+                    }
+
+                    Toast.makeText(context, "Visible", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    if (expandingGroup.getVisibility() == View.VISIBLE) {
+                        hiddenStateArray.put(adapterPosition, false);
+                        expandingGroup.setVisibility(View.GONE);
+
+                        Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+
+        };
+
+        private View.OnClickListener expandingSectionListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = getAdapterPosition();
+                if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_constraintLayout) {
+                    if (expandingGroup.getVisibility() == View.VISIBLE) {
+                        hiddenStateArray.put(adapterPosition, false);
+                        expandingGroup.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    if (expandingGroup.getVisibility() == View.VISIBLE) {
+                        hiddenStateArray.put(adapterPosition, false);
+                        expandingGroup.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        };
+
+
+        // implementation found from here : https://github.com/Oziomajnr/RecyclerViewCheckBoxExample2/blob/with-sparse-boolean-array/app/src/main/java/ogbe/ozioma/com/recyclerviewcheckboxexample/Adapter.java
+        void onRecycleHideExpandedSections(int position) {
+            if (hiddenStateArray.get(position, false)) {
+                if (expandingGroup.getVisibility() == View.VISIBLE) {
+                    hiddenStateArray.put(position, false);
+                    expandingGroup.setVisibility(View.GONE);
+                }
+                Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+            }
+
+
+            //            else {
+//                if (expandingGroup.getVisibility() == View.VISIBLE) {
+//                    hiddenStateArray.put(getAdapterPosition(), false);
+//                    expandingGroup.setVisibility(View.GONE);
+//                }
+//                Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+//
+//            }
+        }
+
     }
 
 
@@ -98,7 +211,9 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         View dataOrRowView = inflater.inflate(R.layout.layout_custom_row_expandable_recycler, parent, false);
 
         // return the new holder instance
-        ViewHolder viewHolder = new ViewHolder(dataOrRowView);
+        viewHolder = new ViewHolder(dataOrRowView);
+
+
         return viewHolder;
     }
 
@@ -109,7 +224,9 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         // Get the data model based on position
         // recyclerViewData data = dataArr.get(position);
 
+        // getting the data at the position from the array
         recyclerViewData data = getItem(position);
+
 
         // set item views based on your views and data model
         TextView textView1 = viewHolder.textViewData1;
@@ -117,6 +234,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
         TextView textView2 = viewHolder.textViewData2;
         textView2.setText(data.getOnline());
+
 
     }
 
@@ -126,12 +244,37 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     //        return dataArr.size();
     // }
 
+
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        super.onViewRecycled(holder);
+        // it closes the recycled rows
+         holder.onRecycleHideExpandedSections(holder.getAdapterPosition());
+    }
+
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        // its works on the view that you are about to see - works well for my needs here
+        // holder.expandingGroup.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        // One time thing - once you see it its gone
+        // holder.expandingGroup.setVisibility(View.GONE);
+    }
+
     public void addMoreContacts(List<recyclerViewData> newdata) {
         dataArr.addAll(newdata);
         submitList(dataArr); // DiffUtil takes care of the check
     }
 
+
     //==================== ============================= =============================
+
 
 }
 

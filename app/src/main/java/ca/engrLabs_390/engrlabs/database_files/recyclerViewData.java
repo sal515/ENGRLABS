@@ -37,7 +37,7 @@ public class recyclerViewData {
         List<recyclerViewData> data = new ArrayList<recyclerViewData>();
 
         for (int i = 1; i <= numContacts; i++) {
-            data.add(new recyclerViewData("Data " + ++lastContactId, "yes", i));
+            data.add(new recyclerViewData("Room " + ++lastContactId, "Available", i));
         }
 
         return data;

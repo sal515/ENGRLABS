@@ -14,10 +14,13 @@ import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 import ca.engrLabs_390.engrlabs.recyclerView.dataAdapter_recyclerView;
 
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
@@ -102,14 +105,21 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     private void bindingAdapterToRecycleViewer(){
         List<recyclerViewData> data;
+
+        Queue<Integer> openedQueue = new LinkedList<>();
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+
+
         // get the data into an arrayList
-        data = recyclerViewData.createContactsList(100);
+        data = recyclerViewData.createContactsList(40);
 
         // pass the arrayList to the recyclerViewVar adapter
         recyclerViewAdapter = new dataAdapter_recyclerView();
 
         // set the custom adapter to the recycler view with the data model passed in
         recyclerViewVar.setAdapter(recyclerViewAdapter);
+
 
         // set the layout manager position the data according to the xml
         recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
@@ -118,10 +128,12 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         recyclerViewAdapter.submitList(data);
 
 
-        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-        itemAnimator.setAddDuration(1000);
-        itemAnimator.setRemoveDuration(1000);
-        recyclerViewVar.setItemAnimator(itemAnimator);
+
+
+//        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+//        itemAnimator.setAddDuration(1000);
+//        itemAnimator.setRemoveDuration(1000);
+//        recyclerViewVar.setItemAnimator(itemAnimator);
 
     }
 

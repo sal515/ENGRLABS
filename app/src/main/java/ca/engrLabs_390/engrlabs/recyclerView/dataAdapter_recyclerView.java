@@ -1,7 +1,7 @@
 package ca.engrLabs_390.engrlabs.recyclerView;
 
 import android.content.Context;
-import android.net.sip.SipSession;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +25,10 @@ import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, dataAdapter_recyclerView.ViewHolder> {
 
-    // Member Variables
+    // member array to keep track of the state of the rows : https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
+    private SparseBooleanArray hiddenStateArray = new SparseBooleanArray();
+
+
 
     private Context context;
 //    // Use groups for hide and visible
@@ -89,6 +92,14 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             // to access the context from any ViewHolder instance.
             super(itemView);
 
+            // !!BAD!! Practice - Blocking recycling of the rows which solves my issue
+            // Found Visible lag with this hack
+//            this.setIsRecyclable(false);
+            // Found Visible lag with this hack
+            // !!BAD!! Practice - Blocking recycling of the rows which solves my issue
+
+
+
             // initialize the context member variable to the context of the activity
             context = itemView.getContext();
 
@@ -134,8 +145,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                     if (isHidden) {
                         expandingGroup.setVisibility(View.VISIBLE);
                         isHidden = false;
-                    }
-                    else{
+                    } else {
                         expandingGroup.setVisibility(View.GONE);
                         isHidden = true;
                     }
@@ -155,6 +165,13 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                 }
             }
         };
+
+
+        void bind(int position) {
+            if (!hiddenStateArray.get(position, false)) {
+
+            }
+        }
 
     }
 
@@ -208,6 +225,8 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         dataArr.addAll(newdata);
         submitList(dataArr); // DiffUtil takes care of the check
     }
+
+
 
     //==================== ============================= =============================
 

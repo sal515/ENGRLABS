@@ -35,10 +35,6 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
 
-//    // Use groups for hide and visible
-//    private ViewGroup headerGroup;
-//    private ViewGroup expandingGroup;
-
     //==================== Fill Adapter with Data Model =============================
 
     public dataAdapter_recyclerView() {
@@ -47,11 +43,6 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
     // Store a member variable for the data
     private List<recyclerViewData> dataArr;
-
-    // Pass in the contact array into the constructor
-    // public dataAdapter_recyclerView(ArrayList<recyclerViewData> dataArr) {
-    //    this.dataArr = dataArr;
-    // }
 
     public static final DiffUtil.ItemCallback<recyclerViewData> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<recyclerViewData>() {
@@ -180,15 +171,6 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                 Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
             }
 
-
-            //            else {
-//                if (expandingGroup.getVisibility() == View.VISIBLE) {
-//                    hiddenStateArray.put(getAdapterPosition(), false);
-//                    expandingGroup.setVisibility(View.GONE);
-//                }
-//                Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
-//
-//            }
         }
 
     }
@@ -238,18 +220,11 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
     }
 
-    // getItemCount to determine the number of items
-    // @Override
-    // public int getItemCount() {
-    //        return dataArr.size();
-    // }
-
-
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
         super.onViewRecycled(holder);
         // it closes the recycled rows
-         holder.onRecycleHideExpandedSections(holder.getAdapterPosition());
+        holder.onRecycleHideExpandedSections(holder.getAdapterPosition());
     }
 
 

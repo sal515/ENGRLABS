@@ -3,6 +3,7 @@ package ca.engrLabs_390.engrlabs.database_files;
 import java.util.ArrayList;
 import java.util.List;
 
+// This file is used to simulate the data for the RecyclerView
 // just a static class with static functions to get the data as necessary
 public class recyclerViewData {
     private String mName;

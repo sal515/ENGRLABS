@@ -130,6 +130,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
 
 
+        // Need to work on the animators -- not working currently
 //        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
 //        itemAnimator.setAddDuration(1000);
 //        itemAnimator.setRemoveDuration(1000);

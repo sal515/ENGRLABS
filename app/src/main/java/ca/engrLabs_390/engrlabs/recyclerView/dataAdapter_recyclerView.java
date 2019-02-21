@@ -1,17 +1,16 @@
 package ca.engrLabs_390.engrlabs.recyclerView;
 
 import android.content.Context;
+import android.net.sip.SipSession;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 // For more details of recycler or recycler adapter follow the link below:
 // https://guides.codepath.com/android/using-the-recyclerview
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -29,7 +28,9 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     // Member Variables
 
     private Context context;
-
+//    // Use groups for hide and visible
+//    private ViewGroup headerGroup;
+//    private ViewGroup expandingGroup;
 
     //==================== Fill Adapter with Data Model =============================
 
@@ -75,6 +76,11 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         private TextView textViewData3;
         private TextView textViewData4;
 
+        // Use groups for hide and visible
+        private ViewGroup headerGroup;
+        private ViewGroup expandingGroup;
+        private ViewGroup rowContainer;
+
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -93,19 +99,63 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
             isHidden = true;
 
-            textViewData1.setOnClickListener(this);
+            headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
+            expandingGroup = itemView.findViewById(R.id.expandingSection_constraintLayout);
+            rowContainer = itemView.findViewById(R.id.recycler_row_constrainet_layout);
+
+            expandingGroup.setVisibility(View.GONE);
+
+
+            headerGroup.setOnClickListener(headerSectionListener);
+            expandingGroup.setOnClickListener(expandingSectionListener);
+//            rowContainer.setOnClickListener(this);
 
         }
 
 
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.rowTextView1) {
-
+            if (v.getId() == R.id.headingSection_constraintLayout) {
+                Toast.makeText(context, "Found header section", Toast.LENGTH_SHORT).show();
+                if (isHidden) {
+                    expandingGroup.setVisibility(View.VISIBLE);
+                    isHidden = false;
+                }
             }
 
-            Toast.makeText(context, Integer.toString(v.getId()), Toast.LENGTH_SHORT).show();
+
         }
+
+        private View.OnClickListener headerSectionListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.headingSection_constraintLayout) {
+                    Toast.makeText(context, "Found header section", Toast.LENGTH_SHORT).show();
+                    if (isHidden) {
+                        expandingGroup.setVisibility(View.VISIBLE);
+                        isHidden = false;
+                    }
+                    else{
+                        expandingGroup.setVisibility(View.GONE);
+                        isHidden = true;
+                    }
+                }
+            }
+        };
+
+        private View.OnClickListener expandingSectionListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.expandingSection_constraintLayout) {
+                    if (!isHidden) {
+                        expandingGroup.setVisibility(View.GONE);
+                        isHidden = true;
+                    }
+                    Toast.makeText(context, "Found expanding section" + v.getId(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
     }
 
 

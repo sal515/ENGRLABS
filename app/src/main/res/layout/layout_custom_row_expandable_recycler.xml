@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recycler_row_constrained_layout"
+    android:id="@+id/recycler_row_constrainet_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:visibility="visible"
@@ -16,6 +16,9 @@
         android:layout_marginTop="2dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="2dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp">
 
@@ -42,7 +45,7 @@
                     android:layout_marginStart="64dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="TextView"
+                    android:text="Room"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -52,20 +55,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
-                    android:text="TextView"
+                    android:text="Avalibiliy:Plot/ICON"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.657"
+                    app:layout_constraintHorizontal_bias="0.663"
                     app:layout_constraintStart_toEndOf="@+id/rowTextView1"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="32dp"
+                    android:layout_height="21dp"
+                    app:layout_constraintBottom_toTopOf="@+id/rowTextView2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.643"
+                    app:layout_constraintStart_toEndOf="@+id/rowTextView1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:srcCompat="@drawable/ic_lock_open_black_24dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/expandingSection_constraintLayout"
                 android:layout_width="350dp"
-                android:layout_height="45dp"
+                android:layout_height="161dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="visible"
@@ -77,31 +92,111 @@
                 app:layout_constraintVertical_bias="0.09">
 
                 <TextView
+                    android:id="@+id/rowTextView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:text="Upcomming Class:"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintEnd_toStartOf="@+id/rowTextView10"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowTextView7" />
+
+                <TextView
+                    android:id="@+id/rowTextView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:text="#"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/rowTextView8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/rowTextView5"
+                    app:layout_constraintTop_toBottomOf="@+id/rowTextView4" />
+
+                <TextView
+                    android:id="@+id/rowTextView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:text="#"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/rowTextView10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/rowTextView7"
+                    app:layout_constraintTop_toBottomOf="@+id/rowTextView6" />
+
+                <TextView
+                    android:id="@+id/rowTextView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:text="Time"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/rowTextView9"
+                    app:layout_constraintTop_toBottomOf="@+id/rowTextView8" />
+
+                <TextView
                     android:id="@+id/rowTextView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="88dp"
-                    android:text="TextView"
+                    android:text="Temp"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/rowTextView5"
                     app:layout_constraintEnd_toStartOf="@+id/rowTextView4"
-                    app:layout_constraintHorizontal_bias="0.767"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.509" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/rowTextView4"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="64dp"
-                    android:text="TextView"
+                    android:layout_height="16dp"
+                    android:text="Celsius"
                     android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/rowTextView6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/rowTextView3"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/rowTextView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:text="# of Students"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/rowTextView7"
+                    app:layout_constraintEnd_toStartOf="@+id/rowTextView6"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowTextView3" />
+
+                <TextView
+                    android:id="@+id/rowTextView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:text="Room Capacity"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/rowTextView9"
+                    app:layout_constraintEnd_toStartOf="@+id/rowTextView8"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowTextView5" />
+
+                <Button
+                    android:id="@+id/button3"
+                    android:layout_width="206dp"
+                    android:layout_height="47dp"
+                    android:text="List of Softwares"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.509" />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowTextView9" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

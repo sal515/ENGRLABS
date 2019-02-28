@@ -155,7 +155,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     else{
                         materialSearchBar.setVisibility(View.VISIBLE);
                     }
-                    return true;
+                    return false;
                 case R.id.navigation_floor_8:
                     mTextSeletectionTextBox.setText(R.string.Floor_8);
                     return true;

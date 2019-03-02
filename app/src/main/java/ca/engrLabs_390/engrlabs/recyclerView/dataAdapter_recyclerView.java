@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.engrLabs_390.engrlabs.LabInfo;
 import ca.engrLabs_390.engrlabs.R;
 import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 
@@ -34,11 +35,13 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     private ViewHolder viewHolder;
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
+    List<LabInfo> info;
 
     //==================== Fill Adapter with Data Model =============================
 
-    public dataAdapter_recyclerView() {
+    public dataAdapter_recyclerView(List<LabInfo> inputInfo) {
         super(DIFF_CALLBACK);
+        this.info = inputInfo;
     }
 
     // Store a member variable for the data
@@ -66,15 +69,19 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-        private TextView textViewData1;
-        private TextView textViewData2;
-        private TextView textViewData3;
-        private TextView textViewData4;
+        private TextView roomNumberEdit;
+        private TextView availabilityEdit;
+        private TextView temperatureTitle;
+        private TextView temperatureEdit;
 
         // Use groups for hide and visible
         private ViewGroup headerGroup;
         private ViewGroup expandingGroup;
         private ViewGroup rowContainer;
+
+        private TextView numOfStudentsRoomEdit;
+        private TextView roomCapacityEdit;
+        private TextView upcomingClassEdit;
 
 
         // We also create a constructor that accepts the entire item row
@@ -88,15 +95,19 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             // initialize the context member variable to the context of the activity
             context = itemView.getContext();
 
-            textViewData1 = itemView.findViewById(R.id.rowTextView1);
-            textViewData2 = itemView.findViewById(R.id.rowTextView2);
-            textViewData3 = itemView.findViewById(R.id.rowTextView3);
-            textViewData4 = itemView.findViewById(R.id.rowTextView4);
+            roomNumberEdit = itemView.findViewById(R.id.roomNumberEdit);
+            availabilityEdit = itemView.findViewById(R.id.availabilityEdit);
+            temperatureTitle = itemView.findViewById(R.id.temperatureTitle);
+            temperatureEdit = itemView.findViewById(R.id.temperatureEdit);
 
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
             expandingGroup = itemView.findViewById(R.id.expandingSection_constraintLayout);
             rowContainer = itemView.findViewById(R.id.recycler_row_constrainet_layout);
+
+            numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
+            roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
+            upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
 
             //Start with all the expandable sections closed
             expandingGroup.setVisibility(View.GONE);
@@ -211,12 +222,28 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
 
         // set item views based on your views and data model
-        TextView textView1 = viewHolder.textViewData1;
-        textView1.setText(data.getName());
+        TextView textView1 = viewHolder.roomNumberEdit;
+        textView1.setText("Room: " + Integer.toString(info.get(position).floor) + Integer.toString(info.get(position).room));
+        //textView1.setText(data.getName());
 
-        TextView textView2 = viewHolder.textViewData2;
+        TextView textView2 = viewHolder.availabilityEdit;
         textView2.setText(data.getOnline());
 
+
+        TextView textView3 = viewHolder.numOfStudentsRoomEdit;
+        textView3.setText(Integer.toString(info.get(position).numberOfStudents));
+
+        TextView textView4 = viewHolder.roomCapacityEdit;
+        textView4.setText(Integer.toString(info.get(position).roomCapacity));
+
+        TextView textView5 = viewHolder.upcomingClassEdit;
+        textView5.setText(Integer.toString(info.get(position).upcomingClass));
+
+        /*(
+        numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
+        roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
+        upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
+        */
 
     }
 

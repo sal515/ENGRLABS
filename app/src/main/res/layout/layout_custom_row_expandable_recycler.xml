@@ -36,7 +36,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/rowTextView1"
+                    android:id="@+id/roomNumberEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
@@ -49,7 +49,7 @@
                     app:layout_constraintVertical_bias="1.0"/>
 
                 <TextView
-                    android:id="@+id/rowTextView2"
+                    android:id="@+id/availabilityEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -58,17 +58,17 @@
                     android:text="@string/availability_plot_icon"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.663"
-                    app:layout_constraintStart_toEndOf="@+id/rowTextView1"
+                    app:layout_constraintStart_toEndOf="@+id/roomNumberEdit"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="32dp"
                     android:layout_height="21dp"
-                    app:layout_constraintBottom_toTopOf="@+id/rowTextView2"
+                    app:layout_constraintBottom_toTopOf="@+id/availabilityEdit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.643"
-                    app:layout_constraintStart_toEndOf="@+id/rowTextView1"
+                    app:layout_constraintStart_toEndOf="@+id/roomNumberEdit"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0"
                     app:srcCompat="@drawable/ic_lock_open_black_24dp" />
@@ -90,104 +90,104 @@
                 app:layout_constraintVertical_bias="0.09">
 
                 <TextView
-                    android:id="@+id/rowTextView9"
+                    android:id="@+id/upcomingClassTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:layout_marginStart="36dp"
                     android:text="@string/upcoming_class"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintBottom_toTopOf="@+id/listOfSoftwareButton"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTextView7" />
+                    app:layout_constraintTop_toBottomOf="@+id/roomCapacityTitle" />
 
                 <TextView
-                    android:id="@+id/rowTextView6"
+                    android:id="@+id/numOfStudentsEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:text="@string/number_of_students"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/rowTextView8"
+                    app:layout_constraintBottom_toTopOf="@+id/roomCapacityEdit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/rowTextView5"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTextView4" />
+                    app:layout_constraintStart_toEndOf="@+id/numOfStudentsTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/temperatureEdit" />
 
                 <TextView
-                    android:id="@+id/rowTextView8"
+                    android:id="@+id/roomCapacityEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:text="@string/room_capacity_num"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/rowTextView10"
+                    app:layout_constraintBottom_toTopOf="@+id/upcomingClassEdit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.476"
-                    app:layout_constraintStart_toEndOf="@+id/rowTextView7"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTextView6" />
+                    app:layout_constraintStart_toEndOf="@+id/roomCapacityTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/numOfStudentsEdit" />
 
                 <TextView
-                    android:id="@+id/rowTextView10"
+                    android:id="@+id/upcomingClassEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="96dp"
                     android:text="@string/time"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/button3"
+                    app:layout_constraintBottom_toTopOf="@+id/listOfSoftwareButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.95"
-                    app:layout_constraintStart_toEndOf="@+id/rowTextView9"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTextView8" />
+                    app:layout_constraintStart_toEndOf="@+id/upcomingClassTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/roomCapacityEdit" />
 
                 <TextView
-                    android:id="@+id/rowTextView3"
+                    android:id="@+id/temperatureTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
                     android:layout_marginEnd="149dp"
                     android:text="@string/temperature"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/rowTextView5"
-                    app:layout_constraintEnd_toStartOf="@+id/rowTextView4"
+                    app:layout_constraintBottom_toTopOf="@+id/numOfStudentsTitle"
+                    app:layout_constraintEnd_toStartOf="@+id/temperatureEdit"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.23000002"
                     app:layout_constraintVertical_chainStyle="spread_inside" />
 
                 <TextView
-                    android:id="@+id/rowTextView4"
+                    android:id="@+id/temperatureEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginStart="100dp"
                     android:text="@string/celsius"
                     android:visibility="visible"
-                    app:layout_constraintStart_toEndOf="@+id/rowTextView3"
+                    app:layout_constraintStart_toEndOf="@+id/temperatureTitle"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/rowTextView5"
+                    android:id="@+id/numOfStudentsTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginStart="36dp"
                     android:text="@string/number_of_students"
                     android:textAlignment="viewStart"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/rowTextView7"
+                    app:layout_constraintBottom_toTopOf="@+id/roomCapacityTitle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTextView3" />
+                    app:layout_constraintTop_toBottomOf="@+id/temperatureTitle" />
 
                 <TextView
-                    android:id="@+id/rowTextView7"
+                    android:id="@+id/roomCapacityTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="16dp"
                     android:layout_marginStart="36dp"
                     android:text="@string/room_capacity"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/rowTextView9"
+                    app:layout_constraintBottom_toTopOf="@+id/upcomingClassTitle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTextView5" />
+                    app:layout_constraintTop_toBottomOf="@+id/numOfStudentsTitle" />
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/listOfSoftwareButton"
                     android:layout_width="206dp"
                     android:layout_height="47dp"
                     android:text="@string/list_of_softwares"
@@ -195,7 +195,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTextView9" />
+                    app:layout_constraintTop_toBottomOf="@+id/upcomingClassTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

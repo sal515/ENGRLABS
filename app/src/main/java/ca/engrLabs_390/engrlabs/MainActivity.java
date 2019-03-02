@@ -8,17 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
     // Declare reference variables
     Button loginBtn;
     Button homepageBtn;
+    ImageView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
 
         initializeReferences();
         initializeListeners();
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     void initializeReferences() {
         loginBtn = findViewById(R.id.loginBtn);
         homepageBtn = findViewById(R.id.homepageBtn);
+        logo = findViewById(R.id.logo);
+        logo.setImageResource(R.drawable.ic_menu_animated);
     }
 
     void initializeListeners() {

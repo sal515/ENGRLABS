@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Vector;
 
+import static com.mancj.materialsearchbar.MaterialSearchBar.BUTTON_BACK;
+
 public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     // Testing TextBox for Bottom Navigation Bar
@@ -118,7 +120,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                 //When user type their text, the suggestion list will update
                 updateSuggestList(materialSearchBar.getText());
                 materialSearchBar.updateLastSuggestions(suggestList);
-                filterSelection = materialSearchBar.getText();
             }
 
             @Override
@@ -129,22 +130,32 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
+
                 //When search bar is closed
                 //Restore original adapter
-                /*
-                if (!enabled)
-                    recyclerViewVar.setAdapter(recyclerViewAdapter);
-                    */
+                if (!enabled){
+                    materialSearchBar.setText("");
+                    filterSelection = "";
+                    bindingAdapterToRecycleViewer();
+                }
             }
 
             @Override
             public void onSearchConfirmed(CharSequence text) {
-                //filterSelection = materialSearchBar.getText();
+                filterSelection = materialSearchBar.getText();
+                bindingAdapterToRecycleViewer();
             }
 
             @Override
             public void onButtonClicked(int buttonCode) {
-
+                //***************doesn't work, don't know why
+                /*
+                if (buttonCode == BUTTON_BACK){
+                    materialSearchBar.setText(null);
+                    filterSelection = null;
+                    bindingAdapterToRecycleViewer();
+                }
+                */
             }
         });
     }
@@ -309,8 +320,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         }
         return returnClassList;
     }
-
-
 
 
 }

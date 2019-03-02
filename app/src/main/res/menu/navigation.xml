@@ -4,10 +4,6 @@
     <!-- Supports up to 5 items not more -->
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
-    <item
         android:id="@+id/navigation_floor_8"
         android:icon="@drawable/ic_floor_8_black_24dp"
         android:title="@string/Floor_8" />
@@ -17,6 +13,10 @@
         android:icon="@drawable/ic_floor_9_black_24dp"
         android:title="@string/Floor_9" />
 
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home" />
     <item
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/ic_dashboard_black_24dp"

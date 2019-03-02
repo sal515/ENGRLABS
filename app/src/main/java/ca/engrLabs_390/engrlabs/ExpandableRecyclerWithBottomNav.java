@@ -87,6 +87,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
         // Initializing the bottom nav bar reference
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_home);
 
         // Initialize RecyclerView variable
         recyclerViewVar = findViewById(R.id.expandingRecyclerView);

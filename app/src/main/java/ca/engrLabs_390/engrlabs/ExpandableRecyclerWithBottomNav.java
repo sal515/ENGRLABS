@@ -1,5 +1,6 @@
 package ca.engrLabs_390.engrlabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -201,8 +202,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     floorMode = 0;
                     bindingAdapterToRecycleViewer();
                     return true;
-                case R.id.navigation_dashboard:
-                    mTextSeletectionTextBox.setText(R.string.title_dashboard);
+                case R.id.navigation_profile:
+                    mTextSeletectionTextBox.setText(R.string.title_profile);
+                    Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                    startActivity(intent);
                     return true;
                 case R.id.navigation_notifications:
                     if(materialSearchBar.getVisibility() == View.VISIBLE)

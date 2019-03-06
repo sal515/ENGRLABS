@@ -3,6 +3,7 @@ package ca.engrLabs_390.engrlabs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
@@ -87,7 +88,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                //attemptLogin();
+                Intent intent = new Intent(getApplicationContext(), CourseSectionSelection.class);
+                startActivity(intent);
             }
         });
 

@@ -9,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -47,8 +49,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     List<String> suggestList = new ArrayList<>();
     List<String> fullSuggestList = new ArrayList<>();   //will contain the entire list of softwares
 
-    //Search Bar
+    //Search Card
     MaterialSearchBar materialSearchBar;
+    CardView searchCard;
+    ImageView sortButton;
 
     // DummyClassData
     List<LabInfo> dummyClassList = new ArrayList<>();
@@ -105,11 +109,13 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         dummyClassList.add(new LabInfo(10,52,22,18,30,25));
         dummyClassList.add(new LabInfo(10,16,26,14,30,45));
 
-        //Initialize Search Bar and SUggestion List
+        //Initialize Search Bar and Suggestion List
         populateSuggestionList();
+        sortButton = findViewById(R.id.sortImage);
+        searchCard = findViewById(R.id.searchCard);
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         materialSearchBar.setHint("Enter your software or 'all'");
-        materialSearchBar.setVisibility(View.GONE);
+        searchCard.setVisibility(View.GONE);
         materialSearchBar.setLastSuggestions(suggestList);
         materialSearchBar.setCardViewElevation(10);
         materialSearchBar.addTextChangeListener(new TextWatcher() {
@@ -160,6 +166,13 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                 */
             }
         });
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                LabSortFragment dialog = new LabSortFragment();
+                dialog.show(getSupportFragmentManager(), "Insert Course");
+                // your code here
+            }
+        });
     }
 
     private void updateSuggestList(String inputString){
@@ -208,12 +221,12 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     startActivity(intent);
                     return true;
                 case R.id.navigation_notifications:
-                    if(materialSearchBar.getVisibility() == View.VISIBLE)
+                    if(searchCard.getVisibility() == View.VISIBLE)
                     {
-                        materialSearchBar.setVisibility(View.GONE);
+                        searchCard.setVisibility(View.GONE);
                     }
                     else{
-                        materialSearchBar.setVisibility(View.VISIBLE);
+                        searchCard.setVisibility(View.VISIBLE);
                     }
                     return false;
                 case R.id.navigation_floor_8:

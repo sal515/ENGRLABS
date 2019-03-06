@@ -2,6 +2,7 @@ package ca.engrLabs_390.engrlabs;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
@@ -56,7 +57,7 @@ public class CourseSectionSelection extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_course:
-                DialogFragment dialog = new DialogFragment();
+                ChooseCourseDialogFragment dialog = new ChooseCourseDialogFragment();
                 dialog.show(getSupportFragmentManager(), "Insert Course");
                 return true;
 

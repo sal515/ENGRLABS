@@ -1,19 +1,16 @@
 package ca.engrLabs_390.engrlabs;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class ChooseCourseDialogFragment extends DialogFragment {
+public class LabSortFragment extends DialogFragment {
 
     private static final String TAG = "InsertCourseDialog";
     EditText titleEditText;
@@ -25,7 +22,7 @@ public class ChooseCourseDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflator, @Nullable ViewGroup container, Bundle savedInstanceState){
-        View view = inflator.inflate(R.layout.fragment_insert_course_dialog, container, false);
+        View view = inflator.inflate(R.layout.fragment_lab_sort, container, false);
 
         /*
         titleEditText = view.findViewById(R.id.titleEditText);

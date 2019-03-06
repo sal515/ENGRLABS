@@ -1,74 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="50dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="50dp">
 
-    <EditText
-        android:id="@+id/titleEditText"
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true">
+
+    </SearchView>
+
+    <ListView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -_"
-        android:inputType="textPersonName" />
+        android:layout_above="@+id/saveButton"
+        android:layout_below="@+id/search" />
 
-    <EditText
-        android:id="@+id/gradeEditText"
+    <Button
+        android:id="@+id/saveButton"
+        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="78dp"
-        android:ems="10"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -_"
-        android:inputType="textPersonName" />
-
-
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/titleEditText"
-        android:layout_centerHorizontal="true"
-        android:text="Course Title" />
-
-    <TextView
-        android:id="@+id/gradeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/gradeEditText"
-        android:layout_centerHorizontal="true"
-        android:text="Course Code" />
-
-    <RelativeLayout
-        android:layout_width="266dp"
-        android:layout_height="59dp"
-        android:layout_alignTop="@+id/gradeText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp">
-
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/button_bg_rounded_corners"
-            android:text="Cancel" />
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="72dp"
-            android:layout_marginRight="72dp"
-            android:background="@drawable/button_bg_rounded_corners"
-            android:text="Save" />
-    </RelativeLayout>
-
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
+        android:text="saveButton" />
 </RelativeLayout>

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/image1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -28,12 +28,12 @@
                 app:srcCompat="@drawable/ic_radio_button_checked_black_24dp" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="TextView" />
+                android:text="None" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -42,7 +42,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/image2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -52,12 +52,12 @@
                 tools:srcCompat="@drawable/ic_radio_button_unchecked_black_24dp" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="TextView" />
+                android:text="Temperature Ascending" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -66,7 +66,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/image3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -76,12 +76,12 @@
                 tools:srcCompat="@drawable/ic_radio_button_unchecked_black_24dp" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="TextView" />
+                android:text="Temperature Descending" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/image4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -100,23 +100,49 @@
                 tools:srcCompat="@drawable/ic_radio_button_unchecked_black_24dp" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/text4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="TextView" />
+                android:text="Number Of Spots Ascending" />
+
         </RelativeLayout>
 
-    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/sort5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/saveButton"
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_weight="1"
-        android:text="saveButton" />
+            <ImageButton
+                android:id="@+id/image5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@android:color/transparent"
+                app:srcCompat="@drawable/ic_radio_button_checked_black_24dp"
+                tools:srcCompat="@drawable/ic_radio_button_unchecked_black_24dp" />
+
+            <TextView
+                android:id="@+id/text5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="Number Of Spots Descending" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/saveButton"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:text="saveButton" />
+
+    </LinearLayout>
 
 </RelativeLayout>

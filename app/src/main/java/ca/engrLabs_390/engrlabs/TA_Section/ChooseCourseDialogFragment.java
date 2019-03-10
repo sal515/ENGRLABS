@@ -1,4 +1,4 @@
-package ca.engrLabs_390.engrlabs;
+package ca.engrLabs_390.engrlabs.TA_Section;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import ca.engrLabs_390.engrlabs.R;
 
 public class ChooseCourseDialogFragment extends DialogFragment {
 

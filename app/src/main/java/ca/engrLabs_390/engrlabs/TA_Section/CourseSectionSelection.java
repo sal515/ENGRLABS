@@ -1,9 +1,10 @@
-package ca.engrLabs_390.engrlabs;
+package ca.engrLabs_390.engrlabs.TA_Section;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
+import ca.engrLabs_390.engrlabs.R;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-
-import java.util.List;
 
 public class CourseSectionSelection extends AppCompatActivity {
 

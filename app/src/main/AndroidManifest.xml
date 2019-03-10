@@ -17,11 +17,11 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".CourseSectionSelection"
+            android:name=".TA_Section.CourseSectionSelection"
             android:parentActivityName=".ExpandableRecyclerWithBottomNav"
             />
         <activity
-            android:name=".LoginActivity"
+            android:name=".TA_Section.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".ExpandableRecyclerWithBottomNav"

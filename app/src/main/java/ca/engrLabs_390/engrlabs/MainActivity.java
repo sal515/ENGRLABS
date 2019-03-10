@@ -4,6 +4,7 @@ package ca.engrLabs_390.engrlabs;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
+import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 
 import android.os.Bundle;
 import android.view.View;

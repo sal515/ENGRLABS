@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.Parser.Classroom;
 import ca.engrLabs_390.engrlabs.Parser.Parser;
 import ca.engrLabs_390.engrlabs.Parser.Software;
+import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 import ca.engrLabs_390.engrlabs.recyclerView.dataAdapter_recyclerView;
 
@@ -226,7 +227,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     return true;
                 case R.id.navigation_profile:
                     mTextSeletectionTextBox.setText(R.string.title_profile);
-                    Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                     return true;
                 case R.id.navigation_notifications:

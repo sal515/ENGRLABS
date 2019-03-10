@@ -102,7 +102,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
-            expandingGroup = itemView.findViewById(R.id.expandingSection_constraintLayout);
+            expandingGroup = itemView.findViewById(R.id.expandingSection_relativeLayout);
             rowContainer = itemView.findViewById(R.id.recycler_row_constrainet_layout);
 
             numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
@@ -152,7 +152,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             @Override
             public void onClick(View v) {
                 int adapterPosition = getAdapterPosition();
-                if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_constraintLayout) {
+                if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_relativeLayout) {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
@@ -238,6 +238,9 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
         TextView textView5 = viewHolder.upcomingClassEdit;
         textView5.setText(Integer.toString(info.get(position).upcomingClass));
+
+        TextView textView6 = viewHolder.temperatureEdit;
+        textView6.setText(Integer.toString(info.get(position).temperature) + "°C");
 
         /*(
         numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);

@@ -43,8 +43,8 @@
                     android:layout_alignParentRight="false"
                     android:layout_centerInParent="false"
                     android:layout_centerVertical="false"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginRight="10dp"
                     android:visibility="visible"
                     app:srcCompat="@drawable/ic_format_list_bulleted_black_24dp" />

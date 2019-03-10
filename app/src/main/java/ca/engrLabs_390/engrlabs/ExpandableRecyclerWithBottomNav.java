@@ -107,7 +107,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         // Initialize RecyclerView variable
         recyclerViewVar = findViewById(R.id.expandingRecyclerView);
 
-        //Dummy CLass List
+        //Dummy Class List
         floorMode = 0;
         filterSelection = "";
         dummyClassList.add(new LabInfo(8,21,25,10,30,40));
@@ -119,7 +119,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         dummyClassList.add(new LabInfo(10,52,22,18,30,25));
         dummyClassList.add(new LabInfo(10,16,26,14,30,45));
 
-        //Initialize Search Bar and Suggestion List
+        //Initialize Search Card and Suggestion List
         populateSuggestionList();
         sortButton = findViewById(R.id.sortImage);
         searchCard = findViewById(R.id.searchCard);
@@ -144,28 +144,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
-    }
-
-    private void updateSuggestList(String inputString){
-        suggestList.clear();
-        if (inputString.length()<3) {    //if no text was entered, no substring searching needed
-            materialSearchBar.clearSuggestions();
-            return;
-        }
-        suggestList.addAll(fullSuggestList);    //all should print out everything as a suggestion
-        if (inputString.toLowerCase().equals("all")){
-            return;
-        }
-        for(int i =0;i<suggestList.size();i++){ //iterate through suggestList
-            String temp = suggestList.get(i).toLowerCase();
-            if (!temp.contains(inputString.toLowerCase())){
-                suggestList.remove(i);   //remove anything that isn't a match
-                i--;
-            }
-        }
-        if (suggestList.size() == 0){   //if nothings left that means there were no matches, just output No Matches
-            suggestList.add("No Results");
-        }
     }
 
     private void setListeneres() {
@@ -321,6 +299,28 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             if (duplicate == false){    //if software wasnt already added, add it
                 fullSuggestList.add(temp);
             }
+        }
+    }
+
+    private void updateSuggestList(String inputString){
+        suggestList.clear();
+        if (inputString.length()<3) {    //if no text was entered, no substring searching needed
+            materialSearchBar.clearSuggestions();
+            return;
+        }
+        suggestList.addAll(fullSuggestList);    //all should print out everything as a suggestion
+        if (inputString.toLowerCase().equals("all")){
+            return;
+        }
+        for(int i =0;i<suggestList.size();i++){ //iterate through suggestList
+            String temp = suggestList.get(i).toLowerCase();
+            if (!temp.contains(inputString.toLowerCase())){
+                suggestList.remove(i);   //remove anything that isn't a match
+                i--;
+            }
+        }
+        if (suggestList.size() == 0){   //if nothings left that means there were no matches, just output No Matches
+            suggestList.add("No Results");
         }
     }
 

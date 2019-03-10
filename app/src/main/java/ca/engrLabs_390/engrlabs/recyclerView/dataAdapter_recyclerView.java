@@ -133,14 +133,14 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                         expandingGroup.setVisibility(View.VISIBLE);
                     }
 
-                    Toast.makeText(context, "Visible", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Visible", Toast.LENGTH_SHORT).show();
 
                 } else {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
 
-                        Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -157,14 +157,14 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                         hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
                     }
-                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                 } else {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
                     }
-                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                 }
 

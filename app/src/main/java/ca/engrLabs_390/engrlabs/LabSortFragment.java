@@ -76,7 +76,8 @@ public class LabSortFragment extends DialogFragment {
         });
 
         saveButton = view.findViewById(R.id.saveButton);
-        images.get(4).setOnClickListener(new View.OnClickListener() {
+        saveButton.setText("Filter");
+        saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getDialog().dismiss();
                 // your code here

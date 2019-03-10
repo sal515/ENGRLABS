@@ -30,7 +30,7 @@ public class CourseSectionSelection extends AppCompatActivity {
 
         //format ActionBar and Content
         ActionBar ab = getSupportActionBar();   //get the Action Bar object
-        ab.setTitle("My Grades");   //set the title
+        ab.setTitle("TA Course Selection");   //set the title
         ab.setDisplayHomeAsUpEnabled(true); //enable UP button, parent is declared in the manifest
 
         //Sign out Button

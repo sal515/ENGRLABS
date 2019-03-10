@@ -87,6 +87,15 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        floorMode = 0;
+        filterSelection = "";
+        navigation.setSelectedItemId(R.id.navigation_home);
+        bindingAdapterToRecycleViewer();
+    }
+
     private void initializeAllReferences() {
         mTextSeletectionTextBox = (TextView) findViewById(R.id.message);
 

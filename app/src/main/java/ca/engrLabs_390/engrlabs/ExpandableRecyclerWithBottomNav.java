@@ -144,45 +144,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
-
-        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
-            @Override
-            public void onSearchStateChanged(boolean enabled) {
-
-                //When search bar is closed
-                //Restore original adapter
-                if (!enabled){
-                    materialSearchBar.setText("");
-                    filterSelection = "";
-                    bindingAdapterToRecycleViewer();
-                }
-            }
-
-            @Override
-            public void onSearchConfirmed(CharSequence text) {
-                filterSelection = materialSearchBar.getText();
-                bindingAdapterToRecycleViewer();
-            }
-
-            @Override
-            public void onButtonClicked(int buttonCode) {
-                //***************doesn't work, don't know why
-                /*
-                if (buttonCode == BUTTON_BACK){
-                    materialSearchBar.setText(null);
-                    filterSelection = null;
-                    bindingAdapterToRecycleViewer();
-                }
-                */
-            }
-        });
-        sortButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                LabSortFragment dialog = new LabSortFragment();
-                dialog.show(getSupportFragmentManager(), "Insert Course");
-                // your code here
-            }
-        });
     }
 
     private void updateSuggestList(String inputString){
@@ -210,7 +171,52 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     private void setListeneres() {
         // Setting the bottom nav bar onItemSelection Listener
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        sortButton.setOnClickListener(sortButtonListener);
+        materialSearchBar.setOnSearchActionListener(materialOnSearchListener);
     }
+
+
+    private MaterialSearchBar.OnSearchActionListener materialOnSearchListener
+            = new MaterialSearchBar.OnSearchActionListener() {
+        @Override
+        public void onSearchStateChanged(boolean enabled) {
+
+            //When search bar is closed
+            //Restore original adapter
+            if (!enabled){
+                materialSearchBar.setText("");
+                filterSelection = "";
+                bindingAdapterToRecycleViewer();
+            }
+        }
+
+        @Override
+        public void onSearchConfirmed(CharSequence text) {
+            filterSelection = materialSearchBar.getText();
+            bindingAdapterToRecycleViewer();
+        }
+
+        @Override
+        public void onButtonClicked(int buttonCode) {
+            //***************doesn't work, don't know why
+                /*
+                if (buttonCode == BUTTON_BACK){
+                    materialSearchBar.setText(null);
+                    filterSelection = null;
+                    bindingAdapterToRecycleViewer();
+                }
+                */
+        }
+    };
+
+    private ImageView.OnClickListener sortButtonListener
+            = new View.OnClickListener() {
+        public void onClick(View v) {
+            LabSortFragment dialog = new LabSortFragment();
+            dialog.show(getSupportFragmentManager(), "Insert Course");
+            // your code here
+        }
+    };
 
     // Bottom Navigation bar OnItemSelectionListener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

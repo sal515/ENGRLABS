@@ -27,15 +27,16 @@
             android:name=".ExpandableRecyclerWithBottomNav"
             android:label="@string/title_activity_expandable_recycler_with_bottom_nav"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.MaterialComponents.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"></activity>
     </application>
 
 </manifest>

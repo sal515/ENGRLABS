@@ -5,6 +5,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +84,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         private TextView roomCapacityEdit;
         private TextView upcomingClassEdit;
 
+        private ImageView favourite;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -100,6 +102,11 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             temperatureTitle = itemView.findViewById(R.id.temperatureTitle);
             temperatureEdit = itemView.findViewById(R.id.temperatureEdit);
 
+            favourite = itemView.findViewById(R.id.favouriteStar);
+            favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
+            /*
+
+            */
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
             expandingGroup = itemView.findViewById(R.id.expandingSection_relativeLayout);
@@ -114,7 +121,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
             headerGroup.setOnClickListener(headerSectionListener);
             expandingGroup.setOnClickListener(expandingSectionListener);
-//            rowContainer.setOnClickListener(this);
+            favourite.setOnClickListener(favouriteStarListener);
 
         }
 
@@ -171,6 +178,13 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             }
         };
 
+        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                info.get(getAdapterPosition()).favourite = !info.get(getAdapterPosition()).favourite;
+                notifyItemChanged(getAdapterPosition());
+            }
+        };
 
         // implementation found from here : https://github.com/Oziomajnr/RecyclerViewCheckBoxExample2/blob/with-sparse-boolean-array/app/src/main/java/ogbe/ozioma/com/recyclerviewcheckboxexample/Adapter.java
         void onRecycleHideExpandedSections(int position) {
@@ -179,7 +193,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                     hiddenStateArray.put(position, false);
                     expandingGroup.setVisibility(View.GONE);
                 }
-                Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -242,11 +256,24 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         TextView textView6 = viewHolder.temperatureEdit;
         textView6.setText(Integer.toString(info.get(position).temperature) + "°C");
 
+
+        /*favourite.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             favourite.setImageResource(R.drawable.ic_star_black_24dp);
+                                         }
+                                     });*/
         /*(
         numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
         roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
         upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
         */
+
+        if (info.get(position).favourite == false) {
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
+        } else {
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_black_24dp);
+        }
 
     }
 

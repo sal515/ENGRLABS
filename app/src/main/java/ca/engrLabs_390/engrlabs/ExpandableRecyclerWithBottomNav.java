@@ -10,7 +10,6 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.Parser.Classroom;
@@ -32,8 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Vector;
-
-import static com.mancj.materialsearchbar.MaterialSearchBar.BUTTON_BACK;
 
 public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
@@ -209,10 +206,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     floorMode = 0;
                     bindingAdapterToRecycleViewer();
                     return true;
-                case R.id.navigation_profile:
-                    mTextSeletectionTextBox.setText(R.string.title_profile);
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
+                case R.id.navigation_favourites:
+                    mTextSeletectionTextBox.setText(R.string.title_favourites);
+                    //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    //startActivity(intent);
                     return true;
                 case R.id.navigation_notifications:
                     if(searchCard.getVisibility() == View.VISIBLE)

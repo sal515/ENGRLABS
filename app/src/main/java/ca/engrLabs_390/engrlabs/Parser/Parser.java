@@ -4,18 +4,125 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class Parser {
     private static final String TAG = "test";
     private Context context;
 
-    public Vector<Software> parse(Context current){
+    public Vector<Software> parse(Context current) {
         context = current;
         //FileReader input = new FileReader("partially_parsed.txt");
         //BufferedReader bufRead = new BufferedReader(input);
+
+
+        AssetManager assetManager1 = current.getResources().getAssets();
+        Vector<Software> software1 = new Vector<>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("input.txt")));
+            String line;
+            String inputString = "";
+
+                //Concatenate the entire file
+            while ((line = reader.readLine()) != null) {
+                inputString += line;
+            }
+
+            System.out.println(inputString);
+            System.out.println("step 1-----------------------------------------------");
+
+
+
+
+            int limitter = 0;
+            List<String> tr = new ArrayList<>();
+            inputString = inputString.substring(inputString.indexOf("<tr>",0));
+            while ((inputString.indexOf("<tr>",0) != -1)|| limitter >200)
+            {
+                int beginning = (inputString.indexOf("<tr>",0));
+                int end = (inputString.indexOf("</tr>",0)) + 5;
+                System.out.println("start: " + beginning + "   end: " + end);
+                if (end<beginning){
+                    break;
+                }
+                String temp = inputString.substring(beginning,end-beginning);
+                limitter++;
+                inputString = inputString.substring(end);
+                tr.add(temp);
+            }
+
+            for (int i = 0;i<tr.size();i++) {
+                //std::cout << info[i].software << "\n" << info[i].classes << "\n";
+                System.out.println(tr.get(i));
+            }
+            System.out.println("step 2-----------------------------------------------");
+
+
+
+
+
+            List<SoftwareTemp> info = new ArrayList<>();
+            for(int j = 0;j<tr.size();j++) {
+                SoftwareTemp temp = new SoftwareTemp();
+                for (int i = 0; i < 2; i++) {
+                    int beginning = (tr.get(j).indexOf("<td>", 0));
+                    int end = (tr.get(j).indexOf("</td>", 0));
+
+                    if (i == 0) {
+                        temp.software = tr.get(j).substring(beginning+4,end-beginning+4);
+                        System.out.println("start: " + beginning + "   end: " + end);
+                        System.out.println("software: " + temp.software);
+                        String tempString = tr.get(j).substring(end+1);
+                        tr.set(j,tempString);
+                    }
+                    else {
+                        temp.classes = tr.get(j).substring(beginning+4,end-beginning+4);
+                        System.out.println("class: " + temp.classes);
+                    }
+
+                }
+                info.add(temp);
+            }
+
+            System.out.println("step 3-----------------------------------------------");
+
+
+            for (int i = 0;i<info.size();i++)
+            {
+                if(info.get(i).classes.equals("")){
+                    System.out.println("deleted: " + info.get(i).software);
+                    info.remove(i);
+                    i--;
+                }
+            }
+
+            System.out.println("step 4-----------------------------------------------");
+
+            String output = "";
+
+            for (int i = 0;i<info.size();i++) {
+                //std::cout << info[i].software << "\n" << info[i].classes << "\n";
+                output += info.get(i).software + "\n" + info.get(i).classes + "\n";
+            }
+            System.out.println(output);
+
+
+            System.out.println("step 5-----------------------------------------------\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-\n/\n-");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+
+
+
+
 
         AssetManager assetManager = current.getResources().getAssets();
         Vector<Software> software = new Vector<>();

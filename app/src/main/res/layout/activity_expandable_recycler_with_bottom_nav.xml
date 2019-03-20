@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/selectableItemBackground"
+    android:backgroundTint="@color/yabzBlue"
     android:clickable="true"
     android:focusable="true"
     android:gravity="start"
@@ -21,7 +22,9 @@
     <RelativeLayout
         android:id="@+id/container_ConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/yabzBlue"
+        android:backgroundTint="@color/yabzBlue">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/searchCard"
@@ -79,6 +82,7 @@
             android:layout_marginBottom="2dp"
             android:text="@string/title_home"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView

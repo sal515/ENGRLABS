@@ -15,13 +15,15 @@
         android:layout_marginTop="2dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="2dp"
+        android:background="@color/yabzGrey"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/yabzGrey">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/headingSection_constraintLayout"
@@ -42,6 +44,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginBottom="10dp"
                     android:text="@string/room"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -56,6 +59,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/availability_plot_icon"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.563"
                     app:layout_constraintStart_toEndOf="@+id/roomNumberEdit"
@@ -89,115 +93,135 @@
                 app:layout_constraintTop_toBottomOf="@+id/headingSection_constraintLayout"
                 app:layout_constraintVertical_bias="0.09">
 
-                <LinearLayout
-                    android:id="@+id/Titles"
-                    android:layout_width="180dp"
+                <RelativeLayout
+                    android:id="@+id/expandingInformationBlock"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="65dp">
+                    android:layout_alignParentTop="true">
 
-                    <TextView
-                        android:id="@+id/temperatureTitle"
-                        android:layout_width="95dp"
+                    <LinearLayout
+                        android:id="@+id/Titles"
+                        android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/temperature"
-                        android:visibility="visible" />
+                        android:orientation="vertical"
+                        android:paddingLeft="65dp">
 
-                    <TextView
-                        android:id="@+id/numOfStudentsTitle"
+                        <TextView
+                            android:id="@+id/temperatureTitle"
+                            android:layout_width="95dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/temperature"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/numOfStudentsTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/expandingAttributeSpacing"
+                            android:text="@string/number_of_students"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/roomCapacityTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/expandingAttributeSpacing"
+                            android:text="@string/room_capacity"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/upcomingClassTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/expandingAttributeSpacing"
+                            android:text="@string/upcoming_class"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/Values"
+                        android:layout_width="164dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="30dp"
+                        android:orientation="vertical"
+                        android:paddingRight="20dp">
+
+                        <TextView
+                            android:id="@+id/temperatureEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/celsius"
+                            android:textAlignment="center"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/numOfStudentsEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/expandingAttributeSpacing"
+                            android:text="@string/number_of_students"
+                            android:textAlignment="center"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/roomCapacityEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/expandingAttributeSpacing"
+                            android:text="@string/room_capacity_num"
+                            android:textAlignment="center"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/upcomingClassEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/expandingAttributeSpacing"
+                            android:text="@string/time"
+                            android:textAlignment="center"
+                            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/expandingButtonBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true">
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/expandingAttributeSpacing"
-                        android:text="@string/number_of_students"
-                        android:textAlignment="viewStart"
-                        android:visibility="visible" />
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/roomCapacityTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/expandingAttributeSpacing"
-                        android:text="@string/room_capacity"
-                        android:visibility="visible" />
+                        <Button
+                            android:id="@+id/listOfSoftwareButton"
+                            android:layout_width="206dp"
+                            android:layout_height="47dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@drawable/software_list_button"
+                            android:text="@string/list_of_softwares" />
 
-                    <TextView
-                        android:id="@+id/upcomingClassTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/expandingAttributeSpacing"
-                        android:text="@string/upcoming_class"
-                        android:visibility="visible" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/Values"
-                    android:layout_width="164dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="30dp"
-                    android:layout_toRightOf="@+id/Titles"
-                    android:orientation="vertical"
-                    android:paddingRight="20dp">
-
-                    <TextView
-                        android:id="@+id/temperatureEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/celsius"
-                        android:textAlignment="center"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/numOfStudentsEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/expandingAttributeSpacing"
-                        android:text="@string/number_of_students"
-                        android:textAlignment="center"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/roomCapacityEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/expandingAttributeSpacing"
-                        android:text="@string/room_capacity_num"
-                        android:textAlignment="center"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/upcomingClassEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/expandingAttributeSpacing"
-                        android:text="@string/time"
-                        android:textAlignment="center"
-                        android:visibility="visible" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/listOfSoftwareButton"
-                        android:layout_width="206dp"
-                        android:layout_height="47dp"
-                        android:layout_marginRight="20dp"
-                        android:text="@string/list_of_softwares" />
-
-                    <ImageView
-                        android:id="@+id/favouriteStar"
-                        android:layout_width="35dp"
-                        android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_star_black_24dp" />
-                </LinearLayout>
+                        <ImageView
+                            android:id="@+id/favouriteStar"
+                            android:layout_width="35dp"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/ic_star_black_24dp" />
+                    </LinearLayout>
+                </RelativeLayout>
 
             </RelativeLayout>
 

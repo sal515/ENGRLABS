@@ -78,6 +78,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         // Use groups for hide and visible
         private ViewGroup headerGroup;
         private ViewGroup expandingGroup;
+        private ViewGroup expandingInfo;
         private ViewGroup rowContainer;
 
         private TextView numOfStudentsRoomEdit;
@@ -106,21 +107,19 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
             /*
 
-            */
+             */
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
             expandingGroup = itemView.findViewById(R.id.expandingSection_relativeLayout);
+            expandingInfo = itemView.findViewById(R.id.expandingInformationBlock);
             rowContainer = itemView.findViewById(R.id.recycler_row_constrainet_layout);
 
             numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
             roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
 
-            //Start with all the expandable sections closed
-            expandingGroup.setVisibility(View.GONE);
-
             headerGroup.setOnClickListener(headerSectionListener);
-            expandingGroup.setOnClickListener(expandingSectionListener);
+            expandingInfo.setOnClickListener(expandingSectionListener);
             favourite.setOnClickListener(favouriteStarListener);
 
         }
@@ -158,7 +157,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         private View.OnClickListener expandingSectionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int adapterPosition = getAdapterPosition();
+              int adapterPosition = getAdapterPosition();
                 if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_relativeLayout) {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateArray.put(adapterPosition, false);
@@ -181,8 +180,16 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                info.get(getAdapterPosition()).favourite = !info.get(getAdapterPosition()).favourite;
-                notifyItemChanged(getAdapterPosition());
+                if (info.get(getAdapterPosition()).favourite == false) {
+                    info.get(getAdapterPosition()).favourite = true;
+                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    info.get(getAdapterPosition()).favourite = false;
+                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
+                }
+                notifyDataSetChanged();
+                //notifyItemChanged(getAdapterPosition());
             }
         };
 
@@ -256,25 +263,20 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         TextView textView6 = viewHolder.temperatureEdit;
         textView6.setText(Integer.toString(info.get(position).temperature) + "°C");
 
-
-        /*favourite.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
-                                             favourite.setImageResource(R.drawable.ic_star_black_24dp);
-                                         }
-                                     });*/
-        /*(
-        numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
-        roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
-        upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
-        */
+        if (hiddenStateArray.get(position) == false) {
+            //Start with all the expandable sections closed
+            viewHolder.expandingGroup.setVisibility(View.GONE);
+        }
+        else
+        {
+            viewHolder.expandingGroup.setVisibility(View.VISIBLE);
+        }
 
         if (info.get(position).favourite == false) {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
         } else {
-            viewHolder.favourite.setImageResource(R.drawable.ic_star_black_24dp);
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_yellow_24dp);
         }
-
     }
 
     @Override

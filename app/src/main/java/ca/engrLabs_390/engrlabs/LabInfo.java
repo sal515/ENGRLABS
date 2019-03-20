@@ -8,6 +8,7 @@ public class LabInfo {
     public int roomCapacity;
     public int upcomingClass;
     public boolean favourite;
+    public boolean clicked;
 
     public LabInfo(int floor, int room, int temperature, int numberOfStudents, int roomCapacity, int upcomingClass) {
         this.floor = floor;
@@ -17,6 +18,7 @@ public class LabInfo {
         this.roomCapacity = roomCapacity;
         this.upcomingClass = upcomingClass;
         this.favourite = false;
+        this.clicked = false;
     }
 
     public LabInfo() {

@@ -39,6 +39,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     // Bottom Navigation Bar variable
     BottomNavigationView navigation;
+    boolean favouritesOnly = false;
 
     // Recycler Adapter variable declaration
     dataAdapter_recyclerView recyclerViewAdapter;
@@ -199,6 +200,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            favouritesOnly = false;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     mTextSeletectionTextBox.setText(R.string.title_home);
@@ -208,6 +210,8 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     return true;
                 case R.id.navigation_favourites:
                     mTextSeletectionTextBox.setText(R.string.title_favourites);
+                    favouritesOnly = true;
+                    bindingAdapterToRecycleViewer();
                     //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     //startActivity(intent);
                     return true;
@@ -323,11 +327,21 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     private List<LabInfo> filterClasses(List<LabInfo> input){
 
-        if (filterSelection.equals("") || filterSelection == null){
-            return input;
-        }
-
         List<LabInfo> returnClassList = new ArrayList<>();
+
+        if (filterSelection.equals("") || filterSelection == null){
+            for(int i=0;i<input.size();i++){
+                if (favouritesOnly == true){
+                    if (input.get(i).favourite == true){
+                        returnClassList.add(input.get(i));
+                    }
+                }
+                else{
+                    returnClassList.add(input.get(i));
+                }
+            }
+            return returnClassList;
+        }
 
         List<Classroom> classes = new ArrayList<>();
         for(int i=0;i<soft.size();i++){
@@ -345,7 +359,14 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                 }
             }
             if (valid == true){
-                returnClassList.add(input.get(i));
+                if (favouritesOnly == true){
+                    if (input.get(i).favourite == true){
+                        returnClassList.add(input.get(i));
+                    }
+                }
+                else{
+                    returnClassList.add(input.get(i));
+                }
             }
         }
         return returnClassList;

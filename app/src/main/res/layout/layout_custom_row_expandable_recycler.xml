@@ -213,6 +213,7 @@
                             android:layout_height="47dp"
                             android:layout_marginRight="20dp"
                             android:background="@drawable/software_list_button"
+                            android:textColor="#FFFFFF"
                             android:text="@string/list_of_softwares" />
 
                         <ImageView

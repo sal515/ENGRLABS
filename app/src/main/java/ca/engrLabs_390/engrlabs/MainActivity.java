@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         initializeReferences();
         initializeListeners();
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         homepageBtn = findViewById(R.id.homepageBtn);
         logo = findViewById(R.id.logo);
-        logo.setImageResource(R.drawable.ic_menu_animated);
+        logo.setImageResource(R.drawable.ic_logo_better);
     }
 
     void initializeListeners() {

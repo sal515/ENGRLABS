@@ -275,7 +275,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         if (info.get(position).favourite == false) {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
         } else {
-            viewHolder.favourite.setImageResource(R.drawable.ic_star_yellow_24dp);
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_yellow_24dp);
         }
     }
 

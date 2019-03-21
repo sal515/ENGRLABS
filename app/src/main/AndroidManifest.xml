@@ -19,6 +19,7 @@
         <activity
             android:name=".TA_Section.CourseSectionSelection"
             android:parentActivityName=".ExpandableRecyclerWithBottomNav"
+            android:theme="@style/Theme.AppCompat.Light"
             />
         <activity
             android:name=".TA_Section.LoginActivity"

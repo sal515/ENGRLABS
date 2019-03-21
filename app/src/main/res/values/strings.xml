@@ -21,8 +21,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="login_test">Login Test</string>
-    <string name="homepage_test">Homepage Test</string>
+    <string name="login_test">TA Sign In</string>
+    <string name="homepage_test">Lab List</string>
     <string name="room">Room</string>
     <string name="availability_plot_icon">Availability:Plot/ICON</string>
     <string name="upcoming_class">Upcoming Class:</string>

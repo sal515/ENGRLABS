@@ -50,6 +50,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     //Search Card
     MaterialSearchBar materialSearchBar;
+    static String text = "";
     CardView searchCard;
     ImageView sortButton;
 
@@ -160,9 +161,17 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             //When search bar is closed
             //Restore original adapter
             if (!enabled){
-                materialSearchBar.setText("");
-                filterSelection = "";
-                bindingAdapterToRecycleViewer();
+                //materialSearchBar.setText("");
+                sortButton.setVisibility(View.VISIBLE);
+                text = materialSearchBar.getText();
+                //materialSearchBar.setText("");
+                //filterSelection = "";
+                //bindingAdapterToRecycleViewer();
+            }
+            else{
+                sortButton.setVisibility(View.GONE);
+                materialSearchBar.setText(text);
+                //materialSearchBar.setText("");
             }
         }
 

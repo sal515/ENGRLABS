@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Software for Windows in the Public Labs</title></head>
+<body><strong>This software list is valid during the Winter 2019 semester. 
+Software listed with a room number is available only where indicated, 
+all other software is available on all ENCS managed Windows10 64bit 
+desktops.</strong><br><br><br><br><table border="1" cellpadding="2" cellspacing="2" width="100%">
+<tbody><tr><td>7-Zip 18.01 (x64)&nbsp;</td><td></td></tr>
+<tr><td>Abaqus_2017</td><td> H0819-00</td></tr>
+<tr><td>Acrobat_Pro_DC</td><td> EV009-241, EV009-245</td></tr>
+<tr><td>ActivePerl 5.22.1 Build 2201</td><td></td></tr>
+<tr><td>Adobe Acrobat Reader DC 19.010.20064</td><td></td></tr>
+<tr><td>Adobe Flash Player 31 PPAPI 31.0.0.153</td><td></td></tr>
+<tr><td>AGI32_18_3_PTBPE_193</td><td> H0821-00, H0835-00</td></tr>
+<tr><td>Alertus Desktop Alert 2.6.48.121</td><td></td></tr>
+<tr><td>Android Studio 3</td><td> H0903-00, H0915-00, H0929-00</td></tr>
+<tr><td>Ansys_V19_2</td><td>
+H0811-00, H0815-00, H0819-00, H0821-00, H0825-00, H0837-00, H0841-00,
+H0843-00, H0921-00, H0929-00, H0961-01, H0961-02, H0961-03, H0961-04,
+H0961-06, H0961-07, H0961-10, H0961-11, H0961-13, H0961-14, H0961-15,
+H0961-17, H0961-19, H0961-21, H0961-23, H0961-25, H0961-26, H0961-27,
+H0961-28, H0961-29, H0961-31, H0961-33, H1067-00, EV008-101, EV008-165,
+EV009-139, EV009-245, EV012.161</td></tr>
+<tr><td>Apache Tomcat 8.0</td><td></td></tr>
+<tr><td>ArcGIS_10_5</td><td> H0825-00,H0841-00, H0907-00, H0929-00</td></tr>
+<tr><td>arduino-1.6.8</td><td> H0821-00, H0849-00, H0917-00, H0929-00, H0967-00</td></tr>
+<tr><td>Arena_v15</td><td>
+H0811-00, H0903-00, H0929-00, H0961-01, H0961-02, H0961-03, H0961-04,
+H0961-06, H0961-07, H0961-10, H0961-11, H0961-13, H0961-14, H0961-15,
+H0961-17, H0961-19, H0961-21, H0961-23, H0961-25, H0961-26, H0961-27,
+H0961-28, H0961-29, H0961-31, H0961-33, H0967-00, EV008-169, EV009-241</td></tr>
+<tr><td>As32</td><td> H0813-00</td></tr>
+<tr><td>aspectj 1.9</td><td></td></tr><tr><td>Athena_v5.2</td><td> H807A, H807B, H807D, H807AH, H807BH, H807CH, H807DH</td></tr>
+<tr><td>Audacity 2.2.2</td><td></td></tr>
+<tr><td>AutoCAD_V2016</td><td> H0813-00, H0929-00</td></tr>
+<tr><td>AxIDE385</td><td> H0813-00</td></tr>
+<tr><td>Blender 2.79.0</td><td></td></tr>
+<tr><td>CaRineCrystallography</td><td> H0823-00, H0835-00</td></tr>
+<tr><td>CarSim_V2017_1</td><td> H0835-00</td></tr>
+<tr><td>Catia</td><td> H0067-00</td></tr>
+<tr><td>Catia_v5-6R2016</td><td>
+H0024-00, H0811-00, H0815-00, H0827-00, H0843-00, H0907-00, H0917-00,
+H0929-00, H0961-01, H0961-02, H0961-03, H0961-04, H0961-06, H0961-07,
+H0961-10, H0961-11, H0961-13, H0961-14, H0961-15, H0961-17, H0961-19,
+H0961-21, H0961-23, H0961-25, H0961-26, H0961-27, H0961-28, H0961-29,
+H0961-31, H0961-33, H1067-00, EV008-101, EV008-165, EV009-139,
+EV009-245, EV012.161</td></tr>
+<tr><td>CDBurnerXP (64 bit) 4.5.8.6795</td><td></td></tr>
+<tr><td>Ces4_1</td><td> H0823-00, H0854-00</td></tr>
+<tr><td>Civil3D_V2017SP1</td><td>
+H0907-00, H0961-01, H0961-02, H0961-03, H0961-04, H0961-06, H0961-07,
+H0961-10, H0961-11, H0961-13, H0961-14, H0961-15, H0961-17, H0961-19,
+H0961-21, H0961-23, H0961-25, H0961-26, H0961-27, H0961-28, H0961-29,
+H0961-31, H0961-33</td></tr>
+<tr><td>CLIPS 64 Bits 6.30</td><td></td></tr>
+<tr><td>Cmap6_7_0_Pro</td><td> H0823-00</td></tr>
+<tr><td>CodeBlocks</td><td></td></tr><tr><td>Comsol_v4_2</td><td> H0843-00, H0915-00</td></tr>
+<tr><td>CPLEX_Studio_127</td><td>
+H0811-00, H0819-00, H0823-00, H0854-00, H0961-01, H0961-02, H0961-03,
+H0961-04, H0961-06, H0961-07, H0961-10, H0961-11, H0961-13, H0961-14,
+H0961-15, H0961-17, H0961-19, H0961-21, H0961-23, H0961-25, H0961-26,
+H0961-27, H0961-28, H0961-29, H0961-31, H0961-33</td></tr>
+<tr><td>cppunit 1.12.1</td><td></td></tr><tr><td>CSI_Bridge_2018</td><td>
+H0961-01, H0961-02, H0961-03, H0961-04, H0961-06, H0961-07, H0961-10,
+H0961-11, H0961-13, H0961-14, H0961-15, H0961-17, H0961-19, H0961-21,
+H0961-23, H0961-25, H0961-26, H0961-27, H0961-28, H0961-29, H0961-31,
+H0961-33</td></tr>
+<tr><td>CSI_ETABS_V2016</td><td> H0815-00, H0817-00, H0819-00, H0823-00,
+H0847-00, H0849-00, H0961-01, H0961-02, H0961-03, H0961-04, H0961-06,
+H0961-07, H0961-10, H0961-11, H0961-13, H0961-14, H0961-15, H0961-17,
+H0961-19, H0961-21, H0961-23, H0961-25, H0961-26, H0961-27, H0961-28,
+H0961-29, H0961-31, H0961-33, EV008-143</td></tr>
+<tr><td>CSI_SAFE_2016</td><td> H0815-00,
+H0817-00, H0819-00, H0845-00, H0849-00, H0961-01, H0961-02, H0961-03,
+H0961-04, H0961-06, H0961-07, H0961-10, H0961-11, H0961-13, H0961-14,
+H0961-15, H0961-17, H0961-19, H0961-21, H0961-23, H0961-25, H0961-26,
+H0961-27, H0961-28, H0961-29, H0961-31, H0961-33</td></tr>
+<tr><td>CSI_SAP2000_2010</td><td>
+H0815-00, H0817-00, H0819-00, H0823-00, H0849-00, H0961-01, H0961-02,
+H0961-03, H0961-04, H0961-06, H0961-07, H0961-10, H0961-11, H0961-13,
+H0961-14, H0961-15, H0961-17, H0961-19, H0961-21, H0961-23, H0961-25,
+H0961-26, H0961-27, H0961-28, H0961-29, H0961-31, H0961-33, EV008-143</td></tr>
+<tr><td>CST_Studio_Suite_v2018</td><td> H0854-00, H0921-00</td></tr>
+<tr><td>CutePDF Writer 3.2</td><td></td></tr>
+<tr><td>Cyclepad_V2</td><td> H0841-00</td></tr>
+<tr><td>DAgent_v6.9.3505</td><td> H0845-00</td></tr>
+<tr><td>Dia&nbsp;</td><td></td></tr>
+<tr><td>DOSBox</td><td> H0813-00</td></tr>
+<tr><td>Doxygen_v1.8.11</td><td> H0929-00</td></tr>
+<tr><td>Dpipe_v2_02_9</td><td> H0807-00 (pople, porter, powell, pregl, pire, polyani, purcell, quidde)&nbsp;</td></tr>
+<tr><td>Ductsize_6_01_285</td><td> H0807-00</td></tr>
+<tr><td>EASy68K_v5_15_03</td><td> H0813-00</td></tr>
+<tr><td>ECJ</td><td></td></tr><tr><td>Eclipse</td><td></td></tr><tr><td>EQuestV3_65</td><td> H0807-00, H0819-00, H0821-00</td></tr>
+<tr><td>Factory_V2017</td><td>
+H0854-00, H0929-00, H0961-01, H0961-02, H0961-03, H0961-04, H0961-06,
+H0961-07, H0961-10, H0961-11, H0961-13, H0961-14, H0961-15, H0961-17,
+H0961-19, H0961-21, H0961-23, H0961-25, H0961-26, H0961-27, H0961-28,
+H0961-29, H0961-31, H0961-33, EV008-169, EV009-241</td></tr>
+<tr><td>Feko_V2017_2</td><td> H0915-00, H0917-00, H0921-00</td></tr>
+<tr><td>FileLocator Lite x64 8.0.867.1</td><td></td></tr>
+<tr><td>GIMP 2.8.22 2.8.22</td><td></td></tr>
+<tr><td>glassfish4</td><td></td></tr><tr><td>glfw321</td><td> H0831-00, H0907-00, H0967-00</td></tr>
+<tr><td>glm0984</td><td> H0831-00, H0907-00, H0967-00</td></tr>
+<tr><td>glut37</td><td> H0831-00, H0907-00, H0967-00</td></tr>
+<tr><td>Google Chrome 71.0.3578.98</td><td></td></tr>
+<tr><td>Google Earth Pro 7.3.1.4507</td><td></td></tr>
+<tr><td>Google Update Helper 1.3.33.7</td><td></td></tr>
+<tr><td>GPL Ghostscript 9.22</td><td></td></tr>
+<tr><td>GPS_X602</td><td> H0815-00, H0821-00, H0845-00</td></tr>
+<tr><td>gsview 6.0</td><td></td></tr>
+<tr><td>HAP_5.10</td><td> H0807-00</td></tr>
+<tr><td>HomerPro_V376</td><td> H0917-00</td></tr>
+<tr><td>Hot3000</td><td> H0823-00, H0847-00, EV008-101, EV008-187, EV009-139, EV009-245</td></tr>
+<tr><td>Hvac3_2</td><td> H0807-00 (richet, richter, ramsay, reines, renault, reymont)&nbsp;</td></tr>
+<tr><td>iBioSim</td><td></td></tr>
+<tr><td>IES_VE2016</td><td>
+H0807-00, H0961-01,
+H0961-02, H0961-03, H0961-04, H0961-06, H0961-07, H0961-10, H0961-11,
+H0961-13, H0961-14, H0961-15, H0961-17, H0961-19, H0961-21, H0961-23,
+H0961-25, H0961-26, H0961-27, H0961-28, H0961-29, H0961-31, H0961-33</td></tr>
+<tr><td>IHSDM</td><td> H0907-00, H0967-00</td></tr>
+<tr><td>IrfanView 4.51 (64-bit) 4.51</td><td></td></tr>
+<tr><td>JADE</td><td></td></tr><tr><td>Java 8 Update 161 (64-bit) 8.0.1610.12</td><td></td></tr>
+
+
+<tr><td>Java SE Development Kit 8 Update 161 (64-bit) 8.0.1610.12</td><td></td></tr>
+
+<tr><td>JES</td><td></td></tr><tr><td>KiCad_v4.0.5</td><td>
+H0823-00, H0847-00, H0929-00, H0961-01, H0961-02, H0961-03, H0961-04,
+H0961-06, H0961-07, H0961-10, H0961-11, H0961-13, H0961-14, H0961-15,
+H0961-17, H0961-19, H0961-21, H0961-23, H0961-25, H0961-26, H0961-27,
+H0961-28, H0961-29, H0961-31, H0961-33, H0967-00</td></tr>
+<tr><td>KompoZer 0.7.10</td><td></td></tr><tr><td>Labview_2009</td><td> H0854-00</td></tr>
+<tr><td>LAME v3.99.3</td><td></td></tr>
+<tr><td>Laminator</td><td> H0813-00</td></tr>
+<tr><td>LBNL_Windows_v7_6_4</td><td> H0819-00</td></tr>
+<tr><td>Lindo6</td><td> H0819-00, EV008-169</td></tr>
+<tr><td>LINGO_v16</td><td> H0825-00, H0854-00, EV008-169</td></tr>
+<tr><td>Logiscope_v7_1</td><td> H0813-00, H0821-00, H0827-00, H0847-00, H0903-00, H0917-00, H0929-00, EV008-187</td></tr>
+<tr><td>LTSpice</td><td> H0915-00, H0917-00</td></tr>
+<tr><td>LUCENE_V_6_6_0</td><td> H0811-00</td></tr>
+<tr><td>Maple_2018</td><td> H0819-00</td></tr>
+<tr><td>MathCAD_Prime_4</td><td> H0821-00</td></tr>
+<tr><td>MATLAB R2018a 9.4</td><td></td></tr>
+<tr><td>Matrix_Analysis_v2</td><td> H0819-00, H0823-00</td></tr>
+<tr><td>McCabeIQ_v8.5</td><td> H0813-00, H0821-00, H0827-00, H0847-00, H0903-00, H0917-00, H0929-00</td></tr>
+<tr><td>Microsoft Office Professional Plus 2019 - en-us 16.0.10339.20026</td><td></td></tr>
+<tr><td>Microsoft Project Professional 2019 - en-us 16.0.10339.20026</td><td></td></tr>
+<tr><td>Microsoft Visio Professional 2019 - en-us 16.0.10339.20026</td><td></td></tr>
+
+<tr><td>MiKTeX 2.9</td><td></td></tr>
+<tr><td>MinGW</td><td></td></tr><tr><td>MinGW 64</td><td></td></tr><tr><td>Minitab_v18</td><td> H0815-00, H0817-00, H0849-00</td></tr>
+<tr><td>ModelMaker_v4</td><td> H0815-00, H0819-00, H0821-00, H0845-00</td></tr>
+<tr><td>MotorSolve_v6.01</td><td> H0921-00, EV009-241, EV009-245</td></tr>
+<tr><td>Mozilla Firefox&nbsp;</td><td></td></tr>
+<tr><td>Mozilla Thunderbird&nbsp;</td><td></td></tr>
+<tr><td>MySQL Workbench 6.3 CE 6.3.10</td><td></td></tr>
+<tr><td>Naviswork_V2017</td><td> H0819-00, H0823-00, H0967-00</td></tr>
+<tr><td>NetBeans IDE 8.2 8.2</td><td></td></tr>
+<tr><td>Notepad++ (32-bit x86) 7.5.4</td><td></td></tr>
+<tr><td>OpenCV</td><td></td></tr><tr><td>OpenChoice TekVISA 3.3.4.6</td><td></td></tr>
+<tr><td>OptiSystem11</td><td> H0915-00, H0921-00</td></tr>
+<tr><td>OrCAD_Pspice17.2</td><td> H0855-00, H0915-00, H0917-00, H0921-00</td></tr>
+<tr><td>Paraview_5.6.0</td><td> H0819-00, H0821-00, H0823-00</td></tr>
+<tr><td>Pelles C for Windows 8.00</td><td></td></tr>
+<tr><td>Perform-3D_V7_0_0</td><td> EV008-143</td></tr>
+<tr><td>Prolight3000_or_Lathe</td><td> H0827-00</td></tr>
+<tr><td>ProLIGHT_v1000</td><td> H0827-00</td></tr>
+<tr><td>PSIM_v11.1.5_network</td><td>
+H0825-00, H0827-00, H0921-00, H0961-01, H0961-02, H0961-03, H0961-04,
+H0961-06, H0961-07, H0961-10, H0961-11, H0961-13, H0961-14, H0961-15,
+H0961-17, H0961-19, H0961-21, H0961-23, H0961-25, H0961-26, H0961-27,
+H0961-28, H0961-29, H0961-31, H0961-33</td></tr>
+<tr><td>psqlODBC_x64 10.01.0000</td><td></td></tr>
+<tr><td>Psychart_v2_01_61</td><td> H0807-00 (pire, polyani, purcell, quidde)</td></tr>
+<tr><td>PTV Vissim v10.00.09</td><td>H0817-00, H0907-00</td></tr><tr><td>PTV Visum v17.01.09</td><td>H0817-00, H907-00</td></tr><tr><td>PuTTY</td><td></td></tr>
+<tr><td>Python 3.6.4 Core Interpreter (32-bit)&nbsp;</td><td></td></tr>
+<tr><td>Python 3.7.0 (Anaconda3 5.3.1 64-bit)</td><td></td></tr>
+
+<tr><td>Qualnet</td><td> H0825-00, H0837-00, H0921-00</td></tr>
+<tr><td>RETScreen_V6_1_1_92</td><td> H0917-00</td></tr>
+<tr><td>Revit_V2017SP1</td><td>
+H0024-00, H0067-00, H0807-00, H0811-00, H0815-00, H0817-00, H0819-00, H0819-00, H0821-00,
+H0823-00, H0827-00, H0831-00, H0835-00, H0841-00, H0845-00, H0847-00,
+H0849-00, H0854-00, H0903-00, H0907-00, H0917-00, H0921-00, H0929-00, H0961-01,
+H0961-02, H0961-03, H0961-04, H0961-06, H0961-07, H0961-10, H0961-11,
+H0961-13, H0961-14, H0961-15, H0961-17, H0961-19, H0961-21, H0961-23,
+H0961-25, H0961-26, H0961-27, H0961-28, H0961-29, H0961-31, H0961-33,
+H0967-00, H1040-00, H1067-00, EV008-101, EV008-165, EV008-169,
+EV008-187, EV009-139, EV009-245, EV012.161</td></tr>
+<tr><td>R for Windows 3.4.4</td><td></td></tr>
+<tr><td>Rocscience_v2018</td><td>
+H0835-00, H0837-00, H0961-01, H0961-02, H0961-03, H0961-04, H0961-06,
+H0961-07, H0961-10, H0961-11, H0961-13, H0961-14, H0961-15, H0961-17,
+H0961-19, H0961-21, H0961-23, H0961-25, H0961-26, H0961-27, H0961-28,
+H0961-29, H0961-31, H0961-33</td></tr>
+<tr><td>SAFI_V_9_0_9</td><td> H0815-00, H0817-00, H0819-00, H0823-00, H0837-00</td></tr>
+<tr><td>S-FRAME_Suite_2017.1.2</td><td>
+H0823-00, H0961-01, H0961-02, H0961-03, H0961-04, H0961-06, H0961-07,
+H0961-10, H0961-11, H0961-13, H0961-14, H0961-15, H0961-17, H0961-19,
+H0961-21, H0961-23, H0961-25, H0961-26, H0961-27, H0961-28, H0961-29,
+H0961-31, H0961-33</td></tr>
+<tr><td>SolidWorks_2017_SP41</td><td> H0024-00, H0067-00,
+H0815-00, H0817-00, H0819-00, H0821-00, H0825-00, H0827-00, H0831-00,
+H0845-00, H0849-00, H0854-00, H0903-00, H0907-00, H0917-00, H0929-00,
+H0961-01, H0961-02, H0961-03, H0961-04, H0961-06, H0961-07, H0961-10,
+H0961-11, H0961-13, H0961-14, H0961-15, H0961-17, H0961-19, H0961-21,
+H0961-23, H0961-25, H0961-26, H0961-27, H0961-28, H0961-29, H0961-31,
+H0961-33, H0967-00, H1040-00, H1067-00, EV009-241, EV012.161</td></tr>
+<tr><td>Sophos Anti-Virus 10.8.2.334</td><td></td></tr>
+
+
+<tr><td>spBeam_v5.0</td><td> H0817-00, H0849-00</td></tr>
+<tr><td>spColumn_v5.11</td><td> H0817-00, H0849-00</td></tr>
+<tr><td>spFrame_v1.5</td><td> H0817-00, H0849-00</td></tr>
+<tr><td>SPipe_v2_0_58</td><td>  H0807-00 (pople, porter, powell, pregl, pire, polyani)</td></tr>
+<tr><td>spMats_v8.12</td><td> H0817-00, H0849-00</td></tr>
+<tr><td>spSlab_v5.0</td><td> H0817-00, H0849-00</td></tr>
+<tr><td>spWall_v5.01</td><td> H0817-00, H0849-00</td></tr>
+<tr><td>SuperDecision</td><td> H0835-00</td></tr>
+<tr><td>SWI-Prolog</td><td></td></tr>
+<tr><td>Tektronix Logic Analyzer v6.1.127</td><td></td></tr>
+<tr><td>TeXnicCenter Version 2.02</td><td></td></tr>
+<tr><td>THERM761</td><td> H0819-00</td></tr>
+<tr><td>TortoiseSVN 1.9.7.27907</td><td></td></tr>
+<tr><td>Trane_Pipe_Designer_v4.1.0</td><td> H0807-00</td></tr>
+<tr><td>Unity 2018.3.1f1</td><td>H0823-00, H0917-00</td></tr><tr><td>Visual_MODFLOW_v2009_1</td><td> H0819-00, H0821-00</td></tr>
+<tr><td>Visual Studio Enterprise 2017</td><td></td></tr>
+<tr><td>VLC media player 3.0.1</td><td></td></tr>
+<tr><td>Vulkan Run Time Libraries 1.0.65.11</td><td></td></tr>
+<tr><td>Weka3_8_0</td><td>
+H0813-00, H0815-00, H0817-00, H0825-00, H0827-00, H0831-00, H0843-00,
+H0847-00, H0849-00, H0903-00, H0929-00, H0967-00</td></tr>
+<tr><td>WhiteStarUML 5.9.1</td><td></td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+<tr><td>WinMerge 2.14.0 2.14.0</td><td></td></tr>
+<tr><td>WinSCP 5.13 5.13</td><td></td></tr>
+<tr><td>Wireshark_v1.12.7</td><td> H0813-00, H0825-00, H0843-00, H0847-00, H0849-00, H0907-00</td></tr>
+<tr><td>WoodWorks_v10</td><td> H0815-00, H0819-00, H0823-00, H0847-00</td></tr>
+<tr><td>WorkingModel_2017</td><td>
+H0024-00, H0811-00, H0815-00, H0825-00, H0961-01, H0961-02, H0961-03,
+H0961-04, H0961-06, H0961-07, H0961-10, H0961-11, H0961-13, H0961-14,
+H0961-15, H0961-17, H0961-19, H0961-21, H0961-23, H0961-25, H0961-26,
+H0961-27, H0961-28, H0961-29, H0961-31, H0961-33, H1040-00, H1067-00,
+EV008-101, EV008-165, EV009-139, EV012.161</td></tr>
+<tr><td>WUFIBio_3.4.1</td><td> H0815-00, H0819-00, H0823-00, H0847-00</td></tr>
+<tr><td>WUFIplus_2.5.1</td><td> H0815-00, H0819-00, H0823-00, H0847-00, EV008-187</td></tr>
+<tr><td>WUFI_Pro_v5_3</td><td> H0815-00, H0819-00, H0823-00, H0847-00, EV008-187</td></tr>
+<tr><td>wxChecksums 1.2.0 1.2.0</td><td></td></tr>
+<tr><td>Xming 7.7.0.17 7.7.0.17</td><td></td></tr>
+</tbody></table><br><br><br><br><br></body></html>

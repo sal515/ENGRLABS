@@ -5,6 +5,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.engrLabs_390.engrlabs.LabInfo;
 import ca.engrLabs_390.engrlabs.R;
 import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 
@@ -34,11 +36,13 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     private ViewHolder viewHolder;
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
+    List<LabInfo> info;
 
     //==================== Fill Adapter with Data Model =============================
 
-    public dataAdapter_recyclerView() {
+    public dataAdapter_recyclerView(List<LabInfo> inputInfo) {
         super(DIFF_CALLBACK);
+        this.info = inputInfo;
     }
 
     // Store a member variable for the data
@@ -66,16 +70,22 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
-        private TextView textViewData1;
-        private TextView textViewData2;
-        private TextView textViewData3;
-        private TextView textViewData4;
+        private TextView roomNumberEdit;
+        private TextView availabilityEdit;
+        private TextView temperatureTitle;
+        private TextView temperatureEdit;
 
         // Use groups for hide and visible
         private ViewGroup headerGroup;
         private ViewGroup expandingGroup;
+        private ViewGroup expandingInfo;
         private ViewGroup rowContainer;
 
+        private TextView numOfStudentsRoomEdit;
+        private TextView roomCapacityEdit;
+        private TextView upcomingClassEdit;
+
+        private ImageView favourite;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -88,22 +98,29 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             // initialize the context member variable to the context of the activity
             context = itemView.getContext();
 
-            textViewData1 = itemView.findViewById(R.id.rowTextView1);
-            textViewData2 = itemView.findViewById(R.id.rowTextView2);
-            textViewData3 = itemView.findViewById(R.id.rowTextView3);
-            textViewData4 = itemView.findViewById(R.id.rowTextView4);
+            roomNumberEdit = itemView.findViewById(R.id.roomNumberEdit);
+            availabilityEdit = itemView.findViewById(R.id.availabilityEdit);
+            temperatureTitle = itemView.findViewById(R.id.temperatureTitle);
+            temperatureEdit = itemView.findViewById(R.id.temperatureEdit);
 
+            favourite = itemView.findViewById(R.id.favouriteStar);
+            favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
+            /*
+
+             */
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
-            expandingGroup = itemView.findViewById(R.id.expandingSection_constraintLayout);
+            expandingGroup = itemView.findViewById(R.id.expandingSection_relativeLayout);
+            expandingInfo = itemView.findViewById(R.id.expandingInformationBlock);
             rowContainer = itemView.findViewById(R.id.recycler_row_constrainet_layout);
 
-            //Start with all the expandable sections closed
-            expandingGroup.setVisibility(View.GONE);
+            numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
+            roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
+            upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
 
             headerGroup.setOnClickListener(headerSectionListener);
-            expandingGroup.setOnClickListener(expandingSectionListener);
-//            rowContainer.setOnClickListener(this);
+            expandingInfo.setOnClickListener(expandingSectionListener);
+            favourite.setOnClickListener(favouriteStarListener);
 
         }
 
@@ -122,14 +139,14 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                         expandingGroup.setVisibility(View.VISIBLE);
                     }
 
-                    Toast.makeText(context, "Visible", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Visible", Toast.LENGTH_SHORT).show();
 
                 } else {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
 
-                        Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -140,26 +157,41 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         private View.OnClickListener expandingSectionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int adapterPosition = getAdapterPosition();
-                if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_constraintLayout) {
+              int adapterPosition = getAdapterPosition();
+                if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_relativeLayout) {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
                     }
-                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                 } else {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
                     }
-                    Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                 }
 
             }
         };
 
+        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (info.get(getAdapterPosition()).favourite == false) {
+                    info.get(getAdapterPosition()).favourite = true;
+                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    info.get(getAdapterPosition()).favourite = false;
+                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
+                }
+                notifyDataSetChanged();
+                //notifyItemChanged(getAdapterPosition());
+            }
+        };
 
         // implementation found from here : https://github.com/Oziomajnr/RecyclerViewCheckBoxExample2/blob/with-sparse-boolean-array/app/src/main/java/ogbe/ozioma/com/recyclerviewcheckboxexample/Adapter.java
         void onRecycleHideExpandedSections(int position) {
@@ -168,7 +200,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
                     hiddenStateArray.put(position, false);
                     expandingGroup.setVisibility(View.GONE);
                 }
-                Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -211,13 +243,40 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
 
         // set item views based on your views and data model
-        TextView textView1 = viewHolder.textViewData1;
-        textView1.setText(data.getName());
+        TextView textView1 = viewHolder.roomNumberEdit;
+        textView1.setText("Room: " + Integer.toString(info.get(position).floor) + Integer.toString(info.get(position).room));
+        //textView1.setText(data.getName());
 
-        TextView textView2 = viewHolder.textViewData2;
+        TextView textView2 = viewHolder.availabilityEdit;
         textView2.setText(data.getOnline());
 
 
+        TextView textView3 = viewHolder.numOfStudentsRoomEdit;
+        textView3.setText(Integer.toString(info.get(position).numberOfStudents));
+
+        TextView textView4 = viewHolder.roomCapacityEdit;
+        textView4.setText(Integer.toString(info.get(position).roomCapacity));
+
+        TextView textView5 = viewHolder.upcomingClassEdit;
+        textView5.setText(Integer.toString(info.get(position).upcomingClass));
+
+        TextView textView6 = viewHolder.temperatureEdit;
+        textView6.setText(Integer.toString(info.get(position).temperature) + "°C");
+
+        if (hiddenStateArray.get(position) == false) {
+            //Start with all the expandable sections closed
+            viewHolder.expandingGroup.setVisibility(View.GONE);
+        }
+        else
+        {
+            viewHolder.expandingGroup.setVisibility(View.VISIBLE);
+        }
+
+        if (info.get(position).favourite == false) {
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
+        } else {
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+        }
     }
 
     @Override

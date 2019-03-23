@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/yabzGrey"
+    android:backgroundTint="@color/yabzGrey"
     tools:context=".MainActivity">
 
     <Button
@@ -13,7 +15,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="45dp"
         android:layout_marginBottom="47dp"
+        android:background="@drawable/button_main_page"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
         android:text="@string/login_test"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -24,7 +30,11 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="130dp"
+        android:background="@drawable/button_main_page"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
         android:text="@string/homepage_test"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
         android:textSize="18sp"
         android:textStyle="bold" />
 

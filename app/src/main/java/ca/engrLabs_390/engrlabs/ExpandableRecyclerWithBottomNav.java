@@ -1,5 +1,6 @@
 package ca.engrLabs_390.engrlabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,11 +9,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.engrLabs_390.engrlabs.Parser.Classroom;
 import ca.engrLabs_390.engrlabs.Parser.Parser;
 import ca.engrLabs_390.engrlabs.Parser.Software;
+import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 import ca.engrLabs_390.engrlabs.recyclerView.dataAdapter_recyclerView;
 
@@ -20,6 +23,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,6 +39,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     // Bottom Navigation Bar variable
     BottomNavigationView navigation;
+    boolean favouritesOnly = false;
 
     // Recycler Adapter variable declaration
     dataAdapter_recyclerView recyclerViewAdapter;
@@ -43,8 +48,18 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     List<String> suggestList = new ArrayList<>();
     List<String> fullSuggestList = new ArrayList<>();   //will contain the entire list of softwares
 
-    //Search Bar
+    //Search Card
     MaterialSearchBar materialSearchBar;
+    static String text = "";
+    CardView searchCard;
+    ImageView sortButton;
+
+    // DummyClassData
+    List<LabInfo> dummyClassList = new ArrayList<>();
+    int floorMode;
+    List<LabInfo> filteredDummyList = new ArrayList<>();
+    String filterSelection;
+    Vector<Software> soft;  //make list to store software
 
     // Why and How recyclerView: https://guides.codepath.com/android/using-the-recyclerview
     // Using a RecyclerView has the following key steps:
@@ -72,20 +87,44 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        floorMode = 0;
+        filterSelection = "";
+        navigation.setSelectedItemId(R.id.navigation_home);
+        bindingAdapterToRecycleViewer();
+    }
+
     private void initializeAllReferences() {
         mTextSeletectionTextBox = (TextView) findViewById(R.id.message);
 
         // Initializing the bottom nav bar reference
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_home);
 
         // Initialize RecyclerView variable
         recyclerViewVar = findViewById(R.id.expandingRecyclerView);
 
-        //Initialize Search Bar and SUggestion List
+        //Dummy Class List
+        floorMode = 0;
+        filterSelection = "";
+        dummyClassList.add(new LabInfo(8,21,25,10,30,40));
+        dummyClassList.add(new LabInfo(8,23,22,12,30,60));
+        dummyClassList.add(new LabInfo(8,47,24,9,30,20));
+        dummyClassList.add(new LabInfo(9,13,21,5,30,10));
+        dummyClassList.add(new LabInfo(9,17,28,16,30,30));
+        dummyClassList.add(new LabInfo(9,21,24,24,30,35));
+        dummyClassList.add(new LabInfo(10,52,22,18,30,25));
+        dummyClassList.add(new LabInfo(10,16,26,14,30,45));
+
+        //Initialize Search Card and Suggestion List
         populateSuggestionList();
+        sortButton = findViewById(R.id.sortImage);
+        searchCard = findViewById(R.id.searchCard);
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         materialSearchBar.setHint("Enter your software or 'all'");
-        materialSearchBar.setVisibility(View.GONE);
+        searchCard.setVisibility(View.GONE);
         materialSearchBar.setLastSuggestions(suggestList);
         materialSearchBar.setCardViewElevation(10);
         materialSearchBar.addTextChangeListener(new TextWatcher() {
@@ -104,6 +143,173 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
+    }
+
+    private void setListeneres() {
+        // Setting the bottom nav bar onItemSelection Listener
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        sortButton.setOnClickListener(sortButtonListener);
+        materialSearchBar.setOnSearchActionListener(materialOnSearchListener);
+    }
+
+
+    private MaterialSearchBar.OnSearchActionListener materialOnSearchListener
+            = new MaterialSearchBar.OnSearchActionListener() {
+        @Override
+        public void onSearchStateChanged(boolean enabled) {
+
+            //When search bar is closed
+            //Restore original adapter
+            if (!enabled){
+                //materialSearchBar.setText("");
+                sortButton.setVisibility(View.VISIBLE);
+                text = materialSearchBar.getText();
+                //materialSearchBar.setText("");
+                //filterSelection = "";
+                //bindingAdapterToRecycleViewer();
+            }
+            else{
+                sortButton.setVisibility(View.GONE);
+                materialSearchBar.setText(text);
+                //materialSearchBar.setText("");
+            }
+        }
+
+        @Override
+        public void onSearchConfirmed(CharSequence text) {
+            filterSelection = materialSearchBar.getText();
+            bindingAdapterToRecycleViewer();
+        }
+
+        @Override
+        public void onButtonClicked(int buttonCode) {
+            //***************doesn't work, don't know why
+                /*
+                if (buttonCode == BUTTON_BACK){
+                    materialSearchBar.setText(null);
+                    filterSelection = null;
+                    bindingAdapterToRecycleViewer();
+                }
+                */
+        }
+    };
+
+    private ImageView.OnClickListener sortButtonListener
+            = new View.OnClickListener() {
+        public void onClick(View v) {
+            LabSortFragment dialog = new LabSortFragment();
+            dialog.show(getSupportFragmentManager(), "Insert Course");
+            // your code here
+        }
+    };
+
+    // Bottom Navigation bar OnItemSelectionListener
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            favouritesOnly = false;
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mTextSeletectionTextBox.setText(R.string.title_home);
+                    recyclerViewAdapter.notifyDataSetChanged();
+                    floorMode = 0;
+                    bindingAdapterToRecycleViewer();
+                    return true;
+                case R.id.navigation_favourites:
+                    mTextSeletectionTextBox.setText(R.string.title_favourites);
+                    favouritesOnly = true;
+                    bindingAdapterToRecycleViewer();
+                    //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    //startActivity(intent);
+                    return true;
+                case R.id.navigation_notifications:
+                    if(searchCard.getVisibility() == View.VISIBLE)
+                    {
+                        searchCard.setVisibility(View.GONE);
+                    }
+                    else{
+                        searchCard.setVisibility(View.VISIBLE);
+                    }
+                    return false;
+                case R.id.navigation_floor_8:
+                    mTextSeletectionTextBox.setText(R.string.Floor_8);
+                    floorMode = 8;
+                    bindingAdapterToRecycleViewer();
+                    return true;
+                case R.id.navigation_floor_9:
+                    mTextSeletectionTextBox.setText(R.string.Floor_9);
+                    floorMode = 9;
+                    bindingAdapterToRecycleViewer();
+                    return true;
+            }
+            return false;
+        }
+    };
+
+
+    private void bindingAdapterToRecycleViewer(){
+        List<recyclerViewData> data;
+
+        Queue<Integer> openedQueue = new LinkedList<>();
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+
+        filteredDummyList.clear();
+        for(int i = 0;i<dummyClassList.size();i++){
+            if ((dummyClassList.get(i).floor == floorMode) || floorMode == 0)
+            {
+                filteredDummyList.add(dummyClassList.get(i));
+            }
+        }
+
+        List<LabInfo> searchFilteredList;
+        searchFilteredList = filterClasses(filteredDummyList);
+
+        // get the data into an arrayList
+        data = recyclerViewData.createContactsList(searchFilteredList.size());
+
+        // pass the arrayList to the recyclerViewVar adapter
+        recyclerViewAdapter = new dataAdapter_recyclerView(searchFilteredList);
+
+        // set the custom adapter to the recycler view with the data model passed in
+        recyclerViewVar.setAdapter(recyclerViewAdapter);
+
+
+        // set the layout manager position the data according to the xml
+        recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
+
+        // setting the data for the adapter to the array created
+        recyclerViewAdapter.submitList(data);
+
+
+
+
+        // Need to work on the animators -- not working currently
+//        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+//        itemAnimator.setAddDuration(1000);
+//        itemAnimator.setRemoveDuration(1000);
+//        recyclerViewVar.setItemAnimator(itemAnimator);
+
+    }
+
+    private void populateSuggestionList(){
+        Parser parser = new Parser();
+        soft = parser.parse(this);  //parse the file in Assets folder
+        fullSuggestList.clear();    //erase current suggest list
+        for(int i =0;i<soft.size();i++){    //iterate through software list
+            String temp = soft.get(i).softwareName;
+            boolean duplicate = false;
+            for(int j =0;j<fullSuggestList.size();j++){ //checks for duplicates
+                if (fullSuggestList.get(j).equals(temp)){
+                    duplicate = true;
+                }
+            }
+            if (duplicate == false){    //if software wasnt already added, add it
+                fullSuggestList.add(temp);
+            }
+        }
     }
 
     private void updateSuggestList(String inputString){
@@ -128,101 +334,52 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         }
     }
 
-    private void setListeneres() {
-        // Setting the bottom nav bar onItemSelection Listener
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
+    private List<LabInfo> filterClasses(List<LabInfo> input){
 
-    // Bottom Navigation bar OnItemSelectionListener
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        List<LabInfo> returnClassList = new ArrayList<>();
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextSeletectionTextBox.setText(R.string.title_home);
-                    recyclerViewAdapter.notifyDataSetChanged();
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextSeletectionTextBox.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    if(materialSearchBar.getVisibility() == View.VISIBLE)
-                    {
-                        materialSearchBar.setVisibility(View.GONE);
+        if (filterSelection.equals("") || filterSelection == null){
+            for(int i=0;i<input.size();i++){
+                if (favouritesOnly == true){
+                    if (input.get(i).favourite == true){
+                        returnClassList.add(input.get(i));
                     }
-                    else{
-                        materialSearchBar.setVisibility(View.VISIBLE);
-                    }
-                    return false;
-                case R.id.navigation_floor_8:
-                    mTextSeletectionTextBox.setText(R.string.Floor_8);
-                    return true;
-                case R.id.navigation_floor_9:
-                    mTextSeletectionTextBox.setText(R.string.Floor_9);
-                    return true;
-            }
-            return false;
-        }
-    };
-
-
-    private void bindingAdapterToRecycleViewer(){
-        List<recyclerViewData> data;
-
-        Queue<Integer> openedQueue = new LinkedList<>();
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-
-        // get the data into an arrayList
-        data = recyclerViewData.createContactsList(40);
-
-        // pass the arrayList to the recyclerViewVar adapter
-        recyclerViewAdapter = new dataAdapter_recyclerView();
-
-        // set the custom adapter to the recycler view with the data model passed in
-        recyclerViewVar.setAdapter(recyclerViewAdapter);
-
-
-        // set the layout manager position the data according to the xml
-        recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
-
-        // setting the data for the adapter to the array created
-        recyclerViewAdapter.submitList(data);
-
-
-
-
-        // Need to work on the animators -- not working currently
-//        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-//        itemAnimator.setAddDuration(1000);
-//        itemAnimator.setRemoveDuration(1000);
-//        recyclerViewVar.setItemAnimator(itemAnimator);
-
-    }
-
-    private void populateSuggestionList(){
-        Vector<Software> soft;  //make list to store software
-        Parser parser = new Parser();
-        soft = parser.parse(this);  //parse the file in Assets folder
-        fullSuggestList.clear();    //erase current suggest list
-        for(int i =0;i<soft.size();i++){    //iterate through software list
-            String temp = soft.get(i).softwareName;
-            boolean duplicate = false;
-            for(int j =0;j<fullSuggestList.size();j++){ //checks for duplicates
-                if (fullSuggestList.get(j).equals(temp)){
-                    duplicate = true;
+                }
+                else{
+                    returnClassList.add(input.get(i));
                 }
             }
-            if (duplicate == false){    //if software wasnt already added, add it
-                fullSuggestList.add(temp);
+            return returnClassList;
+        }
+
+        List<Classroom> classes = new ArrayList<>();
+        for(int i=0;i<soft.size();i++){
+            if (soft.get(i).softwareName.equals(filterSelection)){
+                classes.add(soft.get(i).classrooms);
             }
         }
+
+        for(int i=0;i<input.size();i++){
+            boolean valid = false;
+
+            for(int j=0;j<classes.size();j++){
+                if ((input.get(i).floor == classes.get(j).floor) && (input.get(i).room == classes.get(j).room)){
+                    valid = true;
+                }
+            }
+            if (valid == true){
+                if (favouritesOnly == true){
+                    if (input.get(i).favourite == true){
+                        returnClassList.add(input.get(i));
+                    }
+                }
+                else{
+                    returnClassList.add(input.get(i));
+                }
+            }
+        }
+        return returnClassList;
     }
-
-
 
 
 }

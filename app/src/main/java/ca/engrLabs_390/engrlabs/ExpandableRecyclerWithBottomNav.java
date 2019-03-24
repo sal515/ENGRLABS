@@ -12,9 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import ca.engrLabs_390.engrlabs.Parser.Classroom;
-import ca.engrLabs_390.engrlabs.Parser.Parser;
-import ca.engrLabs_390.engrlabs.Parser.Software;
 import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
 import ca.engrLabs_390.engrlabs.recyclerView.dataAdapter_recyclerView;
@@ -59,7 +56,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     int floorMode;
     List<LabInfo> filteredDummyList = new ArrayList<>();
     String filterSelection;
-    Vector<Software> soft;  //make list to store software
 
     // Why and How recyclerView: https://guides.codepath.com/android/using-the-recyclerview
     // Using a RecyclerView has the following key steps:
@@ -119,7 +115,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         dummyClassList.add(new LabInfo(10,16,26,14,30,45));
 
         //Initialize Search Card and Suggestion List
-        populateSuggestionList();
         sortButton = findViewById(R.id.sortImage);
         searchCard = findViewById(R.id.searchCard);
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
@@ -135,7 +130,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //When user type their text, the suggestion list will update
-                updateSuggestList(materialSearchBar.getText());
                 materialSearchBar.updateLastSuggestions(suggestList);
             }
 
@@ -294,46 +288,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     }
 
-    private void populateSuggestionList(){
-        Parser parser = new Parser();
-        soft = parser.parse(this);  //parse the file in Assets folder
-        fullSuggestList.clear();    //erase current suggest list
-        for(int i =0;i<soft.size();i++){    //iterate through software list
-            String temp = soft.get(i).softwareName;
-            boolean duplicate = false;
-            for(int j =0;j<fullSuggestList.size();j++){ //checks for duplicates
-                if (fullSuggestList.get(j).equals(temp)){
-                    duplicate = true;
-                }
-            }
-            if (duplicate == false){    //if software wasnt already added, add it
-                fullSuggestList.add(temp);
-            }
-        }
-    }
-
-    private void updateSuggestList(String inputString){
-        suggestList.clear();
-        if (inputString.length()<3) {    //if no text was entered, no substring searching needed
-            materialSearchBar.clearSuggestions();
-            return;
-        }
-        suggestList.addAll(fullSuggestList);    //all should print out everything as a suggestion
-        if (inputString.toLowerCase().equals("all")){
-            return;
-        }
-        for(int i =0;i<suggestList.size();i++){ //iterate through suggestList
-            String temp = suggestList.get(i).toLowerCase();
-            if (!temp.contains(inputString.toLowerCase())){
-                suggestList.remove(i);   //remove anything that isn't a match
-                i--;
-            }
-        }
-        if (suggestList.size() == 0){   //if nothings left that means there were no matches, just output No Matches
-            suggestList.add("No Results");
-        }
-    }
-
     private List<LabInfo> filterClasses(List<LabInfo> input){
 
         List<LabInfo> returnClassList = new ArrayList<>();
@@ -352,34 +306,17 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             return returnClassList;
         }
 
-        List<Classroom> classes = new ArrayList<>();
-        for(int i=0;i<soft.size();i++){
-            if (soft.get(i).softwareName.equals(filterSelection)){
-                classes.add(soft.get(i).classrooms);
-            }
-        }
-
         for(int i=0;i<input.size();i++){
-            boolean valid = false;
-
-            for(int j=0;j<classes.size();j++){
-                if ((input.get(i).floor == classes.get(j).floor) && (input.get(i).room == classes.get(j).room)){
-                    valid = true;
+            if (favouritesOnly == true){
+                if (input.get(i).favourite == true){
+                        returnClassList.add(input.get(i));
                 }
             }
-            if (valid == true){
-                if (favouritesOnly == true){
-                    if (input.get(i).favourite == true){
-                        returnClassList.add(input.get(i));
-                    }
-                }
-                else{
-                    returnClassList.add(input.get(i));
-                }
+            else{
+                returnClassList.add(input.get(i));
             }
         }
         return returnClassList;
     }
-
 
 }

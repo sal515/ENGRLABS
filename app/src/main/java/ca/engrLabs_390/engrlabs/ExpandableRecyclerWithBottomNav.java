@@ -43,7 +43,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     //Suggestion list for search bar
     List<String> suggestList = new ArrayList<>();
-    List<String> fullSuggestList = new ArrayList<>();   //will contain the entire list of softwares
 
     //Search Card
     MaterialSearchBar materialSearchBar;
@@ -291,20 +290,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     private List<LabInfo> filterClasses(List<LabInfo> input){
 
         List<LabInfo> returnClassList = new ArrayList<>();
-
-        if (filterSelection.equals("") || filterSelection == null){
-            for(int i=0;i<input.size();i++){
-                if (favouritesOnly == true){
-                    if (input.get(i).favourite == true){
-                        returnClassList.add(input.get(i));
-                    }
-                }
-                else{
-                    returnClassList.add(input.get(i));
-                }
-            }
-            return returnClassList;
-        }
 
         for(int i=0;i<input.size();i++){
             if (favouritesOnly == true){

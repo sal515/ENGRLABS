@@ -243,7 +243,7 @@ public class dataAdapter_recyclerView extends ListAdapter<LabDataModel, dataAdap
 
         // set item views based on your views and data model
         TextView roomNumberTextView = viewHolder.roomNumberEdit;
-        roomNumberTextView.setText("Room: " + Integer.toString(data.getFloor()) + Integer.toString(data.getRoom()));
+        roomNumberTextView.setText("Room: " +  Integer.toString(data.getRoom()));
         //roomNumberTextView.setText(data.getName());
 
         TextView availabilityTextView = viewHolder.availabilityEdit;

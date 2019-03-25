@@ -103,13 +103,11 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expandable_recycler_with_bottom_nav);
 
-
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"
         initializeAllReferences();
 
         // FIXME: where should the search bar logic be called ??
         searchBarLogic();
-
 
         setListeneres();
 
@@ -413,7 +411,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                 case R.id.navigation_home:
                     mTextSelectionTextBox.setText(R.string.title_home);
                     recyclerViewAdapter.notifyDataSetChanged();
-                    floorMode = 0;
+//                    floorMode = 0;
                     //FIXME: Avoid called this whole recycler initializer function
                     bindingAdapterToRecycleViewer();
                     return true;
@@ -472,7 +470,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
 //      FIXME: Set the data to the data arraylist - to pass to the array adapter
         // set the data here
-        data = null;
+//        data = tempLabObjects;
 
         recyclerViewAdapter = new dataAdapter_recyclerView();
 
@@ -484,7 +482,8 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
 
         // passing the adapter with the array list of data
-        recyclerViewAdapter.submitList(data);
+        recyclerViewAdapter.submitList(tempLabObjects);
+        recyclerViewAdapter.notifyDataSetChanged();
 
 
         //FIXME: FIX animator for nice visualization

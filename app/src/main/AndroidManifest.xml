@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!--Getting user permission for internet access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher_yabz"
@@ -18,19 +21,23 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".TA_Section.CourseSectionSelection"
+            android:screenOrientation="portrait"
             android:parentActivityName=".ExpandableRecyclerWithBottomNav"
             android:theme="@style/Theme.AppCompat.Light"
             />
         <activity
             android:name=".TA_Section.LoginActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".ExpandableRecyclerWithBottomNav"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_expandable_recycler_with_bottom_nav"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

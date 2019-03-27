@@ -12,6 +12,8 @@ import android.widget.Toast;
 // For more details of recycler or recycler adapter follow the link below:
 // https://guides.codepath.com/android/using-the-recyclerview
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
@@ -21,11 +23,13 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.database_files.LabDataModel;
 import ca.engrLabs_390.engrlabs.R;
+import ca.engrLabs_390.engrlabs.database_files.LabDataModelDiffCallback;
 
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
-public class dataAdapter_recyclerView extends ListAdapter<LabDataModel, dataAdapter_recyclerView.ViewHolder> {
+//public class dataAdapter_recyclerView extends ListAdapter<LabDataModel, dataAdapter_recyclerView.ViewHolder> {
+public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_recyclerView.ViewHolder> {
 
     // member array to keep track of the state of the rows : https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
     private static SparseBooleanArray hiddenStateSparseBoolArray = new SparseBooleanArray();
@@ -39,29 +43,55 @@ public class dataAdapter_recyclerView extends ListAdapter<LabDataModel, dataAdap
     // Array list of the DataModel
     List<LabDataModel> labDataModel;
 
+    public dataAdapter_recyclerView(List<LabDataModel> labDataModel) {
+        this.labDataModel = labDataModel;
+//        Collections.copy(this.labDataModel, labDataModel);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return labDataModel.size();
+    }
+
+    // swap item method: compares the old and the new list and updates the new list
+    public void swapItems(List<LabDataModel> labDataModel) {
+        final LabDataModelDiffCallback diffCallback = new LabDataModelDiffCallback(this.labDataModel, labDataModel);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        // clear labs and add new labs or changed lab details
+        this.labDataModel.clear();
+        this.labDataModel.addAll(labDataModel);
+
+        // calling adapters notify method after diff is computed
+        diffResult.dispatchUpdatesTo(this);
+
+    }
+
+
     //==================== Fill Adapter with Data Model =============================
 
     //    public dataAdapter_recyclerView(List<LabDataModel> inputInfo) {
-    public dataAdapter_recyclerView() {
-        super(DIFF_CALLBACK);
-    }
+//    public dataAdapter_recyclerView() {
+//        super(DIFF_CALLBACK);
+//    }
 
-    public static final DiffUtil.ItemCallback<LabDataModel> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<LabDataModel>() {
-                @Override
-                public boolean areItemsTheSame(LabDataModel oldItem, LabDataModel newItem) {
-                    return ((oldItem.getFloor() == newItem.getFloor()) &&
-                            (oldItem.getRoom() == newItem.getRoom()));
-//                    return oldItem.getId() == newItem.getId();
-                }
-
-                @Override
-                public boolean areContentsTheSame(LabDataModel oldItem, LabDataModel newItem) {
-                    return ((oldItem.getRoomCapacity() == newItem.getRoomCapacity()) &&
-                            (oldItem.getNumberOfStudents() == newItem.getNumberOfStudents()) &&
-                            oldItem.getTemperature() == newItem.getTemperature());
-                }
-            };
+//    public static final DiffUtil.ItemCallback<LabDataModel> DIFF_CALLBACK =
+//            new DiffUtil.ItemCallback<LabDataModel>() {
+//                @Override
+//                public boolean areItemsTheSame(LabDataModel oldItem, LabDataModel newItem) {
+//                    return ((oldItem.getFloor() == newItem.getFloor()) &&
+//                            (oldItem.getRoom() == newItem.getRoom()));
+////                    return oldItem.getId() == newItem.getId();
+//                }
+//
+//                @Override
+//                public boolean areContentsTheSame(LabDataModel oldItem, LabDataModel newItem) {
+//                    return ((oldItem.getRoomCapacity() == newItem.getRoomCapacity()) &&
+//                            (oldItem.getNumberOfStudents() == newItem.getNumberOfStudents()) &&
+//                            oldItem.getTemperature() == newItem.getTemperature());
+//                }
+//            };
 
     //==================== ============================= =============================
 
@@ -238,12 +268,13 @@ public class dataAdapter_recyclerView extends ListAdapter<LabDataModel, dataAdap
     public void onBindViewHolder(dataAdapter_recyclerView.ViewHolder viewHolder, int position) {
 
         // getting the data at the position from the array
-        LabDataModel data = getItem(position);
+//        LabDataModel data = getItem(position);
+        LabDataModel data = labDataModel.get(position);
 
 
         // set item views based on your views and data model
         TextView roomNumberTextView = viewHolder.roomNumberEdit;
-        roomNumberTextView.setText("Room: " +  Integer.toString(data.getRoom()));
+        roomNumberTextView.setText("Room: " + Integer.toString(data.getRoom()));
         //roomNumberTextView.setText(data.getName());
 
         TextView availabilityTextView = viewHolder.availabilityEdit;
@@ -298,10 +329,11 @@ public class dataAdapter_recyclerView extends ListAdapter<LabDataModel, dataAdap
         // holder.expandingGroup.setVisibility(View.GONE);
     }
 
-    public void addMoreContacts(List<LabDataModel> newLabDataModel) {
-        labDataModel.addAll(newLabDataModel);
-        submitList(labDataModel); // DiffUtil takes care of the check
-    }
+//
+//    public void addMoreItemsToRecyclerView(List<LabDataModel> newLabDataModel) {
+//        labDataModel.addAll(newLabDataModel);
+//        submitList(labDataModel); // DiffUtil takes care of the check
+//    }
 
 
     //==================== ============================= =============================

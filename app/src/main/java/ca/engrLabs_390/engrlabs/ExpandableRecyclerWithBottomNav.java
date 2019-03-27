@@ -55,7 +55,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     // =========  Search bar stuff   ==========
     //Suggestion list for search bar
-    List<String> suggestList = new ArrayList<>();
+    //List<String> suggestList = new ArrayList<>();
 
     //Search Card - Search Bar for the softwares
     MaterialSearchBar materialSearchBar;
@@ -81,10 +81,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
 
     // DummyClassData
-    List<LabDataModel> dummyClassList = new ArrayList<>();
-    int floorMode;
-    List<LabDataModel> filteredDummyList = new ArrayList<>();
-    String filterSelection;
+//    List<LabDataModel> dummyClassList = new ArrayList<>();
+//    int floorMode;
+//    List<LabDataModel> filteredDummyList = new ArrayList<>();
+//    String filterSelection;
 
     // Why and How recyclerView: https://guides.codepath.com/android/using-the-recyclerview
     // Using a RecyclerView has the following key steps:
@@ -109,21 +109,25 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         // FIXME: where should the search bar logic be called ??
         searchBarLogic();
 
-        setListeneres();
+//        setListeneres();
+
 
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
+
+        setListeneres();
+
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        floorMode = 0;
-        filterSelection = "";
-        navigation.setSelectedItemId(R.id.navigation_home);
+//        floorMode = 0;
+//        filterSelection = "";
+//        navigation.setSelectedItemId(R.id.navigation_home);
         //FIXME: ???????? Avoid called this whole recycler initializer function  ????????
-        bindingAdapterToRecycleViewer();
+//        bindingAdapterToRecycleViewer();
     }
 
     private void initializeAllReferences() {
@@ -170,7 +174,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     private void searchBarLogic() {
         materialSearchBar.setHint("Enter your software or 'all'");
         searchCard.setVisibility(View.GONE);
-        materialSearchBar.setLastSuggestions(suggestList);
+//        materialSearchBar.setLastSuggestions(suggestList);
         materialSearchBar.setCardViewElevation(10);
         materialSearchBar.addTextChangeListener(new TextWatcher() {
             @Override
@@ -180,7 +184,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //When user type their text, the suggestion list will update
-                materialSearchBar.updateLastSuggestions(suggestList);
+//                materialSearchBar.updateLastSuggestions(suggestList);
             }
 
             @Override
@@ -205,6 +209,8 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     // Definition of the document listener
     private EventListener<DocumentSnapshot> LabsDocumentEventListener = new EventListener<DocumentSnapshot>() {
+
+
         @Override
         public void onEvent(@Nullable DocumentSnapshot snapshot,
                             @Nullable FirebaseFirestoreException e) {
@@ -328,6 +334,12 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
                     // saving all the lab objects to the tempLabObject Array
                     tempLabObjects.add(labObj);
+//                    recyclerViewAdapter.notifyItemChanged(i);
+//                    recyclerViewVar.getLayoutManager().onItemsChanged(recyclerViewVar);
+
+                    Log.d(TAG, "Lab rooms: " + "->> " + labObj.getRoom());
+
+
                 }
 
                 // testing if the objects are there
@@ -335,14 +347,26 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                 //  Log.d(TAG, "Lab rooms: " + "->> " + tempLabObjects.get(labObjPos).getRoom());
                 // }
 
-                for (int labObjPos = 0; labObjPos < tempLabObjects.size(); labObjPos++) {
-                    Log.d(TAG, "Lab rooms: " + "->> " + tempLabObjects.get(labObjPos).getRoomStr());
-                }
+//                for (int labObjPos = 0; labObjPos < tempLabObjects.size(); labObjPos++) {
+//                    Log.d(TAG, "Lab rooms: " + "->> " + tempLabObjects.get(labObjPos).getRoomStr());
+//                }
+
+
+//                bindingAdapterToRecycleViewer();
+//                recyclerViewAdapter.addMoreItemsToRecyclerView(tempLabObjects);
+
+
+//                recyclerViewAdapter.swapItems(tempLabObjects);
+//                bindingAdapterToRecycleViewer();
 
 
             } else {
                 Log.d(TAG, "Current data: null");
             }
+
+//            recyclerViewAdapter.submitList(tempLabObjects);
+//            recyclerViewAdapter.notifyDataSetChanged();
+//            recyclerViewVar.notifyAll();
         }
     };
 
@@ -370,7 +394,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
         @Override
         public void onSearchConfirmed(CharSequence text) {
-            filterSelection = materialSearchBar.getText();
+//            filterSelection = materialSearchBar.getText();
             //FIXME: Avoid called this whole recycler initializer function
             bindingAdapterToRecycleViewer();
         }
@@ -409,38 +433,38 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
             // favouritesOnly = false;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextSelectionTextBox.setText(R.string.title_home);
-                    recyclerViewAdapter.notifyDataSetChanged();
+//                    mTextSelectionTextBox.setText(R.string.title_home);
+//                    recyclerViewAdapter.notifyDataSetChanged();
 //                    floorMode = 0;
                     //FIXME: Avoid called this whole recycler initializer function
-                    bindingAdapterToRecycleViewer();
+//                    bindingAdapterToRecycleViewer();
                     return true;
                 case R.id.navigation_favourites:
-                    mTextSelectionTextBox.setText(R.string.title_favourites);
+//                    mTextSelectionTextBox.setText(R.string.title_favourites);
 //                    favouritesOnly = true;
                     //FIXME: Avoid called this whole recycler initializer function
-                    bindingAdapterToRecycleViewer();
+//                    bindingAdapterToRecycleViewer();
                     //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     //startActivity(intent);
                     return true;
                 case R.id.navigation_notifications:
-                    if (searchCard.getVisibility() == View.VISIBLE) {
-                        searchCard.setVisibility(View.GONE);
-                    } else {
-                        searchCard.setVisibility(View.VISIBLE);
-                    }
+//                    if (searchCard.getVisibility() == View.VISIBLE) {
+//                        searchCard.setVisibility(View.GONE);
+//                    } else {
+//                        searchCard.setVisibility(View.VISIBLE);
+//                    }
                     return false;
                 case R.id.navigation_floor_8:
-                    mTextSelectionTextBox.setText(R.string.Floor_8);
-                    floorMode = 8;
+//                    mTextSelectionTextBox.setText(R.string.Floor_8);
+//                    floorMode = 8;
                     //FIXME: Avoid called this whole recycler initializer function
-                    bindingAdapterToRecycleViewer();
+//                    bindingAdapterToRecycleViewer();
                     return true;
                 case R.id.navigation_floor_9:
-                    mTextSelectionTextBox.setText(R.string.Floor_9);
-                    floorMode = 9;
+//                    mTextSelectionTextBox.setText(R.string.Floor_9);
+//                    floorMode = 9;
                     //FIXME: Avoid called this whole recycler initializer function
-                    bindingAdapterToRecycleViewer();
+//                    bindingAdapterToRecycleViewer();
                     return true;
             }
             return false;
@@ -449,11 +473,11 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
 
     private void bindingAdapterToRecycleViewer() {
-        List<LabDataModel> data;
+//        List<LabDataModel> data;
 
-        Queue<Integer> openedQueue = new LinkedList<>();
+//        Queue<Integer> openedQueue = new LinkedList<>();
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
 
 //        filteredDummyList.clear();
@@ -472,7 +496,13 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         // set the data here
 //        data = tempLabObjects;
 
-        recyclerViewAdapter = new dataAdapter_recyclerView();
+        LabDataModel generatorObj = new LabDataModel();
+
+
+        recyclerViewAdapter = new dataAdapter_recyclerView(generatorObj.generateLabs(10));
+
+
+//        recyclerViewAdapter = new dataAdapter_recyclerView(tempLabObjects);
 
         // set the custom adapter to the recycler view with the data model passed in
         recyclerViewVar.setAdapter(recyclerViewAdapter);
@@ -481,9 +511,11 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         // set the layout manager position the data according to the xml
         recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
 
+//        recyclerViewVar.getLayoutManager().notify();
+
         // passing the adapter with the array list of data
-        recyclerViewAdapter.submitList(tempLabObjects);
-        recyclerViewAdapter.notifyDataSetChanged();
+//        recyclerViewAdapter.submitList(tempLabObjects);
+//        recyclerViewAdapter.notifyDataSetChanged();
 
 
         //FIXME: FIX animator for nice visualization

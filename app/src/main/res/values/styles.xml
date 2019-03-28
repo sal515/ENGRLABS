@@ -4,7 +4,7 @@
     // The default theme that comes with new project is the following
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
     // Trying out other material themes
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+    <style name="AppTheme" parent="android:Theme.Material">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

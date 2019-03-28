@@ -11,9 +11,13 @@ import android.widget.TextView;
 // For more details of recycler or recycler adapter follow the link below:
 // https://guides.codepath.com/android/using-the-recyclerview
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
+
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -25,8 +29,8 @@ import ca.engrLabs_390.engrlabs.database_files.LabDataModelDiffCallback;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
-//public class dataAdapter_recyclerView extends ListAdapter<LabDataModel, dataAdapter_recyclerView.ViewHolder> {
-public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_recyclerView.ViewHolder> {
+//public class lastChanges_recyclerViewAdapter extends ListAdapter<LabDataModel, lastChanges_recyclerViewAdapter.ViewHolder> {
+public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastChanges_recyclerViewAdapter.ViewHolder> {
 
     // member array to keep track of the state of the rows : https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
     private static SparseBooleanArray hiddenStateSparseBoolArray = new SparseBooleanArray();
@@ -39,12 +43,13 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
 
     // Array list of the DataModel
     List<LabDataModel> labDataModel;
-
-    public dataAdapter_recyclerView(List<LabDataModel> labDataModel) {
+    private Deque<List<LabDataModel>> pendingUpdates;
+    public lastChanges_recyclerViewAdapter(List<LabDataModel> labDataModel) {
 //        this.labDataModel = labDataModel;
         this.labDataModel = new ArrayList<LabDataModel>(labDataModel);
+        pendingUpdates = new ArrayDeque<List<LabDataModel>>();
 
-        int i = 0;
+//        int i = 0;
 //        this.labDataModel = labDataModel;
 //        Collections.copy(this.labDataModel, labDataModel);
 
@@ -55,25 +60,87 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
         return labDataModel.size();
     }
 
-    // swap item method: compares the old and the new list and updates the new list
-    public void swapItems(List<LabDataModel> labDataModel) {
-        final LabDataModelDiffCallback diffCallback = new LabDataModelDiffCallback(this.labDataModel, labDataModel);
-        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+    // =================== DiffUtil Functions ======================================================
 
-        // clear labs and add new labs or changed lab details
-        this.labDataModel.clear();
-        this.labDataModel.addAll(labDataModel);
+//    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
+//    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
+//    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
 
-        // calling adapters notify method after diff is computed
-        diffResult.dispatchUpdatesTo(this);
+
+//    // swap item method: compares the old and the new list and updates the new list
+//    public void swapItems(List<LabDataModel> labDataModel) {
+//        final LabDataModelDiffCallback diffCallback = new LabDataModelDiffCallback(this.labDataModel, labDataModel);
+//        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+//
+//        // clear labs and add new labs or changed lab details
+//        this.labDataModel.clear();
+//        this.labDataModel.addAll(labDataModel);
+//
+//        // calling adapters notify method after diff is computed
+//        diffResult.dispatchUpdatesTo(this);
+//
+//    }
+
+
+    // this method is called from the fragment or activity when there is a change in the recyclerView data
+    public void updateLabData(final List<LabDataModel> newLabModelList) {
+        pendingUpdates.push(newLabModelList);
+        if (pendingUpdates.size() > 1) {
+            return;
+        }
+        updateLabDataInternal(newLabModelList);
+    }
+
+    // this method creates a backgroud thread to compute the differences in the data, so that the main thread doesn't freeze
+    // import android.os.Handler; ---> not logging
+    void updateLabDataInternal(final List<LabDataModel> newLabModelList) {
+        final List<LabDataModel> oldLabModelList = new ArrayList<>(this.labDataModel);
+
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final DiffUtil.DiffResult diffResult =
+                        DiffUtil.calculateDiff(new LabDataModelDiffCallback(oldLabModelList, newLabModelList));
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        applyDiffResult(newLabModelList, diffResult);
+                    }
+                });
+            }
+        }).start();
 
     }
+
+    // This method is called when the background thread's work is done
+    protected void applyDiffResult(List<LabDataModel> newLabModelList,
+                                   DiffUtil.DiffResult diffResult) {
+        pendingUpdates.remove(newLabModelList);
+        dispatchUpdates(newLabModelList, diffResult);
+        if (pendingUpdates.size() > 0) {
+            List<LabDataModel> latest = pendingUpdates.pop();
+            pendingUpdates.clear();
+            updateLabDataInternal(latest);
+        }
+    }
+
+    // This method updates the recyclerView rows by updating the backing data and notifying the adapter
+    protected void dispatchUpdates(List<LabDataModel> newLabModelList,
+                                   DiffUtil.DiffResult diffResult) {
+        diffResult.dispatchUpdatesTo(this);
+        this.labDataModel.clear();
+        this.labDataModel.addAll(newLabModelList);
+    }
+
+
+    // =================== DiffUtil Functions ======================================================
 
 
     //==================== Fill Adapter with Data Model =============================
 
-    //    public dataAdapter_recyclerView(List<LabDataModel> inputInfo) {
-//    public dataAdapter_recyclerView() {
+    //    public lastChanges_recyclerViewAdapter(List<LabDataModel> inputInfo) {
+//    public lastChanges_recyclerViewAdapter() {
 //        super(DIFF_CALLBACK);
 //    }
 
@@ -266,7 +333,7 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
     // onBindViewHolder to set the view attributes based on the data
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(dataAdapter_recyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(lastChanges_recyclerViewAdapter.ViewHolder viewHolder, int position) {
 
         // getting the data at the position from the array
 //        LabDataModel data = getItem(position);

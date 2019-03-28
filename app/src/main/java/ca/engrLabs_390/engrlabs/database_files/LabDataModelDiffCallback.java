@@ -36,12 +36,20 @@ public class LabDataModelDiffCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldLabDataModelArrayList.get(oldItemPosition).getRoom() == newLabDataModelArrayList.get(newItemPosition).getRoom();
+        try {
+            return oldLabDataModelArrayList.get(oldItemPosition).getRoom() == newLabDataModelArrayList.get(newItemPosition).getRoom();
+        } catch (Exception e) {
+            return false;
+        }
 
     }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return this.oldLabDataModelArrayList.get(oldItemPosition).equals(this.newLabDataModelArrayList.get(newItemPosition));
+        try {
+            return this.oldLabDataModelArrayList.get(oldItemPosition).equals(this.newLabDataModelArrayList.get(newItemPosition));
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

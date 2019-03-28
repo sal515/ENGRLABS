@@ -18,16 +18,24 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.database_files.LabDataModel;
-import ca.engrLabs_390.engrlabs.recyclerView.dataAdapter_recyclerView;
+import ca.engrLabs_390.engrlabs.recyclerView.lastChanges_recyclerViewAdapter;
+import jp.wasabeef.recyclerview.animators.FadeInAnimator;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.OvershootInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,7 +65,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     //    boolean favouritesOnly = false;
 
     // Recycler Adapter variable declaration
-    dataAdapter_recyclerView recyclerViewAdapter;
+    lastChanges_recyclerViewAdapter recyclerViewAdapter;
 
     // =========  Search bar stuff   ==========
     //Suggestion list for search bar
@@ -179,7 +187,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 //                    tempLabObjects.get(new LabDataModel().setRoom(labKeys.get(j)));
                 }
 
-                recyclerViewAdapter.swapItems(tempLabObjects);
+//                recyclerViewAdapter.swapItems(tempLabObjects);
+
+
+                recyclerViewAdapter.updateLabData(tempLabObjects);
 
 
 //                HashMap labHashMap = (HashMap) labObj;
@@ -479,7 +490,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         public void onSearchConfirmed(CharSequence text) {
 //            filterSelection = materialSearchBar.getText();
             //FIXME: Avoid called this whole recycler initializer function
-                bindingAdapterToRecycleViewer();
+//                bindingAdapterToRecycleViewer();
         }
 
         @Override
@@ -539,7 +550,8 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     return false;
                 case R.id.navigation_floor_8:
                     LabDataModel generatorObj = new LabDataModel();
-                    recyclerViewAdapter.swapItems(generatorObj.generateLabs(10));
+//                    recyclerViewAdapter.swapItems(generatorObj.generateLabs(10));
+                    recyclerViewAdapter.updateLabData(generatorObj.generateLabs(10));
 
 //                    mTextSelectionTextBox.setText(R.string.Floor_8);
 //                    floorMode = 8;
@@ -583,12 +595,17 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 //        data = tempLabObjects;
 
 //        LabDataModel generatorObj = new LabDataModel();
-//        recyclerViewAdapter = new dataAdapter_recyclerView(generatorObj.generateLabs(2));
-
-        recyclerViewAdapter = new dataAdapter_recyclerView(tempLabObjects);
+//        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(generatorObj.generateLabs(2));
 
 
-//        recyclerViewAdapter = new dataAdapter_recyclerView(tempLabObjects);
+
+        // This absolutely works!!
+        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(tempLabObjects);
+
+
+
+
+//        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(tempLabObjects);
 
         // set the custom adapter to the recycler view with the data model passed in
         recyclerViewVar.setAdapter(recyclerViewAdapter);
@@ -607,9 +624,17 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         //FIXME: FIX animator for nice visualization
         // Need to work on the animators -- not working currently
 //        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-//        itemAnimator.setAddDuration(1000);
-//        itemAnimator.setRemoveDuration(1000);
+//        itemAnimator.setAddDuration(300);
+//        itemAnimator.setRemoveDuration(300);
+//        itemAnimator.setAddDuration(300);
+//        itemAnimator.setChangeDuration(300);
+//        itemAnimator.setMoveDuration(300);
 //        recyclerViewVar.setItemAnimator(itemAnimator);
+
+//        RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
+//        RecyclerView.ItemAnimator itemAnimator = new FadeInAnimator(new OvershootInterpolator(4f));
+        RecyclerView.ItemAnimator itemAnimator = new LandingAnimator(new OvershootInterpolator(1f));
+        recyclerViewVar.setItemAnimator(itemAnimator);
 
     }
 

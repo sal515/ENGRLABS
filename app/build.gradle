@@ -40,6 +40,10 @@ dependencies {
 
     // adding firestore library from firebase
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
+
+
+    // recyclerview animator library
+    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
 }
 
 

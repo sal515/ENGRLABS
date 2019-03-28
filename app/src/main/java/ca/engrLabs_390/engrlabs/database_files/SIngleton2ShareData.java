@@ -10,31 +10,36 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class AppWideSharedData extends Application {
-    private HashMap LabDataMap;
-    private static final String TAG = "SingleTonAppWide";
+public class SIngleton2ShareData extends Application {
+    private static HashMap LabDataMap;
+    private static List<String> keys;
+    private static List<LabDataModel> tempLabObjects;
 
-    private FirebaseDatabase database;
-    private DatabaseReference databaseRootRef;
-    private DatabaseReference databaseDynamicDataRef;
-    private ValueEventListener labDetailsListenerVar;
+    private static final String TAGg = "SingleTonAppWide";
+
+    private static DatabaseReference databaseRootRef;
+    private static FirebaseDatabase database;
+    private static DatabaseReference databaseDynamicDataRef;
+    private static ValueEventListener labDetailsListenerVar;
 
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        downloadLabSnapshotAtStartUp();
-    }
+//    private FirebaseDatabase database;
+//    private DatabaseReference databaseRootRef;
+//    private DatabaseReference databaseDynamicDataRef;
+//    private ValueEventListener labDetailsListenerVar;
 
-    void downloadLabSnapshotAtStartUp() {
+    public static void downloadLabSnapshotAtStartUp() {
         databaseRootRef = FirebaseDatabase.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
         databaseRootRef = database.getReference();
         databaseDynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
         LabDataMap = new HashMap();
-
+        tempLabObjects = new ArrayList<LabDataModel>();
+        keys = new ArrayList<String>();
 
         final Handler handler = new Handler();
         new Thread(new Runnable() {
@@ -55,7 +60,22 @@ public class AppWideSharedData extends Application {
                             LabDataMap = new HashMap((HashMap) labObj);
                         }
 
-                        Log.w(TAG, "ThreadWorking");
+                        String databaseNumberofStudents;
+                        for (int j = 0; j < keys.size(); j++) {
+
+//                    tempLabObjects = new ArrayList<LabDataModel>();
+                            LabDataModel tempLabObj = new LabDataModel();
+                            tempLabObj.setRoomStr(keys.get(j));
+                            databaseNumberofStudents = (String) ((HashMap) LabDataMap.get("B204")).get("NumberOfStudentsPresent");
+                            tempLabObj.setNumberOfStudentsPresent(databaseNumberofStudents);
+                            tempLabObjects.add(tempLabObj);
+
+//                    tempLabObjects.get(new LabDataModel().setRoom(labKeys.get(j)));
+                        }
+
+
+
+                        Log.w(TAGg, "ThreadWorking");
 
                         String i = "Work>";
                     }
@@ -63,7 +83,7 @@ public class AppWideSharedData extends Application {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // Getting Post failed, log a message
-                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                        Log.w(TAGg, "loadPost:onCancelled", databaseError.toException());
                         // [START_EXCLUDE]
 //                Toast.makeText(PostDetailActivity.this, "Failed to load post.",
 //                        Toast.LENGTH_SHORT).show();
@@ -93,11 +113,20 @@ public class AppWideSharedData extends Application {
     }
 
 
-    public HashMap getLabDataMap() {
+    public static HashMap getLabDataMap() {
         return LabDataMap;
     }
 
-    public void setLabDataMap(HashMap labDataMap) {
+    public static void setLabDataMap(HashMap labDataMap) {
         LabDataMap = labDataMap;
+    }
+
+
+    public static List<LabDataModel> getTempLabObjects() {
+        return tempLabObjects;
+    }
+
+    public static void setTempLabObjects(List<LabDataModel> tempLabObjects) {
+        SIngleton2ShareData.tempLabObjects = tempLabObjects;
     }
 }

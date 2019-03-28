@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
+import ca.engrLabs_390.engrlabs.database_files.SIngleton2ShareData;
 
 import android.os.Bundle;
 import android.view.View;
@@ -18,11 +19,16 @@ public class MainActivity extends AppCompatActivity {
     Button homepageBtn;
     ImageView logo;
 
+    private SIngleton2ShareData singleton2StoreData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //getSupportActionBar().hide();
+
+        singleton2StoreData = new SIngleton2ShareData();
+        SIngleton2ShareData.downloadLabSnapshotAtStartUp();
 
         initializeReferences();
         initializeListeners();

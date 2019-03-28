@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.database_files.LabDataModel;
+import ca.engrLabs_390.engrlabs.database_files.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.lastChanges_recyclerViewAdapter;
 import jp.wasabeef.recyclerview.animators.FadeInAnimator;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
@@ -90,6 +91,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     List<LabDataModel> tempLabObjects;
     List<LabDataModel> labObjects;
     HashMap<String, Object> labs;
+    private SIngleton2ShareData singleton2StoreData;
 
     // ========= Firebase variables =================
 
@@ -116,6 +118,8 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expandable_recycler_with_bottom_nav);
+
+        singleton2StoreData = new SIngleton2ShareData();
 
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"
         initializeAllReferences();
@@ -168,7 +172,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
                 // Check if the object is of type HashMap, if it is cast it to HashMap
                 if (labObj instanceof HashMap) {
-                    labsDynamicDataMap = new HashMap((HashMap)labObj);
+                    labsDynamicDataMap = new HashMap((HashMap) labObj);
                     labKeys = new ArrayList<String>(labsDynamicDataMap.keySet());
                 }
 
@@ -192,6 +196,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
                 recyclerViewAdapter.updateLabData(tempLabObjects);
 
+                if (!labKeys.isEmpty()) {
+                    labKeys.clear();
+                }
 
 //                HashMap labHashMap = (HashMap) labObj;
 //                labHashMap.get("H41");
@@ -598,11 +605,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 //        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(generatorObj.generateLabs(2));
 
 
-
         // This absolutely works!!
-        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(tempLabObjects);
-
-
+//        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(tempLabObjects);
+        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(SIngleton2ShareData.getTempLabObjects());
 
 
 //        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(tempLabObjects);

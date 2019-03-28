@@ -1,4 +1,4 @@
-package ca.engrLabs_390.engrlabs.database_files;
+package ca.engrLabs_390.engrlabs.dataModels;
 
 public class dbHelper {
 

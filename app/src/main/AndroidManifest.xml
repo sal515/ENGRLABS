@@ -36,6 +36,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
+            android:name=".TA_Section.FirebaseEmailPasswordAuth"
+            android:screenOrientation="portrait"
+            android:label="EmailPasswordAuthen"
+            android:theme="@style/Theme.MaterialComponents.Light">
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

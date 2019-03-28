@@ -7,7 +7,7 @@
     tools:context=".TA_Section.CourseSectionSelection">
 
     <Button
-        android:id="@+id/signOutButton"
+        android:id="@+id/signOutButtonInstructorPage"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,5 +27,5 @@
         android:id="@+id/selectedList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/signOutButton" />
+        android:layout_above="@+id/signOutButtonInstructorPage" />
 </RelativeLayout>

@@ -2,8 +2,6 @@ package ca.engrLabs_390.engrlabs.TA_Section;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
 import ca.engrLabs_390.engrlabs.R;
 
 import android.content.Intent;
@@ -33,7 +31,7 @@ public class CourseSectionSelection extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true); //enable UP button, parent is declared in the manifest
 
         //Sign out Button
-        signOutButton = findViewById(R.id.signOutButton);
+        signOutButton = findViewById(R.id.signOutButtonInstructorPage);
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

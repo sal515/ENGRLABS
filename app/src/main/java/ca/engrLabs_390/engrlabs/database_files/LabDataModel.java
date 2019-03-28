@@ -38,26 +38,6 @@ public class LabDataModel implements Cloneable {
         return clone;
     }
 
-    //    // Comparator for the PriorityQueue
-//    @Override
-//    public int compareTo(LabDataModel lab) {
-////        if (this.getFloor() > lab.getFloor() && this.getRoom() > lab.getRoom()) {
-////            return 1;
-////        } else if (this.getFloor() > lab.getFloor() && this.getRoom() < lab.getRoom()) {
-////            return -1;
-////        } else {
-////            return 0;
-////        }
-//
-//        if (this.getRoom() > lab.getRoom()) {
-//            return 1;
-//        } else if (this.getRoom() < lab.getRoom()) {
-//            return -1;
-//        } else {
-//            return 0;
-//        }
-//    }
-
     // reference : https://www.geeksforgeeks.org/overriding-equals-method-in-java/
     @Override
     public boolean equals(@Nullable Object o) {
@@ -90,23 +70,6 @@ public class LabDataModel implements Cloneable {
                 Objects.equals(this.getUpcomingClass().get("Subject"), labDataModel.getUpcomingClass().get("Subject")) &&
                 Objects.equals(this.getUpcomingClass().get("Title"), labDataModel.getUpcomingClass().get("Title"));
     }
-
-
-//    public LabDataModel(int floor,
-//                        int Room,
-//                        String Temperature,
-//                        String NumberOfStudentsPresent,
-//                        int TotalCapacity,
-//                        HashMap<String, String> upcomingClass) {
-//        this.floor = floor;
-//        this.Room = Room;
-//        this.Temperature = Temperature;
-//        this.NumberOfStudentsPresent = NumberOfStudentsPresent;
-//        this.TotalCapacity = TotalCapacity;
-//        this.upcomingClass = upcomingClass;
-//        this.favourite = false;
-//        this.clicked = false;
-//    }
 
     public LabDataModel() {
         this.floor = -1;

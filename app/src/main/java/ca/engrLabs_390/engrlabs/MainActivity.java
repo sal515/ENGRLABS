@@ -19,15 +19,12 @@ public class MainActivity extends AppCompatActivity {
     Button homepageBtn;
     ImageView logo;
 
-    private SIngleton2ShareData singleton2StoreData;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //getSupportActionBar().hide();
 
-        singleton2StoreData = new SIngleton2ShareData();
         SIngleton2ShareData.downloadLabSnapshotAtStartUp();
 
         initializeReferences();
@@ -66,10 +63,6 @@ public class MainActivity extends AppCompatActivity {
     // going from mainActivity to ExpandableRecylerView with Bottom Nav
     public void goto_homepageActivity() {
         Intent intent = new Intent(this, ExpandableRecyclerWithBottomNav.class);
-
-        // Example to pass info from one activity to another
-        // put extra is used to primitive data from one activity to another
-        //        intent.putExtra("courseID", courseID);
 
         startActivity(intent);
     }

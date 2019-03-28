@@ -50,8 +50,6 @@ public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastCh
         pendingUpdates = new ArrayDeque<List<LabDataModel>>();
 
 //        int i = 0;
-//        this.labDataModel = labDataModel;
-//        Collections.copy(this.labDataModel, labDataModel);
 
     }
 
@@ -64,22 +62,6 @@ public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastCh
 
 //    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
 //    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
-//    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
-
-
-//    // swap item method: compares the old and the new list and updates the new list
-//    public void swapItems(List<LabDataModel> labDataModel) {
-//        final LabDataModelDiffCallback diffCallback = new LabDataModelDiffCallback(this.labDataModel, labDataModel);
-//        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-//
-//        // clear labs and add new labs or changed lab details
-//        this.labDataModel.clear();
-//        this.labDataModel.addAll(labDataModel);
-//
-//        // calling adapters notify method after diff is computed
-//        diffResult.dispatchUpdatesTo(this);
-//
-//    }
 
 
     // this method is called from the fragment or activity when there is a change in the recyclerView data
@@ -135,34 +117,6 @@ public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastCh
 
 
     // =================== DiffUtil Functions ======================================================
-
-
-    //==================== Fill Adapter with Data Model =============================
-
-    //    public lastChanges_recyclerViewAdapter(List<LabDataModel> inputInfo) {
-//    public lastChanges_recyclerViewAdapter() {
-//        super(DIFF_CALLBACK);
-//    }
-
-//    public static final DiffUtil.ItemCallback<LabDataModel> DIFF_CALLBACK =
-//            new DiffUtil.ItemCallback<LabDataModel>() {
-//                @Override
-//                public boolean areItemsTheSame(LabDataModel oldItem, LabDataModel newItem) {
-//                    return ((oldItem.getFloor() == newItem.getFloor()) &&
-//                            (oldItem.getRoom() == newItem.getRoom()));
-////                    return oldItem.getId() == newItem.getId();
-//                }
-//
-//                @Override
-//                public boolean areContentsTheSame(LabDataModel oldItem, LabDataModel newItem) {
-//                    return ((oldItem.getTotalCapacity() == newItem.getTotalCapacity()) &&
-//                            (oldItem.getNumberOfStudentsPresent() == newItem.getNumberOfStudentsPresent()) &&
-//                            oldItem.getTemperature() == newItem.getTemperature());
-//                }
-//            };
-
-    //==================== ============================= =============================
-
 
     //==================== Define View Holder =============================
     // Provide a direct reference to each of the views within a data item
@@ -397,13 +351,6 @@ public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastCh
         // One time thing - once you see it its gone
         // holder.expandingGroup.setVisibility(View.GONE);
     }
-
-//
-//    public void addMoreItemsToRecyclerView(List<LabDataModel> newLabDataModel) {
-//        labDataModel.addAll(newLabDataModel);
-//        submitList(labDataModel); // DiffUtil takes care of the check
-//    }
-
 
     //==================== ============================= =============================
 

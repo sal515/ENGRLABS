@@ -26,12 +26,6 @@ public class SIngleton2ShareData extends Application {
     private static DatabaseReference databaseDynamicDataRef;
     private static ValueEventListener labDetailsListenerVar;
 
-
-//    private FirebaseDatabase database;
-//    private DatabaseReference databaseRootRef;
-//    private DatabaseReference databaseDynamicDataRef;
-//    private ValueEventListener labDetailsListenerVar;
-
     public static void downloadLabSnapshotAtStartUp() {
         databaseRootRef = FirebaseDatabase.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
@@ -49,11 +43,8 @@ public class SIngleton2ShareData extends Application {
                 ValueEventListener labDetailsListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get Post object and use the values to update the UI
-
                         // extract the snapshot as an object
                         Object labObj = dataSnapshot.getValue();
-
 
                         // Check if the object is of type HashMap, if it is cast it to HashMap
                         if (labObj instanceof HashMap) {
@@ -62,15 +53,11 @@ public class SIngleton2ShareData extends Application {
 
                         String databaseNumberofStudents;
                         for (int j = 0; j < keys.size(); j++) {
-
-//                    tempLabObjects = new ArrayList<LabDataModel>();
                             LabDataModel tempLabObj = new LabDataModel();
                             tempLabObj.setRoomStr(keys.get(j));
                             databaseNumberofStudents = (String) ((HashMap) LabDataMap.get("B204")).get("NumberOfStudentsPresent");
                             tempLabObj.setNumberOfStudentsPresent(databaseNumberofStudents);
                             tempLabObjects.add(tempLabObj);
-
-//                    tempLabObjects.get(new LabDataModel().setRoom(labKeys.get(j)));
                         }
 
 
@@ -93,13 +80,10 @@ public class SIngleton2ShareData extends Application {
                 databaseDynamicDataRef.addValueEventListener(labDetailsListener);
                 labDetailsListenerVar = labDetailsListener;
 
-
-//                final DiffUtil.DiffResult diffResult =
-//                        DiffUtil.calculateDiff(new LabDataModelDiffCallback(oldLabModelList, newLabModelList));
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-//                        applyDiffResult(newLabModelList, diffResult);
+                        // UI stuff can be done at the end of the actual computation in the thread
                     }
                 });
             }

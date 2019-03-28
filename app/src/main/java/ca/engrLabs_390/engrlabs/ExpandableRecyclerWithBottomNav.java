@@ -58,9 +58,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     // Testing TextBox for Bottom Navigation Bar
     private TextView mTextSelectionTextBox;
 
-    // Bottom Navigation Bar variable
-    BottomNavigationView navigation;
-
     // FIXME: Related to favourite buttom commenting out for now; until I go through the logic
     // favourite checking variable
     //    boolean favouritesOnly = false;
@@ -129,24 +126,14 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
         setListeneres();
 
-
-        // Creating reference of databaseRootRef - to write to db
+//        Creating reference of databaseRootRef - to write to db
 //        FirebaseDatabase databaseRootRef = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = databaseRootRef.getReference("/");
 
-
         databaseRootRef = FirebaseDatabase.getInstance().getReference();
-
-
-//        myRef.setValue("Hello, World!");
-
-
-//        setListeneres();
-
 
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
-
 
     }
 
@@ -155,9 +142,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         super.onStart();
 //        floorMode = 0;
 //        filterSelection = "";
-//        navigation.setSelectedItemId(R.id.navigation_home);
-        //FIXME: ???????? Avoid called this whole recycler initializer function  ????????
-//        bindingAdapterToRecycleViewer();
 
         // Add value event listener to the post
         // [START post_value_event_listener]
@@ -187,12 +171,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     databaseNumberofStudents = (String) ((HashMap) labsDynamicDataMap.get("B204")).get("NumberOfStudentsPresent");
                     tempLabObj.setNumberOfStudentsPresent(databaseNumberofStudents);
                     tempLabObjects.add(tempLabObj);
-
-//                    tempLabObjects.get(new LabDataModel().setRoom(labKeys.get(j)));
                 }
-
-//                recyclerViewAdapter.swapItems(tempLabObjects);
-
 
                 recyclerViewAdapter.updateLabData(tempLabObjects);
 
@@ -200,15 +179,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     labKeys.clear();
                 }
 
-//                HashMap labHashMap = (HashMap) labObj;
-//                labHashMap.get("H41");
-
                 // [START_EXCLUDE]
                 String i = "Work>";
 
-//                mAuthorView.setText(post.author);
-//                mTitleView.setText(post.title);
-//                mBodyView.setText(post.body);
                 // [END_EXCLUDE]
             }
 
@@ -222,9 +195,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                 // [END_EXCLUDE]
             }
         };
+        // set the listener for the db
         databaseDynamicDataRef.addValueEventListener(labDetailsListener);
         labDetailsListenerVar = labDetailsListener;
-
     }
 
     @Override
@@ -237,10 +210,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     }
 
     private void initializeAllReferences() {
-
-        // initialize databaseRootRef variable
-//        db = FirebaseFirestore.getInstance();
-
+        // initiazing variables for the database
         database = FirebaseDatabase.getInstance();
         databaseRootRef = database.getReference();
         databaseDynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
@@ -251,12 +221,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         tempLabObjects = new ArrayList<LabDataModel>();
         labsDynamicDataMap = new HashMap();
 
-
-        mTextSelectionTextBox = (TextView) findViewById(R.id.message);
-
-        // Initializing the bottom nav bar reference
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setSelectedItemId(R.id.navigation_home);
 
         // Initialize RecyclerView variable
         recyclerViewVar = findViewById(R.id.expandingRecyclerView);
@@ -304,13 +268,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     }
 
     private void setListeneres() {
-        // setting the databaseRootRef document Event listener
-//        final DocumentReference docRef = db.collection("PUBLIC_DATA").document("Labs");
-//        docRef.addSnapshotListener(LabsDocumentEventListener);
 
         // Setting the bottom nav bar onItemSelection Listener
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        sortButton.setOnClickListener(sortButtonListener);
+//        sortButton.setOnClickListener(sortButtonListener);
         materialSearchBar.setOnSearchActionListener(materialOnSearchListener);
 
     }
@@ -514,76 +474,16 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         }
     };
 
-    private ImageView.OnClickListener sortButtonListener
-            = new View.OnClickListener() {
-        public void onClick(View v) {
-            LabSortFragment dialog = new LabSortFragment();
-            dialog.show(getSupportFragmentManager(), "Insert Course");
-            // your code here
-        }
-    };
-
-
-    // Bottom Navigation bar OnItemSelectionListener
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            // FIXME: Again not sure about the logic of the favourites option
-            // favouritesOnly = false;
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-//                    mTextSelectionTextBox.setText(R.string.title_home);
-//                    recyclerViewAdapter.notifyDataSetChanged();
-//                    floorMode = 0;
-                    //FIXME: Avoid called this whole recycler initializer function
-//                    bindingAdapterToRecycleViewer();
-                    return true;
-                case R.id.navigation_favourites:
-//                    mTextSelectionTextBox.setText(R.string.title_favourites);
-//                    favouritesOnly = true;
-                    //FIXME: Avoid called this whole recycler initializer function
-//                    bindingAdapterToRecycleViewer();
-                    //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    //startActivity(intent);
-                    return true;
-                case R.id.navigation_notifications:
-//                    if (searchCard.getVisibility() == View.VISIBLE) {
-//                        searchCard.setVisibility(View.GONE);
-//                    } else {
-//                        searchCard.setVisibility(View.VISIBLE);
-//                    }
-                    return false;
-                case R.id.navigation_floor_8:
-                    LabDataModel generatorObj = new LabDataModel();
-//                    recyclerViewAdapter.swapItems(generatorObj.generateLabs(10));
-                    recyclerViewAdapter.updateLabData(generatorObj.generateLabs(10));
-
-//                    mTextSelectionTextBox.setText(R.string.Floor_8);
-//                    floorMode = 8;
-                    //FIXME: Avoid called this whole recycler initializer function
-//                    bindingAdapterToRecycleViewer();
-                    return true;
-                case R.id.navigation_floor_9:
-//                    mTextSelectionTextBox.setText(R.string.Floor_9);
-//                    floorMode = 9;
-                    //FIXME: Avoid called this whole recycler initializer function
-//                    bindingAdapterToRecycleViewer();
-                    return true;
-            }
-            return false;
-        }
-    };
-
+//    private ImageView.OnClickListener sortButtonListener
+//            = new View.OnClickListener() {
+//        public void onClick(View v) {
+//            LabSortFragment dialog = new LabSortFragment();
+//            dialog.show(getSupportFragmentManager(), "Insert Course");
+//            // your code here
+//        }
+//    };
 
     private void bindingAdapterToRecycleViewer() {
-//        List<LabDataModel> data;
-
-//        Queue<Integer> openedQueue = new LinkedList<>();
-
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
 
 //        filteredDummyList.clear();
 //        for(int i = 0;i<dummyClassList.size();i++){
@@ -597,37 +497,17 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 //        searchFilteredList = filterClasses(filteredDummyList);
 
 
-//      FIXME: Set the data to the data arraylist - to pass to the array adapter
-        // set the data here
-//        data = tempLabObjects;
-
-//        LabDataModel generatorObj = new LabDataModel();
-//        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(generatorObj.generateLabs(2));
-
-
         // This absolutely works!!
+        // Passing the data to the Adapter
 //        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(tempLabObjects);
         recyclerViewAdapter = new lastChanges_recyclerViewAdapter(SIngleton2ShareData.getTempLabObjects());
-
-
-//        recyclerViewAdapter = new lastChanges_recyclerViewAdapter(tempLabObjects);
 
         // set the custom adapter to the recycler view with the data model passed in
         recyclerViewVar.setAdapter(recyclerViewAdapter);
 
-
         // set the layout manager position the data according to the xml
         recyclerViewVar.setLayoutManager(new LinearLayoutManager(this));
 
-//        recyclerViewVar.getLayoutManager().notify();
-
-        // passing the adapter with the array list of data
-//        recyclerViewAdapter.submitList(tempLabObjects);
-//        recyclerViewAdapter.notifyDataSetChanged();
-
-
-        //FIXME: FIX animator for nice visualization
-        // Need to work on the animators -- not working currently
 //        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
 //        itemAnimator.setAddDuration(300);
 //        itemAnimator.setRemoveDuration(300);
@@ -638,6 +518,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
 //        RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
 //        RecyclerView.ItemAnimator itemAnimator = new FadeInAnimator(new OvershootInterpolator(4f));
+//      The animator fixes the program of Flickering screen
         RecyclerView.ItemAnimator itemAnimator = new LandingAnimator(new OvershootInterpolator(1f));
         recyclerViewVar.setItemAnimator(itemAnimator);
 

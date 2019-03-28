@@ -165,6 +165,8 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                 }
 
                 String databaseNumberofStudents;
+                tempLabObjects.clear();
+
                 for (int j = 0; j < labKeys.size(); j++) {
 
 //                    tempLabObjects = new ArrayList<LabDataModel>();

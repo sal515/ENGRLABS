@@ -25,6 +25,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha04'
     implementation 'androidx.annotation:annotation:1.1.0-alpha02'
     implementation 'com.google.firebase:firebase-database:16.1.0'
+    implementation 'com.google.firebase:firebase-auth:16.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
@@ -40,7 +41,6 @@ dependencies {
 
     // adding firestore library from firebase
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
-
 
     // recyclerview animator library
     implementation 'jp.wasabeef:recyclerview-animators:3.0.0'

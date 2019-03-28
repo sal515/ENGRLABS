@@ -22,9 +22,9 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import ca.engrLabs_390.engrlabs.database_files.LabDataModel;
+import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.R;
-import ca.engrLabs_390.engrlabs.database_files.LabDataModelDiffCallback;
+import ca.engrLabs_390.engrlabs.dataModels.LabDataModelDiffCallback;
 
 
 // Create the basic adapter extending from RecyclerView.Adapter

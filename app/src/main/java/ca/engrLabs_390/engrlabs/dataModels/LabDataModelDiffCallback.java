@@ -1,6 +1,4 @@
-package ca.engrLabs_390.engrlabs.database_files;
-
-import com.google.firebase.firestore.ListenerRegistration;
+package ca.engrLabs_390.engrlabs.dataModels;
 
 import java.util.List;
 

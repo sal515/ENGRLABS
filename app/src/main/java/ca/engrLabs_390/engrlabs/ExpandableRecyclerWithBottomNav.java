@@ -2,9 +2,6 @@ package ca.engrLabs_390.engrlabs;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,27 +15,19 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import ca.engrLabs_390.engrlabs.database_files.LabDataModel;
-import ca.engrLabs_390.engrlabs.database_files.SIngleton2ShareData;
+import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
+import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.lastChanges_recyclerViewAdapter;
-import jp.wasabeef.recyclerview.animators.FadeInAnimator;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import jp.wasabeef.recyclerview.animators.OvershootInLeftAnimator;
-import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,8 +44,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     private DatabaseReference databaseDynamicDataRef;
     private ValueEventListener labDetailsListenerVar;
 
-    // Testing TextBox for Bottom Navigation Bar
-    private TextView mTextSelectionTextBox;
 
     // FIXME: Related to favourite buttom commenting out for now; until I go through the logic
     // favourite checking variable
@@ -88,7 +75,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     List<LabDataModel> tempLabObjects;
     List<LabDataModel> labObjects;
     HashMap<String, Object> labs;
-    private SIngleton2ShareData singleton2StoreData;
 
     // ========= Firebase variables =================
 
@@ -116,7 +102,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expandable_recycler_with_bottom_nav);
 
-        singleton2StoreData = new SIngleton2ShareData();
 
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"
         initializeAllReferences();

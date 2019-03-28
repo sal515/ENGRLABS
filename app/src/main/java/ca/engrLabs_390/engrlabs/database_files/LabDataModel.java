@@ -1,7 +1,5 @@
 package ca.engrLabs_390.engrlabs.database_files;
 
-import com.google.firebase.firestore.ListenerRegistration;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,24 +8,37 @@ import java.util.Objects;
 import androidx.annotation.Nullable;
 
 //public class LabDataModel implements Comparable<LabDataModel> {
-public class LabDataModel  {
+public class LabDataModel implements Cloneable {
     private int floor;
-    private int room;
+    private int Room;
+    private int RoomCode;
     private String roomStr;
-    private String temperature;
-    private String numberOfStudents;
-    private int roomCapacity;
+    private String Temperature;
+    private String NumberOfStudentsPresent;
+    private int TotalCapacity;
     //    private int upcomingClass;
     private boolean favourite;
     private boolean clicked;
     private String timeStamp;
+    private String AvailableSpots;
     private String availability;
-
-
     private HashMap<String, String> upcomingClass = new HashMap<String, String>();
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        LabDataModel clone = null;
+        try {
+            clone = (LabDataModel) super.clone();
 
-//    // Comparator for the PriorityQueue
+            // copy new data object to cloned method
+            clone.setUpcomingClass((HashMap) this.getUpcomingClass());
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        return clone;
+    }
+
+    //    // Comparator for the PriorityQueue
 //    @Override
 //    public int compareTo(LabDataModel lab) {
 ////        if (this.getFloor() > lab.getFloor() && this.getRoom() > lab.getRoom()) {
@@ -69,7 +80,7 @@ public class LabDataModel  {
 //        return Double.compare(re, c.re) == 0
 //                && Double.compare(im, c.im) == 0;
 
-        return this.getNumberOfStudents().equals(labDataModel.getNumberOfStudents()) &&
+        return this.getNumberOfStudentsPresent().equals(labDataModel.getNumberOfStudentsPresent()) &&
                 this.getTemperature().equals(labDataModel.getTemperature()) &&
                 this.getAvailability().equals(labDataModel.getAvailability()) &&
                 Objects.equals(this.getUpcomingClass().get("Category"), labDataModel.getUpcomingClass().get("Category")) &&
@@ -82,16 +93,16 @@ public class LabDataModel  {
 
 
 //    public LabDataModel(int floor,
-//                        int room,
-//                        String temperature,
-//                        String numberOfStudents,
-//                        int roomCapacity,
+//                        int Room,
+//                        String Temperature,
+//                        String NumberOfStudentsPresent,
+//                        int TotalCapacity,
 //                        HashMap<String, String> upcomingClass) {
 //        this.floor = floor;
-//        this.room = room;
-//        this.temperature = temperature;
-//        this.numberOfStudents = numberOfStudents;
-//        this.roomCapacity = roomCapacity;
+//        this.Room = Room;
+//        this.Temperature = Temperature;
+//        this.NumberOfStudentsPresent = NumberOfStudentsPresent;
+//        this.TotalCapacity = TotalCapacity;
 //        this.upcomingClass = upcomingClass;
 //        this.favourite = false;
 //        this.clicked = false;
@@ -99,10 +110,10 @@ public class LabDataModel  {
 
     public LabDataModel() {
         this.floor = -1;
-        this.room = -1;
-        this.temperature = "";
-        this.numberOfStudents = "";
-        this.roomCapacity = -1;
+        this.Room = -1;
+        this.Temperature = "";
+        this.NumberOfStudentsPresent = "";
+        this.TotalCapacity = -1;
         this.favourite = false;
         this.clicked = false;
         this.timeStamp = "";
@@ -116,15 +127,17 @@ public class LabDataModel  {
         this.upcomingClass.put("Title", "");
     }
 
-    public List<LabDataModel> generateLabs( int size) {
+    public List<LabDataModel> generateLabs(int size) {
         List<LabDataModel> labDataModelList = new ArrayList<>();
-        LabDataModel tempObj = new LabDataModel();
+        LabDataModel tempObj;
 
         for (int i = 0; i < size; i++) {
-            tempObj.setRoom(800+i);
+            tempObj = new LabDataModel();
+            tempObj.setRoom(i);
             labDataModelList.add(tempObj);
         }
 
+        int j = 0;
         return labDataModelList;
     }
 
@@ -139,11 +152,11 @@ public class LabDataModel  {
     }
 
     public int getRoom() {
-        return room;
+        return Room;
     }
 
     public void setRoom(int room) {
-        this.room = room;
+        this.Room = room;
     }
 
     public String getRoomStr() {
@@ -154,29 +167,37 @@ public class LabDataModel  {
         this.roomStr = roomStr;
     }
 
+    public int getRoomCode() {
+        return RoomCode;
+    }
+
+    public void setRoomCode(int roomCode) {
+        RoomCode = roomCode;
+    }
+
     public String getTemperature() {
-        return temperature;
+        return Temperature;
     }
 
     public void setTemperature(String temperature) {
-        this.temperature = temperature;
+        this.Temperature = temperature;
     }
 
 
-    public String getNumberOfStudents() {
-        return numberOfStudents;
+    public String getNumberOfStudentsPresent() {
+        return NumberOfStudentsPresent;
     }
 
-    public void setNumberOfStudents(String numberOfStudents) {
-        this.numberOfStudents = numberOfStudents;
+    public void setNumberOfStudentsPresent(String numberOfStudentsPresent) {
+        this.NumberOfStudentsPresent = numberOfStudentsPresent;
     }
 
-    public int getRoomCapacity() {
-        return roomCapacity;
+    public int getTotalCapacity() {
+        return TotalCapacity;
     }
 
-    public void setRoomCapacity(int roomCapacity) {
-        this.roomCapacity = roomCapacity;
+    public void setTotalCapacity(int totalCapacity) {
+        this.TotalCapacity = totalCapacity;
     }
 
     public boolean isFavourite() {
@@ -201,6 +222,14 @@ public class LabDataModel  {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getAvailableSpots() {
+        return AvailableSpots;
+    }
+
+    public void setAvailableSpots(String availableSpots) {
+        AvailableSpots = availableSpots;
     }
 
     public HashMap<String, String> getUpcomingClass() {

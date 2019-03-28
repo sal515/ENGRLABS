@@ -7,19 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 // For more details of recycler or recycler adapter follow the link below:
 // https://guides.codepath.com/android/using-the-recyclerview
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.database_files.LabDataModel;
 import ca.engrLabs_390.engrlabs.R;
@@ -44,7 +41,11 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
     List<LabDataModel> labDataModel;
 
     public dataAdapter_recyclerView(List<LabDataModel> labDataModel) {
-        this.labDataModel = labDataModel;
+//        this.labDataModel = labDataModel;
+        this.labDataModel = new ArrayList<LabDataModel>(labDataModel);
+
+        int i = 0;
+//        this.labDataModel = labDataModel;
 //        Collections.copy(this.labDataModel, labDataModel);
 
     }
@@ -87,8 +88,8 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
 //
 //                @Override
 //                public boolean areContentsTheSame(LabDataModel oldItem, LabDataModel newItem) {
-//                    return ((oldItem.getRoomCapacity() == newItem.getRoomCapacity()) &&
-//                            (oldItem.getNumberOfStudents() == newItem.getNumberOfStudents()) &&
+//                    return ((oldItem.getTotalCapacity() == newItem.getTotalCapacity()) &&
+//                            (oldItem.getNumberOfStudentsPresent() == newItem.getNumberOfStudentsPresent()) &&
 //                            oldItem.getTemperature() == newItem.getTemperature());
 //                }
 //            };
@@ -274,17 +275,18 @@ public class dataAdapter_recyclerView extends RecyclerView.Adapter<dataAdapter_r
 
         // set item views based on your views and data model
         TextView roomNumberTextView = viewHolder.roomNumberEdit;
-        roomNumberTextView.setText("Room: " + Integer.toString(data.getRoom()));
+//        roomNumberTextView.setText("Room: " + Integer.toString(data.getRoom()));
+        roomNumberTextView.setText("Room: " + data.getRoomStr());
         //roomNumberTextView.setText(data.getName());
 
         TextView availabilityTextView = viewHolder.availabilityEdit;
         availabilityTextView.setText(data.getAvailability());
 
         TextView numberOfStudentsTextView = viewHolder.numOfStudentsRoomEdit;
-        numberOfStudentsTextView.setText(data.getNumberOfStudents());
+        numberOfStudentsTextView.setText(data.getNumberOfStudentsPresent());
 
         TextView roomCapacityTextView = viewHolder.roomCapacityEdit;
-        roomCapacityTextView.setText(Integer.toString(data.getRoomCapacity()));
+        roomCapacityTextView.setText(Integer.toString(data.getTotalCapacity()));
 
         TextView upcomingClassTextView = viewHolder.upcomingClassEdit;
         // FIXME: Set up the map properly and then set the value

@@ -5,7 +5,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,9 +33,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import javax.annotation.Nullable;
 
@@ -39,6 +41,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
     private static final String TAG = "RecyclerViewActivity";
 
+    private FirebaseDatabase database;
+    private DatabaseReference databaseRootRef;
+    private DatabaseReference databaseDynamicDataRef;
+    private ValueEventListener labDetailsListenerVar;
 
     // Testing TextBox for Bottom Navigation Bar
     private TextView mTextSelectionTextBox;
@@ -70,12 +76,12 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     FirebaseFirestore db;
     // variables
     HashMap<String, Object> document;
+    HashMap labsDynamicDataMap;
     List<String> labKeys;
     // FIXME: Temp listArray to add IEEE to the recyclerView
     List<LabDataModel> tempLabObjects;
     List<LabDataModel> labObjects;
     HashMap<String, Object> labs;
-
 
     // ========= Firebase variables =================
 
@@ -109,13 +115,25 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         // FIXME: where should the search bar logic be called ??
         searchBarLogic();
 
+        setListeneres();
+
+
+        // Creating reference of databaseRootRef - to write to db
+//        FirebaseDatabase databaseRootRef = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = databaseRootRef.getReference("/");
+
+
+        databaseRootRef = FirebaseDatabase.getInstance().getReference();
+
+
+//        myRef.setValue("Hello, World!");
+
+
 //        setListeneres();
 
 
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
-
-        setListeneres();
 
 
     }
@@ -128,16 +146,90 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 //        navigation.setSelectedItemId(R.id.navigation_home);
         //FIXME: ???????? Avoid called this whole recycler initializer function  ????????
 //        bindingAdapterToRecycleViewer();
+
+        // Add value event listener to the post
+        // [START post_value_event_listener]
+        ValueEventListener labDetailsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+
+                // extract the snapshot as an object
+                Object labObj = dataSnapshot.getValue();
+
+
+                // Check if the object is of type HashMap, if it is cast it to HashMap
+                if (labObj instanceof HashMap) {
+                    labsDynamicDataMap = new HashMap((HashMap)labObj);
+                    labKeys = new ArrayList<String>(labsDynamicDataMap.keySet());
+                }
+
+                String databaseNumberofStudents;
+                for (int j = 0; j < labKeys.size(); j++) {
+
+//                    tempLabObjects = new ArrayList<LabDataModel>();
+                    LabDataModel tempLabObj = new LabDataModel();
+                    tempLabObj.setRoomStr(labKeys.get(j));
+                    databaseNumberofStudents = (String) ((HashMap) labsDynamicDataMap.get("B204")).get("NumberOfStudentsPresent");
+                    tempLabObj.setNumberOfStudentsPresent(databaseNumberofStudents);
+                    tempLabObjects.add(tempLabObj);
+
+//                    tempLabObjects.get(new LabDataModel().setRoom(labKeys.get(j)));
+                }
+
+                recyclerViewAdapter.swapItems(tempLabObjects);
+
+
+//                HashMap labHashMap = (HashMap) labObj;
+//                labHashMap.get("H41");
+
+                // [START_EXCLUDE]
+                String i = "Work>";
+
+//                mAuthorView.setText(post.author);
+//                mTitleView.setText(post.title);
+//                mBodyView.setText(post.body);
+                // [END_EXCLUDE]
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // [START_EXCLUDE]
+//                Toast.makeText(PostDetailActivity.this, "Failed to load post.",
+//                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
+            }
+        };
+        databaseDynamicDataRef.addValueEventListener(labDetailsListener);
+        labDetailsListenerVar = labDetailsListener;
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (labDetailsListenerVar != null) {
+            databaseRootRef.removeEventListener(labDetailsListenerVar);
+        }
     }
 
     private void initializeAllReferences() {
 
-        // initialize database variable
-        db = FirebaseFirestore.getInstance();
+        // initialize databaseRootRef variable
+//        db = FirebaseFirestore.getInstance();
 
-        // initializing the arrayList of LabDataModel objects extracted from the database
+        database = FirebaseDatabase.getInstance();
+        databaseRootRef = database.getReference();
+        databaseDynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
+
+
+        // initializing the arrayList of LabDataModel objects extracted from the databaseRootRef
         labObjects = new ArrayList<LabDataModel>();
         tempLabObjects = new ArrayList<LabDataModel>();
+        labsDynamicDataMap = new HashMap();
 
 
         mTextSelectionTextBox = (TextView) findViewById(R.id.message);
@@ -163,11 +255,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
         //Initialize Search Card and Suggestion List
 
-
         sortButton = findViewById(R.id.sortImage);
         searchCard = findViewById(R.id.searchCard);
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
-
 
     }
 
@@ -194,9 +284,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
     }
 
     private void setListeneres() {
-        // setting the database document Event listener
-        final DocumentReference docRef = db.collection("PUBLIC_DATA").document("Labs");
-        docRef.addSnapshotListener(LabsDocumentEventListener);
+        // setting the databaseRootRef document Event listener
+//        final DocumentReference docRef = db.collection("PUBLIC_DATA").document("Labs");
+//        docRef.addSnapshotListener(LabsDocumentEventListener);
 
         // Setting the bottom nav bar onItemSelection Listener
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -248,10 +338,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                     // getting the key = DynamicData of type hashmap in the lab hashmap
                     if (document.get(labkey) instanceof HashMap) {
 
-                        // getting Building code from the database
+                        // getting Building code from the databaseRootRef
                         // TODO: get Building code
 
-                        // getting Room Number from the database
+                        // getting Room Number from the databaseRootRef
                         lookForKeyLvL0 = "DynamicData";
                         lookForKeyLvL1 = "Room";
                         if (((HashMap) document.get(labkey)).get(lookForKeyLvL0) instanceof HashMap) {
@@ -273,7 +363,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                             // Log.d(TAG, lookForKeyLvL1 + "->> " + IntTempData);
                         }
 
-                        // getting Room Number as string  from the database
+                        // getting Room Number as string  from the databaseRootRef
                         lookForKeyLvL0 = "DynamicData";
                         lookForKeyLvL1 = "Room";
                         if (((HashMap) document.get(labkey)).get(lookForKeyLvL0) instanceof HashMap) {
@@ -289,8 +379,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                             // Log.d(TAG, lookForKeyLvL1 + "->> " + IntTempData);
                         }
 
-
-                        // getting Temperature from the database
+                        // getting Temperature from the databaseRootRef
                         lookForKeyLvL0 = "DynamicData";
                         lookForKeyLvL1 = "Temperature";
                         if (((HashMap) document.get(labkey)).get(lookForKeyLvL0) instanceof HashMap) {
@@ -306,8 +395,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                             //  Log.d(TAG, lookForKeyLvL1 + "->> " + labObj.getTemperature());
                         }
 
-
-                        // getting NumberOfStudents from the database
+                        // getting NumberOfStudents from the databaseRootRef
                         lookForKeyLvL0 = "DynamicData";
                         lookForKeyLvL1 = "NumberOfStudentsPresent";
                         if (((HashMap) document.get(labkey)).get(lookForKeyLvL0) instanceof HashMap) {
@@ -320,28 +408,23 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
                             } catch (NumberFormatException e1) {
                                 e1.printStackTrace();
                             }
-                            labObj.setNumberOfStudents(StringTempData);
-                            // Log.d(TAG, lookForKeyLvL1 + "->> " + labObj.getNumberOfStudents());
+                            labObj.setNumberOfStudentsPresent(StringTempData);
+                            // Log.d(TAG, lookForKeyLvL1 + "->> " + labObj.getNumberOfStudentsPresent());
                         }
 
                         // TODO : interface room capacity
-                        // getting RoomCapacity from the database
-                        labObj.setRoomCapacity(30);
+                        // getting RoomCapacity from the databaseRootRef
+                        labObj.setTotalCapacity(30);
 
                         // TODO : interface upcoming class
-                        // getting UpcomingClass from the database - map
+                        // getting UpcomingClass from the databaseRootRef - map
                     }
-
                     // saving all the lab objects to the tempLabObject Array
                     tempLabObjects.add(labObj);
 //                    recyclerViewAdapter.notifyItemChanged(i);
 //                    recyclerViewVar.getLayoutManager().onItemsChanged(recyclerViewVar);
-
                     Log.d(TAG, "Lab rooms: " + "->> " + labObj.getRoom());
-
-
                 }
-
                 // testing if the objects are there
                 // for (int labObjPos = 0; labObjPos < tempLabObjects.size(); labObjPos++) {
                 //  Log.d(TAG, "Lab rooms: " + "->> " + tempLabObjects.get(labObjPos).getRoom());
@@ -358,8 +441,6 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 
 //                recyclerViewAdapter.swapItems(tempLabObjects);
 //                bindingAdapterToRecycleViewer();
-
-
             } else {
                 Log.d(TAG, "Current data: null");
             }
@@ -396,7 +477,7 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         public void onSearchConfirmed(CharSequence text) {
 //            filterSelection = materialSearchBar.getText();
             //FIXME: Avoid called this whole recycler initializer function
-            bindingAdapterToRecycleViewer();
+                bindingAdapterToRecycleViewer();
         }
 
         @Override
@@ -455,6 +536,9 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
 //                    }
                     return false;
                 case R.id.navigation_floor_8:
+                    LabDataModel generatorObj = new LabDataModel();
+                    recyclerViewAdapter.swapItems(generatorObj.generateLabs(10));
+
 //                    mTextSelectionTextBox.setText(R.string.Floor_8);
 //                    floorMode = 8;
                     //FIXME: Avoid called this whole recycler initializer function
@@ -496,10 +580,10 @@ public class ExpandableRecyclerWithBottomNav extends AppCompatActivity {
         // set the data here
 //        data = tempLabObjects;
 
-        LabDataModel generatorObj = new LabDataModel();
+//        LabDataModel generatorObj = new LabDataModel();
+//        recyclerViewAdapter = new dataAdapter_recyclerView(generatorObj.generateLabs(2));
 
-
-        recyclerViewAdapter = new dataAdapter_recyclerView(generatorObj.generateLabs(10));
+        recyclerViewAdapter = new dataAdapter_recyclerView(tempLabObjects);
 
 
 //        recyclerViewAdapter = new dataAdapter_recyclerView(tempLabObjects);

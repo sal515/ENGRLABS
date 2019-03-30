@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Page Navigation"
+        android:id="@+id/PageNavigationHeader">
+        <menu>
+            <item
+                android:id="@+id/homepage"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:checkable="true"
+                android:title="Home Page" />
+            <item
+                android:id="@+id/lablist"
+                android:icon="@drawable/ic_menu_black_24dp"
+                android:checkable="true"
+                android:title="Lab List" />
+            <item
+                android:id="@+id/taSection"
+                android:icon="@drawable/ic_person_black_24dp"
+                android:checkable="true"
+                android:title="TA Login" />
+        </menu>
+
+    </item>
+    <item
+        android:title="Filter Options"
+        android:id="@+id/FilterOptionsHeader">
+        <menu>
+            <item
+                android:id="@+id/eighthFloor"
+                android:icon="@drawable/ic_floor_8_black_24dp"
+                android:title="8th Floor Only"
+                app:actionLayout="@layout/drawer_switch_item"/>
+            <item
+                android:id="@+id/ninthFloor"
+                android:icon="@drawable/ic_floor_9_black_24dp"
+                android:title="9th Floor Only"
+                app:actionLayout="@layout/drawer_switch_item"/>
+            <item
+                android:id="@+id/favourites"
+                android:icon="@drawable/ic_star_border_black_24dp"
+                android:title="Show Favourites Only"
+                app:actionLayout="@layout/drawer_switch_item"/>
+        </menu>
+
+    </item>
+    <item
+        android:title="Sorting Options"
+        android:id="@+id/SortingOptionsHeader">
+        <menu>
+            <item
+                android:id="@+id/tempUp"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="Cold Rooms First"
+                app:actionLayout="@layout/drawer_switch_item"/>
+            <item
+                android:id="@+id/tempDown"
+                android:icon="@drawable/ic_whatshot_black_24dp"
+                android:title="Warm Rooms First"
+                app:actionLayout="@layout/drawer_switch_item"/>
+            <item
+                android:id="@+id/freeUp"
+                android:icon="@drawable/ic_accessibility_black_24dp"
+                android:title="Most Free Spots"
+                app:actionLayout="@layout/drawer_switch_item"/>
+            <item
+                android:id="@+id/freeDown"
+                android:icon="@drawable/ic_accessibility_black_24dp"
+                android:title="Least Free Spots"
+                app:actionLayout="@layout/drawer_switch_item"/>
+        </menu>
+    </item>
+</menu>

@@ -274,6 +274,16 @@ public class ExpandableRecycler extends AppCompatActivity {
                     // NumberOfStudentsPresent = (String) ((HashMap) labsDynamicDataMap.get("B204")).get("NumberOfStudentsPresent");
                     tempDynamicDataObj.setNumberOfStudentsPresent(NumberOfStudentsPresent);
 
+                    // if
+
+                    // Sort the array here: According to user selection
+                    // if temperature sort ascending === true
+                        // sortAscendingTemp()
+
+
+
+
+
                     // Adding the tempDynamicData object created to the List
                     tempDynamicDataList.add(tempDynamicDataObj);
                 }
@@ -336,6 +346,28 @@ public class ExpandableRecycler extends AppCompatActivity {
         });
     }
 
+//    private void updateSuggestList(String inputString){
+//        suggestList.clear();
+//        if (inputString.length()<3) {    //if no text was entered, no substring searching needed
+//            materialSearchBar.clearSuggestions();
+//            return;
+//        }
+//        suggestList.addAll(fullSuggestList);    //all should print out everything as a suggestion
+//        if (inputString.toLowerCase().equals("all")){
+//            return;
+//        }
+//        for(int i =0;i<suggestList.size();i++){ //iterate through suggestList
+//            String temp = suggestList.get(i).toLowerCase();
+//            if (!temp.contains(inputString.toLowerCase())){
+//                suggestList.remove(i);   //remove anything that isn't a match
+//                i--;
+//            }
+//        }
+//        if (suggestList.size() == 0){   //if nothings left that means there were no matches, just output No Matches
+//            suggestList.add("No Results");
+//        }
+//    }
+
     private MaterialSearchBar.OnSearchActionListener materialOnSearchListener
             = new MaterialSearchBar.OnSearchActionListener() {
         @Override
@@ -361,8 +393,13 @@ public class ExpandableRecycler extends AppCompatActivity {
         @Override
         public void onSearchConfirmed(CharSequence text) {
 //            filterSelection = materialSearchBar.getText();
+
+            // This is where you set the state for the recyclerview
+
+
             //FIXME: Avoid called this whole recycler initializer function
 //                bindingAdapterToRecycleViewer();
+
         }
 
         @Override

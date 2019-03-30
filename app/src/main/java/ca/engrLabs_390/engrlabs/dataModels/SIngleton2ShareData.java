@@ -58,8 +58,6 @@ public class SIngleton2ShareData extends Application {
 
                         HashMap dynamicDataMap;
                         List<String> dynamicDatakeysList;
-                        dynamicDataMap = new HashMap();
-                        dynamicDatakeysList = new ArrayList<String>();
 
 
                         // Check if the object is of type HashMap, if it is cast it to HashMap
@@ -189,8 +187,7 @@ public class SIngleton2ShareData extends Application {
 
                         HashMap softwaresMap;
                         List<String> softwareKeysList;
-                        softwaresMap = new HashMap();
-                        softwareKeysList = new ArrayList<String>();
+//                        softwareKeysList = new ArrayList<String>();
 
 
                         // extract the snapshot as an object
@@ -198,10 +195,10 @@ public class SIngleton2ShareData extends Application {
                         // Check if the object is of type HashMap, if it is cast it to HashMap
                         if (labObj instanceof HashMap) {
                             softwaresMap = new HashMap((HashMap) labObj);
-                            softwareKeysList = new ArrayList<String>(softwaresMap.keySet());
+                            softwareList = new ArrayList<String>(softwaresMap.keySet());
                         }
 
-//                        String i = "Work";
+                        String i = "Work";
                     }
 
                     @Override

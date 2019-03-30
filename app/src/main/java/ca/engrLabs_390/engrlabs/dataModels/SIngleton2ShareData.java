@@ -15,11 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SIngleton2ShareData extends Application {
+
+    private static final String TAG = "SingleTon";
+
+
     private static HashMap LabDataMap;
     private static List<String> keysList;
     private static List<LabDataModel> tempLabDynamicDataObjects;
 
-    private static final String TAGg = "SingleTonAppWide";
 
     // references to the database
     private static FirebaseDatabase database;
@@ -31,28 +34,9 @@ public class SIngleton2ShareData extends Application {
     // valueEvent listener
     private static ValueEventListener labDetailsListenerVar;
 
-    public static void extractParsedSoftwareData() {
-
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
 
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI stuff can be done at the end of the actual computation in the thread
-                    }
-                });
-            }
-        }).start();
-
-
-
-    }
-
-    public static void downloadLabSnapshotAtStartUp() {
+    public static void downloadDynamicDataForRecyclerStartUp() {
         // databaseRootRef = FirebaseDatabase.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
         databaseRootRef = database.getReference();
@@ -81,20 +65,75 @@ public class SIngleton2ShareData extends Application {
 
                         }
 
-                        String databaseNumberofStudents;
+                        // Variable declarations for the RecyclerVeiw Rows
+                        int floor;
+                        int Room;
+                        String RoomCode;
+                        String Temperature;
+                        String NumberOfStudentsPresent;
+                        String TotalCapacity;
+                        String AvailableSpots;
+                        String LabAvailable;
+                        String BuildingCode;
+                        String LocationCode;
+                        HashMap<String, String> upcomingClass = new HashMap<String, String>();
+
                         for (int j = 0; j < keysList.size(); j++) {
-                            LabDataModel tempLabObj = new LabDataModel();
-                            tempLabObj.setRoomCode(keysList.get(j));
-                            databaseNumberofStudents = (String) ((HashMap) LabDataMap.get("B204")).get("NumberOfStudentsPresent");
-                            tempLabObj.setNumberOfStudentsPresent(databaseNumberofStudents);
-                            tempLabDynamicDataObjects.add(tempLabObj);
+                            // tempDynamicDataList = new ArrayList<LabDataModel>();
+                            LabDataModel tempDynamicDataObj = new LabDataModel();
+
+                            // AvailableSpots
+                            AvailableSpots =  ((HashMap) LabDataMap.get(keysList.get(j))).get("AvailableSpots").toString();
+                            BuildingCode = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("BuildingCode");
+                            LabAvailable = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("LabAvailable");
+                            LocationCode = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("LocationCode");
+                            try {
+                                Room = Integer.parseInt((String) ((HashMap) LabDataMap.get(keysList.get(j))).get("Room"));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.w(TAG, "Error Loading Room from Database");
+
+                                Room = 000;
+
+                            }
+
+                            try {
+                                RoomCode = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("RoomCode");
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                                Log.w(TAG, "Error Loading Room Code from Database");
+                                RoomCode = "000";
+                            }
+                            // setting the temperature
+                            Temperature = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("Temperature");
+                            TotalCapacity = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("TotalCapacity");
+                            // setting the number of students
+                            NumberOfStudentsPresent = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("NumberOfStudentsPresent");
+
+
+                            tempDynamicDataObj.setAvailableSpots(AvailableSpots);
+                            tempDynamicDataObj.setBuildingCode(BuildingCode);
+                            tempDynamicDataObj.setLabAvailability(LabAvailable);
+                            tempDynamicDataObj.setLocationCode(LocationCode);
+                            tempDynamicDataObj.setRoom(Room);
+                            tempDynamicDataObj.setRoomCode(RoomCode);
+                            tempDynamicDataObj.setTemperature(Temperature);
+                            tempDynamicDataObj.setTotalCapacity(TotalCapacity);
+
+                            // setting the Room number
+//                    tempDynamicDataObj.setRoomStr(keysList.get(j));
+                            // NumberOfStudentsPresent = (String) ((HashMap) LabDataMap.get("B204")).get("NumberOfStudentsPresent");
+                            tempDynamicDataObj.setNumberOfStudentsPresent(NumberOfStudentsPresent);
+
+                            // Adding the tempDynamicData object created to the List
+                            tempLabDynamicDataObjects.add(tempDynamicDataObj);
                         }
 
                         if (!keysList.isEmpty()) {
                             keysList.clear();
                         }
 
-                        Log.w(TAGg, "ThreadWorking");
+                        Log.w(TAG, "ThreadWorking");
 
                         String i = "Work>";
                     }
@@ -102,15 +141,40 @@ public class SIngleton2ShareData extends Application {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // Getting Post failed, log a message
-                        Log.w(TAGg, "loadPost:onCancelled", databaseError.toException());
+                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                         // [START_EXCLUDE]
                         // Toast.makeText(PostDetailActivity.this, "Failed to load post.",
                         // Toast.LENGTH_SHORT).show();
                         // [END_EXCLUDE]
                     }
                 };
-                dynamicDataRef.addValueEventListener(labDetailsListener);
-                labDetailsListenerVar = labDetailsListener;
+                dynamicDataRef.addListenerForSingleValueEvent(labDetailsListener);
+//                labDetailsListenerVar = labDetailsListener;
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI stuff can be done during the computation thread is running
+
+                    }
+                });
+            }
+        }).start();
+
+//        if (labDetailsListenerVar != null) {
+//            databaseRootRef.removeEventListener(labDetailsListenerVar);
+//        }
+    }
+
+
+    public static void extractParsedSoftwareData() {
+
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
 
                 handler.post(new Runnable() {
                     @Override
@@ -121,10 +185,10 @@ public class SIngleton2ShareData extends Application {
             }
         }).start();
 
-        if (labDetailsListenerVar != null) {
-            databaseRootRef.removeEventListener(labDetailsListenerVar);
-        }
+
+
     }
+
 
 
     public static HashMap getLabDataMap() {

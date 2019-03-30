@@ -405,7 +405,20 @@ public class ExpandableRecycler extends AppCompatActivity {
         // This absolutely works!!
         // Passing the data to the Adapter
 //        recyclerViewAdapter = new recyclerView_lastChangesAdapter(tempDynamicDataList);
-        recyclerViewAdapter = new recyclerView_lastChangesAdapter(SIngleton2ShareData.getTempLabDynamicDataObjects());
+
+        try {
+//            tempDynamicDataList = new ArrayList<>();
+
+             tempDynamicDataList = new ArrayList<>(SIngleton2ShareData.getTempLabDynamicDataObjects());
+            Log.w(TAG, "Data Filled From SingleTon Class");
+            int i = 0;
+        } catch (Exception e) {
+            tempDynamicDataList = new ArrayList<>();
+            Log.w(TAG, "Data failed to fill from the SingleTon Class");
+            // e.printStackTrace();
+        }
+
+        recyclerViewAdapter = new recyclerView_lastChangesAdapter(tempDynamicDataList);
 
         // set the custom adapter to the recycler view with the data model passed in
         recyclerViewVar.setAdapter(recyclerViewAdapter);

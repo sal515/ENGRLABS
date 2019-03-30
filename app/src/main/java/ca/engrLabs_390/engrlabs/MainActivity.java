@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().hide();
 //        setupWindowAnimations();
 
-        SIngleton2ShareData.downloadLabSnapshotAtStartUp();
+        SIngleton2ShareData.downloadDynamicDataForRecyclerStartUp();
 
         initializeReferences();
         initializeListeners();

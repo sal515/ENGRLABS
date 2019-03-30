@@ -11,17 +11,18 @@ import androidx.annotation.Nullable;
 public class LabDataModel implements Cloneable {
     private int floor;
     private int Room;
-    private int RoomCode;
-    private String roomStr;
+    private String RoomCode;
     private String Temperature;
     private String NumberOfStudentsPresent;
-    private int TotalCapacity;
+    private String TotalCapacity;
     //    private int upcomingClass;
     private boolean favourite;
     private boolean clicked;
     private String timeStamp;
     private String AvailableSpots;
-    private String availability;
+    private String LabAvailability;
+    private String BuildingCode;
+    private String LocationCode;
     private HashMap<String, String> upcomingClass = new HashMap<String, String>();
 
     @Override
@@ -47,7 +48,7 @@ public class LabDataModel implements Cloneable {
             return true;
         }
 
-                /* Check if o is an instance of Complex or not
+        /* Check if o is an instance of Complex or not
           "null instanceof [type]" also returns false */
         if (!(o instanceof LabDataModel)) {
             return false;
@@ -60,9 +61,10 @@ public class LabDataModel implements Cloneable {
 //        return Double.compare(re, c.re) == 0
 //                && Double.compare(im, c.im) == 0;
 
+        // Whatever checks added here will be updated in the recyclerView when database data changes
         return this.getNumberOfStudentsPresent().equals(labDataModel.getNumberOfStudentsPresent()) &&
                 this.getTemperature().equals(labDataModel.getTemperature()) &&
-                this.getAvailability().equals(labDataModel.getAvailability()) &&
+                this.getLabAvailability().equals(labDataModel.getLabAvailability()) &&
                 Objects.equals(this.getUpcomingClass().get("Category"), labDataModel.getUpcomingClass().get("Category")) &&
                 Objects.equals(this.getUpcomingClass().get("StartHour"), labDataModel.getUpcomingClass().get("StartHour")) &&
                 Objects.equals(this.getUpcomingClass().get("StartMin"), labDataModel.getUpcomingClass().get("StartMin")) &&
@@ -76,11 +78,11 @@ public class LabDataModel implements Cloneable {
         this.Room = -1;
         this.Temperature = "";
         this.NumberOfStudentsPresent = "";
-        this.TotalCapacity = -1;
+        this.TotalCapacity = "";
         this.favourite = false;
         this.clicked = false;
         this.timeStamp = "";
-        this.availability = "";
+        this.LabAvailability = "";
 //        this.upcomingClass = null;
         this.upcomingClass.put("Category", "");
         this.upcomingClass.put("StartHour", "");
@@ -122,19 +124,12 @@ public class LabDataModel implements Cloneable {
         this.Room = room;
     }
 
-    public String getRoomStr() {
-        return roomStr;
-    }
 
-    public void setRoomStr(String roomStr) {
-        this.roomStr = roomStr;
-    }
-
-    public int getRoomCode() {
+    public String getRoomCode() {
         return RoomCode;
     }
 
-    public void setRoomCode(int roomCode) {
+    public void setRoomCode(String roomCode) {
         RoomCode = roomCode;
     }
 
@@ -155,12 +150,12 @@ public class LabDataModel implements Cloneable {
         this.NumberOfStudentsPresent = numberOfStudentsPresent;
     }
 
-    public int getTotalCapacity() {
+    public String getTotalCapacity() {
         return TotalCapacity;
     }
 
-    public void setTotalCapacity(int totalCapacity) {
-        this.TotalCapacity = totalCapacity;
+    public void setTotalCapacity(String totalCapacity) {
+        TotalCapacity = totalCapacity;
     }
 
     public boolean isFavourite() {
@@ -195,19 +190,35 @@ public class LabDataModel implements Cloneable {
         AvailableSpots = availableSpots;
     }
 
+    public String getLabAvailability() {
+        return LabAvailability;
+    }
+
+    public void setLabAvailability(String labAvailable) {
+        this.LabAvailability = labAvailable;
+    }
+
+    public String getBuildingCode() {
+        return BuildingCode;
+    }
+
+    public void setBuildingCode(String buildingCode) {
+        BuildingCode = buildingCode;
+    }
+
+    public String getLocationCode() {
+        return LocationCode;
+    }
+
+    public void setLocationCode(String locationCode) {
+        LocationCode = locationCode;
+    }
+
     public HashMap<String, String> getUpcomingClass() {
         return upcomingClass;
     }
 
     public void setUpcomingClass(HashMap<String, String> upcomingClass) {
         this.upcomingClass = upcomingClass;
-    }
-
-    public String getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(String availability) {
-        this.availability = availability;
     }
 }

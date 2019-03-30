@@ -1,6 +1,7 @@
 package ca.engrLabs_390.engrlabs.recyclerView;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,29 +9,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-// For more details of recycler or recycler adapter follow the link below:
-// https://guides.codepath.com/android/using-the-recyclerview
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
 
-import android.os.Handler;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.R;
+import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModelDiffCallback;
+
+// For more details of recycler or recycler adapter follow the link below:
+// https://guides.codepath.com/android/using-the-recyclerview
 
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
-//public class lastChanges_recyclerViewAdapter extends ListAdapter<LabDataModel, lastChanges_recyclerViewAdapter.ViewHolder> {
-public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastChanges_recyclerViewAdapter.ViewHolder> {
+//public class recyclerView_lastChangesAdapter extends ListAdapter<LabDataModel, recyclerView_lastChangesAdapter.ViewHolder> {
+public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recyclerView_lastChangesAdapter.ViewHolder> {
 
     // member array to keep track of the state of the rows : https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
     private static SparseBooleanArray hiddenStateSparseBoolArray = new SparseBooleanArray();
@@ -44,7 +43,7 @@ public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastCh
     // Array list of the DataModel
     List<LabDataModel> labDataModel;
     private Deque<List<LabDataModel>> pendingUpdates;
-    public lastChanges_recyclerViewAdapter(List<LabDataModel> labDataModel) {
+    public recyclerView_lastChangesAdapter(List<LabDataModel> labDataModel) {
 //        this.labDataModel = labDataModel;
         this.labDataModel = new ArrayList<LabDataModel>(labDataModel);
         pendingUpdates = new ArrayDeque<List<LabDataModel>>();
@@ -287,7 +286,7 @@ public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastCh
     // onBindViewHolder to set the view attributes based on the data
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(lastChanges_recyclerViewAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(recyclerView_lastChangesAdapter.ViewHolder viewHolder, int position) {
 
         // getting the data at the position from the array
 //        LabDataModel data = getItem(position);
@@ -297,17 +296,18 @@ public class lastChanges_recyclerViewAdapter extends RecyclerView.Adapter<lastCh
         // set item views based on your views and data model
         TextView roomNumberTextView = viewHolder.roomNumberEdit;
 //        roomNumberTextView.setText("Room: " + Integer.toString(data.getRoom()));
-        roomNumberTextView.setText("Room: " + data.getRoomStr());
+//        roomNumberTextView.setText("Room: " + data.getRoomStr());
+        roomNumberTextView.setText("Room: " + data.getRoomCode());
         //roomNumberTextView.setText(data.getName());
 
         TextView availabilityTextView = viewHolder.availabilityEdit;
-        availabilityTextView.setText(data.getAvailability());
+        availabilityTextView.setText(data.getLabAvailability());
 
         TextView numberOfStudentsTextView = viewHolder.numOfStudentsRoomEdit;
         numberOfStudentsTextView.setText(data.getNumberOfStudentsPresent());
 
         TextView roomCapacityTextView = viewHolder.roomCapacityEdit;
-        roomCapacityTextView.setText(Integer.toString(data.getTotalCapacity()));
+        roomCapacityTextView.setText(data.getTotalCapacity());
 
         TextView upcomingClassTextView = viewHolder.upcomingClassEdit;
         // FIXME: Set up the map properly and then set the value

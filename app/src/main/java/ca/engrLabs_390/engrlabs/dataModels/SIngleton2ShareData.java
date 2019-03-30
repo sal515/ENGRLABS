@@ -16,24 +16,33 @@ import java.util.List;
 
 public class SIngleton2ShareData extends Application {
     private static HashMap LabDataMap;
-    private static List<String> keys;
-    private static List<LabDataModel> tempLabObjects;
+    private static List<String> keysList;
+    private static List<LabDataModel> tempLabDynamicDataObjects;
 
     private static final String TAGg = "SingleTonAppWide";
 
-    private static DatabaseReference databaseRootRef;
+    // references to the database
     private static FirebaseDatabase database;
-    private static DatabaseReference databaseDynamicDataRef;
+    private static DatabaseReference databaseRootRef;
+    private static DatabaseReference dynamicDataRef;
+    private static DatabaseReference softwaresRef;
+    private static DatabaseReference currentSemesterCoursesRef;
+    private static DatabaseReference currentSemesterLabsRef;
+    // valueEvent listener
     private static ValueEventListener labDetailsListenerVar;
 
+//    public static void
+
     public static void downloadLabSnapshotAtStartUp() {
-        databaseRootRef = FirebaseDatabase.getInstance().getReference();
+        // databaseRootRef = FirebaseDatabase.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
         databaseRootRef = database.getReference();
-        databaseDynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
+        dynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
+
+
         LabDataMap = new HashMap();
-        tempLabObjects = new ArrayList<LabDataModel>();
-        keys = new ArrayList<String>();
+        tempLabDynamicDataObjects = new ArrayList<LabDataModel>();
+        keysList = new ArrayList<String>();
 
         final Handler handler = new Handler();
         new Thread(new Runnable() {
@@ -49,18 +58,22 @@ public class SIngleton2ShareData extends Application {
                         // Check if the object is of type HashMap, if it is cast it to HashMap
                         if (labObj instanceof HashMap) {
                             LabDataMap = new HashMap((HashMap) labObj);
+                            keysList = new ArrayList<String>(LabDataMap.keySet());
+
                         }
 
                         String databaseNumberofStudents;
-                        for (int j = 0; j < keys.size(); j++) {
+                        for (int j = 0; j < keysList.size(); j++) {
                             LabDataModel tempLabObj = new LabDataModel();
-                            tempLabObj.setRoomStr(keys.get(j));
+                            tempLabObj.setRoomCode(keysList.get(j));
                             databaseNumberofStudents = (String) ((HashMap) LabDataMap.get("B204")).get("NumberOfStudentsPresent");
                             tempLabObj.setNumberOfStudentsPresent(databaseNumberofStudents);
-                            tempLabObjects.add(tempLabObj);
+                            tempLabDynamicDataObjects.add(tempLabObj);
                         }
 
-
+                        if (!keysList.isEmpty()) {
+                            keysList.clear();
+                        }
 
                         Log.w(TAGg, "ThreadWorking");
 
@@ -72,12 +85,12 @@ public class SIngleton2ShareData extends Application {
                         // Getting Post failed, log a message
                         Log.w(TAGg, "loadPost:onCancelled", databaseError.toException());
                         // [START_EXCLUDE]
-//                Toast.makeText(PostDetailActivity.this, "Failed to load post.",
-//                        Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(PostDetailActivity.this, "Failed to load post.",
+                        // Toast.LENGTH_SHORT).show();
                         // [END_EXCLUDE]
                     }
                 };
-                databaseDynamicDataRef.addValueEventListener(labDetailsListener);
+                dynamicDataRef.addValueEventListener(labDetailsListener);
                 labDetailsListenerVar = labDetailsListener;
 
                 handler.post(new Runnable() {
@@ -89,11 +102,9 @@ public class SIngleton2ShareData extends Application {
             }
         }).start();
 
-
         if (labDetailsListenerVar != null) {
             databaseRootRef.removeEventListener(labDetailsListenerVar);
         }
-
     }
 
 
@@ -105,12 +116,11 @@ public class SIngleton2ShareData extends Application {
         LabDataMap = labDataMap;
     }
 
-
-    public static List<LabDataModel> getTempLabObjects() {
-        return tempLabObjects;
+    public static List<LabDataModel> getTempLabDynamicDataObjects() {
+        return tempLabDynamicDataObjects;
     }
 
-    public static void setTempLabObjects(List<LabDataModel> tempLabObjects) {
-        SIngleton2ShareData.tempLabObjects = tempLabObjects;
+    public static void setTempLabDynamicDataObjects(List<LabDataModel> tempLabDynamicDataObjects) {
+        SIngleton2ShareData.tempLabDynamicDataObjects = tempLabDynamicDataObjects;
     }
 }

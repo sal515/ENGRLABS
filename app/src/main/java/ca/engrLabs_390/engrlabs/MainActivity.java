@@ -2,15 +2,15 @@
 package ca.engrLabs_390.engrlabs;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.transition.Slide;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,12 +24,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //getSupportActionBar().hide();
+//        setupWindowAnimations();
 
         SIngleton2ShareData.downloadLabSnapshotAtStartUp();
 
         initializeReferences();
         initializeListeners();
 
+    }
+
+    // Slide animation between activity
+    private void setupWindowAnimations() {
+        Slide slide = new Slide();
+        slide.setDuration(1000);
+        getWindow().setExitTransition(slide);
     }
 
     void initializeReferences() {
@@ -62,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     // going from mainActivity to ExpandableRecylerView with Bottom Nav
     public void goto_homepageActivity() {
-        Intent intent = new Intent(this, ExpandableRecyclerWithBottomNav.class);
+        Intent intent = new Intent(this, ExpandableRecycler.class);
 
         startActivity(intent);
     }

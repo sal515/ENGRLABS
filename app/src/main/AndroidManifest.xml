@@ -22,7 +22,7 @@
         <activity
             android:name=".TA_Section.CourseSectionSelection"
             android:screenOrientation="portrait"
-            android:parentActivityName=".ExpandableRecyclerWithBottomNav"
+            android:parentActivityName=".ExpandableRecycler"
             android:theme="@style/Theme.AppCompat.Light"
             />
         <activity
@@ -30,7 +30,7 @@
             android:screenOrientation="portrait"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".ExpandableRecyclerWithBottomNav"
+            android:name=".ExpandableRecycler"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_expandable_recycler_with_bottom_nav"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

@@ -31,7 +31,26 @@ public class SIngleton2ShareData extends Application {
     // valueEvent listener
     private static ValueEventListener labDetailsListenerVar;
 
-//    public static void
+    public static void extractParsedSoftwareData() {
+
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI stuff can be done at the end of the actual computation in the thread
+                    }
+                });
+            }
+        }).start();
+
+
+
+    }
 
     public static void downloadLabSnapshotAtStartUp() {
         // databaseRootRef = FirebaseDatabase.getInstance().getReference();

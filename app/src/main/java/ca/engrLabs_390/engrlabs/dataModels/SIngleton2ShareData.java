@@ -58,6 +58,8 @@ public class SIngleton2ShareData extends Application {
 
                         HashMap dynamicDataMap;
                         List<String> dynamicDatakeysList;
+                        dynamicDataMap = new HashMap();
+                        dynamicDatakeysList = new ArrayList<String>();
 
 
                         // Check if the object is of type HashMap, if it is cast it to HashMap

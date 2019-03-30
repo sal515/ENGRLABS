@@ -1,68 +1,121 @@
 package ca.engrLabs_390.engrlabs.recyclerView;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-// For more details of recycler or recycler adapter follow the link below:
-// https://guides.codepath.com/android/using-the-recyclerview
-
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import ca.engrLabs_390.engrlabs.LabInfo;
 import ca.engrLabs_390.engrlabs.R;
-import ca.engrLabs_390.engrlabs.database_files.recyclerViewData;
+import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
+import ca.engrLabs_390.engrlabs.dataModels.LabDataModelDiffCallback;
+
+// For more details of recycler or recycler adapter follow the link below:
+// https://guides.codepath.com/android/using-the-recyclerview
 
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
-public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, dataAdapter_recyclerView.ViewHolder> {
+//public class recyclerView_lastChangesAdapter extends ListAdapter<LabDataModel, recyclerView_lastChangesAdapter.ViewHolder> {
+public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recyclerView_lastChangesAdapter.ViewHolder> {
 
     // member array to keep track of the state of the rows : https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
-    private static SparseBooleanArray hiddenStateArray = new SparseBooleanArray();
+    private static SparseBooleanArray hiddenStateSparseBoolArray = new SparseBooleanArray();
 
 
     private Context context;
     private ViewHolder viewHolder;
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
-    List<LabInfo> info;
 
-    //==================== Fill Adapter with Data Model =============================
+    // Array list of the DataModel
+    List<LabDataModel> labDataModel;
+    private Deque<List<LabDataModel>> pendingUpdates;
+    public recyclerView_lastChangesAdapter(List<LabDataModel> labDataModel) {
+//        this.labDataModel = labDataModel;
+        this.labDataModel = new ArrayList<LabDataModel>(labDataModel);
+        pendingUpdates = new ArrayDeque<List<LabDataModel>>();
 
-    public dataAdapter_recyclerView(List<LabInfo> inputInfo) {
-        super(DIFF_CALLBACK);
-        this.info = inputInfo;
+//        int i = 0;
+
     }
 
-    // Store a member variable for the data
-    private List<recyclerViewData> dataArr;
+    @Override
+    public int getItemCount() {
+        return labDataModel.size();
+    }
 
-    public static final DiffUtil.ItemCallback<recyclerViewData> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<recyclerViewData>() {
-                @Override
-                public boolean areItemsTheSame(recyclerViewData oldItem, recyclerViewData newItem) {
-                    return oldItem.getmId() == newItem.getmId();
-                }
+    // =================== DiffUtil Functions ======================================================
 
-                @Override
-                public boolean areContentsTheSame(recyclerViewData oldItem, recyclerViewData newItem) {
-                    return (oldItem.getName() == newItem.getName() && oldItem.getOnline() == newItem.getOnline());
-                }
-            };
+//    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
+//    REFERENCE :: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
 
-    //==================== ============================= =============================
 
+    // this method is called from the fragment or activity when there is a change in the recyclerView data
+    public void updateLabData(final List<LabDataModel> newLabModelList) {
+        pendingUpdates.push(newLabModelList);
+        if (pendingUpdates.size() > 1) {
+            return;
+        }
+        updateLabDataInternal(newLabModelList);
+    }
+
+    // this method creates a backgroud thread to compute the differences in the data, so that the main thread doesn't freeze
+    // import android.os.Handler; ---> not logging
+    void updateLabDataInternal(final List<LabDataModel> newLabModelList) {
+        final List<LabDataModel> oldLabModelList = new ArrayList<>(this.labDataModel);
+
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final DiffUtil.DiffResult diffResult =
+                        DiffUtil.calculateDiff(new LabDataModelDiffCallback(oldLabModelList, newLabModelList));
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        applyDiffResult(newLabModelList, diffResult);
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    // This method is called when the background thread's work is done
+    protected void applyDiffResult(List<LabDataModel> newLabModelList,
+                                   DiffUtil.DiffResult diffResult) {
+        pendingUpdates.remove(newLabModelList);
+        dispatchUpdates(newLabModelList, diffResult);
+        if (pendingUpdates.size() > 0) {
+            List<LabDataModel> latest = pendingUpdates.pop();
+            pendingUpdates.clear();
+            updateLabDataInternal(latest);
+        }
+    }
+
+    // This method updates the recyclerView rows by updating the backing data and notifying the adapter
+    protected void dispatchUpdates(List<LabDataModel> newLabModelList,
+                                   DiffUtil.DiffResult diffResult) {
+        diffResult.dispatchUpdatesTo(this);
+        this.labDataModel.clear();
+        this.labDataModel.addAll(newLabModelList);
+    }
+
+
+    // =================== DiffUtil Functions ======================================================
 
     //==================== Define View Holder =============================
     // Provide a direct reference to each of the views within a data item
@@ -72,7 +125,6 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
         private TextView roomNumberEdit;
         private TextView availabilityEdit;
-        private TextView temperatureTitle;
         private TextView temperatureEdit;
 
         // Use groups for hide and visible
@@ -100,14 +152,10 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
             roomNumberEdit = itemView.findViewById(R.id.roomNumberEdit);
             availabilityEdit = itemView.findViewById(R.id.availabilityEdit);
-            temperatureTitle = itemView.findViewById(R.id.temperatureTitle);
             temperatureEdit = itemView.findViewById(R.id.temperatureEdit);
 
             favourite = itemView.findViewById(R.id.favouriteStar);
             favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
-            /*
-
-             */
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
             expandingGroup = itemView.findViewById(R.id.expandingSection_relativeLayout);
@@ -118,24 +166,25 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
 
+            // setting the layout listeners
             headerGroup.setOnClickListener(headerSectionListener);
             expandingInfo.setOnClickListener(expandingSectionListener);
-            favourite.setOnClickListener(favouriteStarListener);
+//            favourite.setOnClickListener(favouriteStarListener);
 
         }
 
         @Override
         public void onClick(View v) {
-            // Just here coz it needs to be overridden due to inheritance; we are using the bottom two
+            // Just here coz it needs to be overridden due to inheritance; we are using the following ones:
         }
 
         private View.OnClickListener headerSectionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int adapterPosition = getAdapterPosition();
-                if (!(hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.headingSection_constraintLayout) {
+                if (!(hiddenStateSparseBoolArray.get(adapterPosition, false)) && v.getId() == R.id.headingSection_constraintLayout) {
                     if (expandingGroup.getVisibility() == View.GONE) {
-                        hiddenStateArray.put(adapterPosition, true);
+                        hiddenStateSparseBoolArray.put(adapterPosition, true);
                         expandingGroup.setVisibility(View.VISIBLE);
                     }
 
@@ -143,7 +192,7 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
 
                 } else {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
-                        hiddenStateArray.put(adapterPosition, false);
+                        hiddenStateSparseBoolArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
 
                         //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
@@ -157,17 +206,17 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         private View.OnClickListener expandingSectionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              int adapterPosition = getAdapterPosition();
-                if ((hiddenStateArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_relativeLayout) {
+                int adapterPosition = getAdapterPosition();
+                if ((hiddenStateSparseBoolArray.get(adapterPosition, false)) && v.getId() == R.id.expandingSection_relativeLayout) {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
-                        hiddenStateArray.put(adapterPosition, false);
+                        hiddenStateSparseBoolArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
                     }
                     //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                 } else {
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
-                        hiddenStateArray.put(adapterPosition, false);
+                        hiddenStateSparseBoolArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
                     }
                     //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
@@ -177,27 +226,31 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
             }
         };
 
-        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (info.get(getAdapterPosition()).favourite == false) {
-                    info.get(getAdapterPosition()).favourite = true;
-                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    info.get(getAdapterPosition()).favourite = false;
-                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
-                }
-                notifyDataSetChanged();
-                //notifyItemChanged(getAdapterPosition());
-            }
-        };
+        // FIXME: Figure out the Logic later on --- Commented for now
+//        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int adapterPosition = getAdapterPosition();
+//                if (labDataModel.get(getAdapterPosition()).favourite == false) {
+//                    labDataModel.get(getAdapterPosition()).favourite = true;
+//                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    labDataModel.get(getAdapterPosition()).favourite = false;
+//                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed
+//                // then update that specific row rather than the whole dataset change
+//                notifyDataSetChanged();
+//                //notifyItemChanged(getAdapterPosition());
+//            }
+//        };
 
         // implementation found from here : https://github.com/Oziomajnr/RecyclerViewCheckBoxExample2/blob/with-sparse-boolean-array/app/src/main/java/ogbe/ozioma/com/recyclerviewcheckboxexample/Adapter.java
         void onRecycleHideExpandedSections(int position) {
-            if (hiddenStateArray.get(position, false)) {
+            if (hiddenStateSparseBoolArray.get(position, false)) {
                 if (expandingGroup.getVisibility() == View.VISIBLE) {
-                    hiddenStateArray.put(position, false);
+                    hiddenStateSparseBoolArray.put(position, false);
                     expandingGroup.setVisibility(View.GONE);
                 }
                 //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
@@ -227,52 +280,50 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         // return the new holder instance
         viewHolder = new ViewHolder(dataOrRowView);
 
-
         return viewHolder;
     }
 
     // onBindViewHolder to set the view attributes based on the data
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(dataAdapter_recyclerView.ViewHolder viewHolder, int position) {
-        // Get the data model based on position
-        // recyclerViewData data = dataArr.get(position);
+    public void onBindViewHolder(recyclerView_lastChangesAdapter.ViewHolder viewHolder, int position) {
 
         // getting the data at the position from the array
-        recyclerViewData data = getItem(position);
+//        LabDataModel data = getItem(position);
+        LabDataModel data = labDataModel.get(position);
 
 
         // set item views based on your views and data model
-        TextView textView1 = viewHolder.roomNumberEdit;
-        textView1.setText("Room: " + Integer.toString(info.get(position).floor) + Integer.toString(info.get(position).room));
-        //textView1.setText(data.getName());
+        TextView roomNumberTextView = viewHolder.roomNumberEdit;
+//        roomNumberTextView.setText("Room: " + Integer.toString(data.getRoom()));
+//        roomNumberTextView.setText("Room: " + data.getRoomStr());
+        roomNumberTextView.setText("Room: " + data.getRoomCode());
+        //roomNumberTextView.setText(data.getName());
 
-        TextView textView2 = viewHolder.availabilityEdit;
-        textView2.setText(data.getOnline());
+        TextView availabilityTextView = viewHolder.availabilityEdit;
+        availabilityTextView.setText(data.getLabAvailability());
 
+        TextView numberOfStudentsTextView = viewHolder.numOfStudentsRoomEdit;
+        numberOfStudentsTextView.setText(data.getNumberOfStudentsPresent());
 
-        TextView textView3 = viewHolder.numOfStudentsRoomEdit;
-        textView3.setText(Integer.toString(info.get(position).numberOfStudents));
+        TextView roomCapacityTextView = viewHolder.roomCapacityEdit;
+        roomCapacityTextView.setText(data.getTotalCapacity());
 
-        TextView textView4 = viewHolder.roomCapacityEdit;
-        textView4.setText(Integer.toString(info.get(position).roomCapacity));
+        TextView upcomingClassTextView = viewHolder.upcomingClassEdit;
+        // FIXME: Set up the map properly and then set the value
+        //        upcomingClassTextView.setText(Integer.toString(data.getUpcomingClass().));
 
-        TextView textView5 = viewHolder.upcomingClassEdit;
-        textView5.setText(Integer.toString(info.get(position).upcomingClass));
+        TextView temperatureTextView = viewHolder.temperatureEdit;
+        temperatureTextView.setText(data.getTemperature() + "°C");
 
-        TextView textView6 = viewHolder.temperatureEdit;
-        textView6.setText(Integer.toString(info.get(position).temperature) + "°C");
-
-        if (hiddenStateArray.get(position) == false) {
+        if (!hiddenStateSparseBoolArray.get(position)) {
             //Start with all the expandable sections closed
             viewHolder.expandingGroup.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             viewHolder.expandingGroup.setVisibility(View.VISIBLE);
         }
 
-        if (info.get(position).favourite == false) {
+        if (!data.isFavourite()) {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
         } else {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_yellow_24dp);
@@ -300,12 +351,6 @@ public class dataAdapter_recyclerView extends ListAdapter<recyclerViewData, data
         // One time thing - once you see it its gone
         // holder.expandingGroup.setVisibility(View.GONE);
     }
-
-    public void addMoreContacts(List<recyclerViewData> newdata) {
-        dataArr.addAll(newdata);
-        submitList(dataArr); // DiffUtil takes care of the check
-    }
-
 
     //==================== ============================= =============================
 

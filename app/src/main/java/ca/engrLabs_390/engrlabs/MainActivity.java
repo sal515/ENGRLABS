@@ -2,14 +2,15 @@
 package ca.engrLabs_390.engrlabs;
 
 import android.content.Intent;
-
-import androidx.appcompat.app.AppCompatActivity;
-import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
-
 import android.os.Bundle;
+import android.transition.Slide;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
+import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,10 +24,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //getSupportActionBar().hide();
+//        setupWindowAnimations();
+
+        SIngleton2ShareData.downloadDynamicDataForRecyclerStartUp();
+        SIngleton2ShareData.extractParsedSoftwareData();
 
         initializeReferences();
         initializeListeners();
 
+    }
+
+    // Slide animation between activity
+    private void setupWindowAnimations() {
+        Slide slide = new Slide();
+        slide.setDuration(1000);
+        getWindow().setExitTransition(slide);
     }
 
     void initializeReferences() {
@@ -59,11 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     // going from mainActivity to ExpandableRecylerView with Bottom Nav
     public void goto_homepageActivity() {
-        Intent intent = new Intent(this, ExpandableRecyclerWithBottomNav.class);
-
-        // Example to pass info from one activity to another
-        // put extra is used to primitive data from one activity to another
-        //        intent.putExtra("courseID", courseID);
+        Intent intent = new Intent(this, ExpandableRecycler.class);
 
         startActivity(intent);
     }

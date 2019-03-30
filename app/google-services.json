@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "306324113002",
+    "firebase_url": "https://engrlabs-10f0c.firebaseio.com",
+    "project_id": "engrlabs-10f0c",
+    "storage_bucket": "engrlabs-10f0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306324113002:android:964f5de6e34ba235",
+        "android_client_info": {
+          "package_name": "ca.engrLabs_390.engrlabs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306324113002-vo14317b872f1smnrv7kumushes96qg4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.engrLabs_390.engrlabs",
+            "certificate_hash": "e00bb90151510da7542826a128f081456629ec6f"
+          }
+        },
+        {
+          "client_id": "306324113002-12reo517t338g051finmrek1vh7258ua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR7leKpDvvcT3bBnYPqDqftB3zu9qgwew"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306324113002-12reo517t338g051finmrek1vh7258ua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

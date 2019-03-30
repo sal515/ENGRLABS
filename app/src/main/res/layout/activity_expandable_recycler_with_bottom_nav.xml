@@ -11,7 +11,7 @@
     android:focusable="true"
     android:gravity="start"
     android:orientation="vertical"
-    tools:context=".ExpandableRecyclerWithBottomNav">
+    tools:context=".ExpandableRecycler">
 
     <!--android:layout_margin="5dp"-->
 
@@ -89,24 +89,12 @@
             android:id="@+id/expandingRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/navigation"
             android:layout_below="@+id/message"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:visibility="visible" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="?android:attr/windowBackground"
-            android:visibility="visible"
-            app:menu="@menu/navigation">
-
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
     </RelativeLayout>
 
     <!--RecyclerView layout setting -->

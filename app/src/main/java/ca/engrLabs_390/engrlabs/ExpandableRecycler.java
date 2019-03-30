@@ -179,7 +179,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
 
 //        int asdaf = 0;
-//        List<LabDataModel> tempTest = new ArrayList(SIngleton2ShareData.getTempLabDynamicDataObjects());
+//        List<LabDataModel> tempTest = new ArrayList(SIngleton2ShareData.getLabDynamicDataObjects());
 //
 //        for (int i = 0; i < tempTest.size(); i++) {
 //            Log.w(TAG, String.valueOf(tempTest.get(i)));
@@ -409,7 +409,7 @@ public class ExpandableRecycler extends AppCompatActivity {
         try {
 //            tempDynamicDataList = new ArrayList<>();
 
-             tempDynamicDataList = new ArrayList<>(SIngleton2ShareData.getTempLabDynamicDataObjects());
+             tempDynamicDataList = new ArrayList<>(SIngleton2ShareData.getLabDynamicDataObjects());
             Log.w(TAG, "Data Filled From SingleTon Class");
             int i = 0;
         } catch (Exception e) {

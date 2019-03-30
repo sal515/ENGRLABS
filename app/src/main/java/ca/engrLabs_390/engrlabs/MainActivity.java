@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 //        setupWindowAnimations();
 
         SIngleton2ShareData.downloadDynamicDataForRecyclerStartUp();
+        SIngleton2ShareData.extractParsedSoftwareData();
 
         initializeReferences();
         initializeListeners();

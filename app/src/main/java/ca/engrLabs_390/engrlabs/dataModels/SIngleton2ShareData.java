@@ -19,9 +19,8 @@ public class SIngleton2ShareData extends Application {
     private static final String TAG = "SingleTon";
 
 
-    private static HashMap LabDataMap;
-    private static List<String> keysList;
-    private static List<LabDataModel> tempLabDynamicDataObjects;
+    private static List<LabDataModel> labDynamicDataObjects;
+    private static List<String> softwareList;
 
 
     // references to the database
@@ -41,11 +40,10 @@ public class SIngleton2ShareData extends Application {
         database = FirebaseDatabase.getInstance();
         databaseRootRef = database.getReference();
         dynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
+        softwaresRef = databaseRootRef.child("/PUBLIC_DATA/Softwares");
 
 
-        LabDataMap = new HashMap();
-        tempLabDynamicDataObjects = new ArrayList<LabDataModel>();
-        keysList = new ArrayList<String>();
+        labDynamicDataObjects = new ArrayList<LabDataModel>();
 
         final Handler handler = new Handler();
         new Thread(new Runnable() {
@@ -58,10 +56,16 @@ public class SIngleton2ShareData extends Application {
                         // extract the snapshot as an object
                         Object labObj = dataSnapshot.getValue();
 
+                        HashMap dynamicDataMap;
+                        List<String> dynamicDatakeysList;
+                        dynamicDataMap = new HashMap();
+                        dynamicDatakeysList = new ArrayList<String>();
+
+
                         // Check if the object is of type HashMap, if it is cast it to HashMap
                         if (labObj instanceof HashMap) {
-                            LabDataMap = new HashMap((HashMap) labObj);
-                            keysList = new ArrayList<String>(LabDataMap.keySet());
+                            dynamicDataMap = new HashMap((HashMap) labObj);
+                            dynamicDatakeysList = new ArrayList<String>(dynamicDataMap.keySet());
 
                         }
 
@@ -78,17 +82,17 @@ public class SIngleton2ShareData extends Application {
                         String LocationCode;
                         HashMap<String, String> upcomingClass = new HashMap<String, String>();
 
-                        for (int j = 0; j < keysList.size(); j++) {
+                        for (int j = 0; j < dynamicDatakeysList.size(); j++) {
                             // tempDynamicDataList = new ArrayList<LabDataModel>();
                             LabDataModel tempDynamicDataObj = new LabDataModel();
 
                             // AvailableSpots
-                            AvailableSpots =  ((HashMap) LabDataMap.get(keysList.get(j))).get("AvailableSpots").toString();
-                            BuildingCode = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("BuildingCode");
-                            LabAvailable = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("LabAvailable");
-                            LocationCode = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("LocationCode");
+                            AvailableSpots =  ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("AvailableSpots").toString();
+                            BuildingCode = (String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("BuildingCode");
+                            LabAvailable = (String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("LabAvailable");
+                            LocationCode = (String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("LocationCode");
                             try {
-                                Room = Integer.parseInt((String) ((HashMap) LabDataMap.get(keysList.get(j))).get("Room"));
+                                Room = Integer.parseInt((String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("Room"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Log.w(TAG, "Error Loading Room from Database");
@@ -98,17 +102,17 @@ public class SIngleton2ShareData extends Application {
                             }
 
                             try {
-                                RoomCode = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("RoomCode");
+                                RoomCode = (String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("RoomCode");
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                                 Log.w(TAG, "Error Loading Room Code from Database");
                                 RoomCode = "000";
                             }
                             // setting the temperature
-                            Temperature = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("Temperature");
-                            TotalCapacity = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("TotalCapacity");
+                            Temperature = (String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("Temperature");
+                            TotalCapacity = (String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("TotalCapacity");
                             // setting the number of students
-                            NumberOfStudentsPresent = (String) ((HashMap) LabDataMap.get(keysList.get(j))).get("NumberOfStudentsPresent");
+                            NumberOfStudentsPresent = (String) ((HashMap) dynamicDataMap.get(dynamicDatakeysList.get(j))).get("NumberOfStudentsPresent");
 
 
                             tempDynamicDataObj.setAvailableSpots(AvailableSpots);
@@ -121,16 +125,16 @@ public class SIngleton2ShareData extends Application {
                             tempDynamicDataObj.setTotalCapacity(TotalCapacity);
 
                             // setting the Room number
-//                    tempDynamicDataObj.setRoomStr(keysList.get(j));
-                            // NumberOfStudentsPresent = (String) ((HashMap) LabDataMap.get("B204")).get("NumberOfStudentsPresent");
+//                    tempDynamicDataObj.setRoomStr(dynamicDatakeysList.get(j));
+                            // NumberOfStudentsPresent = (String) ((HashMap) dynamicDataMap.get("B204")).get("NumberOfStudentsPresent");
                             tempDynamicDataObj.setNumberOfStudentsPresent(NumberOfStudentsPresent);
 
                             // Adding the tempDynamicData object created to the List
-                            tempLabDynamicDataObjects.add(tempDynamicDataObj);
+                            labDynamicDataObjects.add(tempDynamicDataObj);
                         }
 
-                        if (!keysList.isEmpty()) {
-                            keysList.clear();
+                        if (!dynamicDatakeysList.isEmpty()) {
+                            dynamicDatakeysList.clear();
                         }
 
                         Log.w(TAG, "ThreadWorking");
@@ -169,12 +173,43 @@ public class SIngleton2ShareData extends Application {
 
     public static void extractParsedSoftwareData() {
 
+        softwareList = new ArrayList<String>();
+
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             @Override
             public void run() {
 
+                // Downloading the parsed software data from the dabase
+                ValueEventListener labDetailsListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.w(TAG, "Software Parsing Data download function called ");
 
+
+                        HashMap softwaresMap;
+                        List<String> softwareKeysList;
+                        softwaresMap = new HashMap();
+                        softwareKeysList = new ArrayList<String>();
+
+
+                        // extract the snapshot as an object
+                        Object labObj = dataSnapshot.getValue();
+                        // Check if the object is of type HashMap, if it is cast it to HashMap
+                        if (labObj instanceof HashMap) {
+                            softwaresMap = new HashMap((HashMap) labObj);
+                            softwareKeysList = new ArrayList<String>(softwaresMap.keySet());
+                        }
+
+//                        String i = "Work";
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    }
+                };
+                softwaresRef.addListenerForSingleValueEvent(labDetailsListener);
 
                 handler.post(new Runnable() {
                     @Override
@@ -185,25 +220,21 @@ public class SIngleton2ShareData extends Application {
             }
         }).start();
 
-
-
     }
 
-
-
-    public static HashMap getLabDataMap() {
-        return LabDataMap;
+    public static List<LabDataModel> getLabDynamicDataObjects() {
+        return labDynamicDataObjects;
     }
 
-    public static void setLabDataMap(HashMap labDataMap) {
-        LabDataMap = labDataMap;
+    public static void setLabDynamicDataObjects(List<LabDataModel> labDynamicDataObjects) {
+        SIngleton2ShareData.labDynamicDataObjects = labDynamicDataObjects;
     }
 
-    public static List<LabDataModel> getTempLabDynamicDataObjects() {
-        return tempLabDynamicDataObjects;
+    public static List<String> getSoftwareList() {
+        return softwareList;
     }
 
-    public static void setTempLabDynamicDataObjects(List<LabDataModel> tempLabDynamicDataObjects) {
-        SIngleton2ShareData.tempLabDynamicDataObjects = tempLabDynamicDataObjects;
+    public static void setSoftwareList(List<String> softwareList) {
+        SIngleton2ShareData.softwareList = softwareList;
     }
 }

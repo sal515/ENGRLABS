@@ -1,5 +1,6 @@
 package ca.engrLabs_390.engrlabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +33,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.recyclerView_lastChangesAdapter;
@@ -66,6 +68,9 @@ public class ExpandableRecycler extends AppCompatActivity {
     DrawerLayout drawer;
     NavigationView navigationView;
     MenuItem menu;
+    MenuItem homePageNavButton;
+    MenuItem labListNavButton;
+    MenuItem taLoginNavButton;
     Switch tempUp;
     Switch tempDown;
     Switch peopleUp;
@@ -189,6 +194,30 @@ public class ExpandableRecycler extends AppCompatActivity {
         drawer = findViewById(R.id.drawerContainer);
         navigationView = findViewById(R.id.nav_view);
 
+        homePageNavButton = findViewById(R.id.homepage);
+        labListNavButton = findViewById(R.id.lablist);
+        taLoginNavButton = findViewById(R.id.taSection);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.homepage:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        break;
+                    case R.id.lablist:
+                        startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        break;
+                    case R.id.taSection:
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
         List<Switch> floorSwitches = new ArrayList<>();;
         eigthFloor = navigationView.getMenu().findItem(R.id.eighthFloor).getActionView().findViewById(R.id.switcher);
         ninthFloor = navigationView.getMenu().findItem(R.id.ninthFloor).getActionView().findViewById(R.id.switcher);
@@ -253,6 +282,7 @@ public class ExpandableRecycler extends AppCompatActivity {
             }
         });
     }
+
     private void sortInitForSwitchesInAGroup(final List<Switch> switchList, int switchIndex){
         switchList.get(switchIndex).setOnClickListener(new View.OnClickListener() {
             @Override

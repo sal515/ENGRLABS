@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -169,7 +170,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             // setting the layout listeners
             headerGroup.setOnClickListener(headerSectionListener);
             expandingInfo.setOnClickListener(expandingSectionListener);
-//            favourite.setOnClickListener(favouriteStarListener);
+            favourite.setOnClickListener(favouriteStarListener);
 
         }
 
@@ -227,24 +228,24 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         };
 
         // FIXME: Figure out the Logic later on --- Commented for now
-//        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int adapterPosition = getAdapterPosition();
-//                if (labDataModel.get(getAdapterPosition()).favourite == false) {
-//                    labDataModel.get(getAdapterPosition()).favourite = true;
-//                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    labDataModel.get(getAdapterPosition()).favourite = false;
-//                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed
-//                // then update that specific row rather than the whole dataset change
-//                notifyDataSetChanged();
-//                //notifyItemChanged(getAdapterPosition());
-//            }
-//        };
+        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LabDataModel data = labDataModel.get(getAdapterPosition());
+                if (data.isFavourite() == false) {
+                    data.setFavourite(true);
+                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                } else {
+                    data.setFavourite(false);
+                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
+                }
+
+                //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed
+                // then update that specific row rather than the whole dataset change
+                notifyDataSetChanged();
+                //notifyItemChanged(getAdapterPosition());
+            }
+        };
 
         // implementation found from here : https://github.com/Oziomajnr/RecyclerViewCheckBoxExample2/blob/with-sparse-boolean-array/app/src/main/java/ogbe/ozioma/com/recyclerviewcheckboxexample/Adapter.java
         void onRecycleHideExpandedSections(int position) {

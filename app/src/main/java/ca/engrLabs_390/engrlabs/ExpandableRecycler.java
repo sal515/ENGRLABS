@@ -78,6 +78,17 @@ public class ExpandableRecycler extends AppCompatActivity {
     Switch eigthFloor;
     Switch ninthFloor;
     Switch favorites;
+    enum SortTypes {
+        NONE,
+        TEMP_UP,
+        TEMP_DOWN,
+        PEOPLE_UP,
+        PEOPLE_DOWN,
+    }
+    boolean favouriteFilter = false;
+    int floorFilter = 0;
+    SortTypes sortType = SortTypes.NONE;
+
     // =========  Nav Drawer Stuff   ==========
 
     // ========= Firebase variables =================
@@ -355,9 +366,13 @@ public class ExpandableRecycler extends AppCompatActivity {
         }
         else if (pressedSwitch == favorites){
             if (switchOn == true) {
+                favouriteFilter = true;
+                updateData();
                 Toast.makeText(getApplicationContext(), "Favourites", Toast.LENGTH_SHORT).show();
             }
             else{
+                favouriteFilter = false;
+                updateData();
                 Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
@@ -489,7 +504,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                     tempDynamicDataList.add(tempDynamicDataObj);
                 }
 
-                recyclerViewAdapter.updateLabData(tempDynamicDataList);
+                updateData();
 
                 if (!labKeysList.isEmpty()) {
                     labKeysList.clear();
@@ -690,8 +705,54 @@ public class ExpandableRecycler extends AppCompatActivity {
 //      The animator fixes the program of Flickering screen
         RecyclerView.ItemAnimator itemAnimator = new LandingAnimator(new OvershootInterpolator(1f));
         recyclerViewVar.setItemAnimator(itemAnimator);
-
     }
+
+    private void updateData(){
+        //final List<LabDataModel> unsortedList = tempDynamicDataList;
+        List<LabDataModel> sortedList = tempDynamicDataList;
+
+        if (floorFilter != 0){
+            sortedList = filterByFloor(sortedList);
+        }
+
+        if (favouriteFilter == true){
+            sortedList = filterByFavourite(sortedList);
+        }
+
+        if (sortType != SortTypes.NONE){
+            sortedList = sortLabList(sortedList);
+        }
+
+        recyclerViewAdapter.updateLabData(sortedList);
+    }
+
+    private List<LabDataModel> filterByFloor(List<LabDataModel> input){
+        List<LabDataModel> output = new ArrayList<>();
+        for(int i = 0;i<input.size();i++){
+            System.out.println(input.get(i).getFloor());
+            if (input.get(i).getFloor() == -1){
+                output.add(input.get(i));
+            }
+        }
+        return output;
+    }
+
+    private List<LabDataModel> filterByFavourite(List<LabDataModel> input){
+        List<LabDataModel> output = new ArrayList<>();
+        for(int i = 0;i<input.size();i++){
+            System.out.println(input.get(i).isFavourite());
+            if (input.get(i).isFavourite()){
+                output.add(input.get(i));
+            }
+        }
+        return output;
+    }
+
+    private List<LabDataModel> sortLabList(List<LabDataModel> input){
+        return input;
+    }
+
+
 
     // FIXME: Not sure if we will need it
 //    private List<LabDataModel> filterClasses(List<LabDataModel> input){

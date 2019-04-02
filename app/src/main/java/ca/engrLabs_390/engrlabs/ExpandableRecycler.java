@@ -136,8 +136,10 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     //Tooltips
     //Handles Tutorial Mode
-    private static int tooltipState = 0; //local state machine to control active tooltip
+    public static int tooltipState = 0; //local state machine to control active tooltip
     private Tooltip tool;   //local tooltip
+
+    public static int listToolTipState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -787,6 +789,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     public static void initTooltips(){
         tooltipState = 0;
+        listToolTipState = 0;
     }
     private void processTooltips(){
         if (MainActivity.getTutorialMode() == true) {
@@ -824,10 +827,9 @@ public class ExpandableRecycler extends AppCompatActivity {
         });
     }
 
-    private void nextToolTip(){
+    public void nextToolTip(){
         tool.dismiss();
         tooltipState++;
         processTooltips();
     }
-
 }

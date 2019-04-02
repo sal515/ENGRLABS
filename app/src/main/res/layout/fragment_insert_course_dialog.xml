@@ -21,11 +21,11 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/saveButton"
+        android:layout_above="@+id/closeButton"
         android:layout_below="@+id/search" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/closeButton"
         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:layout_width="match_parent"
         android:layout_height="40dp"

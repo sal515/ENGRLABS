@@ -1,11 +1,13 @@
 package ca.engrLabs_390.engrlabs.recyclerView;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Queue;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.R;
@@ -40,6 +43,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     private ViewHolder viewHolder;
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
+    Context parentContext;
 
     // Array list of the DataModel
     List<LabDataModel> labDataModel;
@@ -138,6 +142,8 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         private TextView roomCapacityEdit;
         private TextView upcomingClassEdit;
 
+        private Button softwareListButton;
+
         private ImageView favourite;
 
         // We also create a constructor that accepts the entire item row
@@ -167,11 +173,24 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
 
+            softwareListButton = itemView.findViewById(R.id.listOfSoftwareButton);
+
             // setting the layout listeners
             headerGroup.setOnClickListener(headerSectionListener);
             expandingInfo.setOnClickListener(expandingSectionListener);
             favourite.setOnClickListener(favouriteStarListener);
-
+            softwareListButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SoftwareListFragment dialog = new SoftwareListFragment();
+                    Bundle args = new Bundle();
+                    args.putInt("Floor",8);
+                    args.putInt("Class",8);
+                    args.putChar("Building",'H');
+                    dialog.setArguments(args);
+                    dialog.show(((AppCompatActivity)parentContext).getSupportFragmentManager(), "Insert Course");
+                }
+            });
         }
 
         @Override
@@ -273,6 +292,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        parentContext = context;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom Layout for each row and return as variable

@@ -649,7 +649,7 @@ public class ExpandableRecycler extends AppCompatActivity {
     private ImageView.OnClickListener sortButtonListener
             = new View.OnClickListener() {
         public void onClick(View v) {
-            //LabSortFragment dialog = new LabSortFragment();
+            //SoftwareListFragment dialog = new SoftwareListFragment();
             drawer.openDrawer(GravityCompat.START);
             //MenuItem checkable = navigationView.getMenu().findItem(R.id.tempDown);
             //checkable.setChecked(true);
@@ -661,7 +661,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 //    private ImageView.OnClickListener sortButtonListener
 //            = new View.OnClickListener() {
 //        public void onClick(View v) {
-//            LabSortFragment dialog = new LabSortFragment();
+//            SoftwareListFragment dialog = new SoftwareListFragment();
 //            dialog.show(getSupportFragmentManager(), "Insert Course");
 //            // your code here
 //        }

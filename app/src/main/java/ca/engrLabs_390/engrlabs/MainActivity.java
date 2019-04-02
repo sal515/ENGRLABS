@@ -7,12 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
+
+import com.tooltip.OnClickListener;
+import com.tooltip.Tooltip;
 
 import java.util.Calendar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
@@ -26,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
     Button homepageBtn;
     ImageView logo;
     private NotificationManagerCompat notificationManager;
+
+    //Handles Tutorial Mode
+    private Switch tutorialModeSwitch;  //the switch
+    private static boolean tutorialMode = false; //global variable which stores the status of tutorial mode, modified by tutorialModeSwitch
+    private static int tooltipState = 0; //local state machine to control active tooltip
+    private Tooltip tool;   //local tooltip
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +55,18 @@ public class MainActivity extends AppCompatActivity {
         notificationManager = NotificationManagerCompat.from(this);
 
         setScheduledNotification(Calendar.MONDAY,22,45,0);  //Monday at 10:45pm
+    }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if ((tutorialMode == true)&&(!tutorialModeSwitch.isChecked())){
+            tutorialModeSwitch.setChecked(true);
+            if (tool != null){
+                tool.dismiss();
+            }
+            processTooltips();
+        }
     }
 
     // Slide animation between activity
@@ -58,11 +81,27 @@ public class MainActivity extends AppCompatActivity {
         homepageBtn = findViewById(R.id.homepageBtn);
         logo = findViewById(R.id.logo);
         logo.setImageResource(R.drawable.ic_logo_better);
+        tutorialModeSwitch = findViewById(R.id.tutorialMode);
     }
 
     void initializeListeners() {
         loginBtn.setOnClickListener(loginBtnOnclickListener);
         homepageBtn.setOnClickListener(homepageBtnOnclickListener);
+        tutorialModeSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tutorialMode = tutorialModeSwitch.isChecked();
+
+                if (tutorialMode == true){
+                    setTooltips();
+                }
+                else{
+                    if (tool != null){
+                        tool.dismiss();
+                    }
+                }
+            }
+        });
     }
 
 
@@ -110,5 +149,54 @@ public class MainActivity extends AppCompatActivity {
         //cal.add(Calendar.MINUTE, 1);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcast);
+    }
+    public static boolean getTutorialMode(){
+        return tutorialMode;
+    }
+
+    private void setTooltips(){
+        if (tutorialMode = true){
+            if (tool != null){
+                tool.dismiss();
+            }
+            tooltipState = 0;
+            ExpandableRecycler.initTooltips();
+            processTooltips();
+        }
+    }
+    private void processTooltips(){
+        switch (tooltipState){
+            case 0:
+                buildToolTip("Click On a Tip to Dismiss it", Gravity.BOTTOM,tutorialModeSwitch);
+                break;
+            case 1:
+                buildToolTip("Login as a TA",Gravity.TOP,loginBtn);
+                break;
+            case 2:
+                buildToolTip("View the List of Labs",Gravity.BOTTOM,homepageBtn);
+                break;
+
+            default:
+                break;
+
+        }
+    }
+    private void buildToolTip(String text, int gravity, View v){
+        tool = new Tooltip.Builder(v, R.style.Tooltip)
+                .setCancelable(false)
+                .setDismissOnClick(false)
+                .setCornerRadius(20f)
+                .setGravity(gravity)
+                .setText(text)
+                .setTextSize(R.dimen.toolTipSize)
+                .show();
+        tool.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(@NonNull Tooltip tooltip) {
+                tool.dismiss();
+                tooltipState++;
+                processTooltips();
+            }
+        });
     }
 }

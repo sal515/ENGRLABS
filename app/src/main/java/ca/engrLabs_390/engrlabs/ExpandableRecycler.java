@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Fade;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -21,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.tooltip.OnClickListener;
+import com.tooltip.Tooltip;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,6 +134,11 @@ public class ExpandableRecycler extends AppCompatActivity {
     // RecyclerView Reference variable
     RecyclerView recyclerViewVar;
 
+    //Tooltips
+    //Handles Tutorial Mode
+    private static int tooltipState = 0; //local state machine to control active tooltip
+    private Tooltip tool;   //local tooltip
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +161,8 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
+
+        processTooltips();
 
     }
 
@@ -266,25 +276,28 @@ public class ExpandableRecycler extends AppCompatActivity {
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                /*
                 if (MainActivity.getTutorialMode() == true) {
+                    if (tool!=null){
+                        tool.dismiss();
+                    }
+                    /*
                     if (tooltipState == 2){
                         nextToolTip();
                     }
                     else if ((tooltipState == 0 )||(tooltipState == 1 )){
                         tool.dismiss();
                     }
+                    */
                 }
-                */
+
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                /*
                 if ((tooltipState == 0 )||(tooltipState == 1 )){
                     processTooltips();
                 }
-                */
+
             }
 
             @Override
@@ -771,5 +784,50 @@ public class ExpandableRecycler extends AppCompatActivity {
 //        }
 //        return returnClassList;
 //    }
+
+    public static void initTooltips(){
+        tooltipState = 0;
+    }
+    private void processTooltips(){
+        if (MainActivity.getTutorialMode() == true) {
+            switch (tooltipState) {
+                case 0:
+                    buildToolTip("Press a Lab to Expand for More Info", Gravity.TOP, recyclerViewVar);
+                    break;
+                case 1:
+                    buildToolTip("You can Search for a Specific Software", Gravity.BOTTOM, searchCard);
+                    break;
+                case 2:
+                    buildToolTip("Press Here or Pull From Edge to Open Menu", Gravity.RIGHT, sortButton);
+                    break;
+
+                default:
+                    break;
+
+            }
+        }
+    }
+    private void buildToolTip(String text, int gravity, View v){
+        tool = new Tooltip.Builder(v, R.style.Tooltip)
+                .setCancelable(false)
+                .setDismissOnClick(false)
+                .setCornerRadius(20f)
+                .setGravity(gravity)
+                .setText(text)
+                .setTextSize(R.dimen.toolTipSize)
+                .show();
+        tool.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(@NonNull Tooltip tooltip) {
+                nextToolTip();
+            }
+        });
+    }
+
+    private void nextToolTip(){
+        tool.dismiss();
+        tooltipState++;
+        processTooltips();
+    }
 
 }

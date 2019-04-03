@@ -1,13 +1,20 @@
 package ca.engrLabs_390.engrlabs.recyclerView;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.SparseBooleanArray;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.tooltip.OnClickListener;
+import com.tooltip.Tooltip;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -16,8 +23,11 @@ import java.util.List;
 import java.util.Queue;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.engrLabs_390.engrlabs.ExpandableRecycler;
+import ca.engrLabs_390.engrlabs.MainActivity;
 import ca.engrLabs_390.engrlabs.R;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModelDiffCallback;
@@ -39,6 +49,12 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     private ViewHolder viewHolder;
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
+    Context parentContext;
+
+    //Tooltips
+    //Handles Tutorial Mode
+   // private static int tooltipState = 0; //local state machine to control active tooltip
+    private Tooltip tool;   //local tooltip
 
     // Array list of the DataModel
     List<LabDataModel> labDataModel;
@@ -137,6 +153,8 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         private TextView roomCapacityEdit;
         private TextView upcomingClassEdit;
 
+        private Button softwareListButton;
+
         private ImageView favourite;
 
         // We also create a constructor that accepts the entire item row
@@ -156,6 +174,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
 
             favourite = itemView.findViewById(R.id.favouriteStar);
             favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
+            favouriteTemp = favourite;
 
             headerGroup = itemView.findViewById(R.id.headingSection_constraintLayout);
             expandingGroup = itemView.findViewById(R.id.expandingSection_relativeLayout);
@@ -166,11 +185,29 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
 
+            softwareListButton = itemView.findViewById(R.id.listOfSoftwareButton);
+            buttonTemp = softwareListButton;
             // setting the layout listeners
             headerGroup.setOnClickListener(headerSectionListener);
             expandingInfo.setOnClickListener(expandingSectionListener);
-//            favourite.setOnClickListener(favouriteStarListener);
-
+            favourite.setOnClickListener(favouriteStarListener);
+            softwareListButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SoftwareListFragment dialog = new SoftwareListFragment();
+                    Bundle args = new Bundle();
+                    args.putInt("Floor",8);
+                    args.putInt("Class",8);
+                    args.putChar("Building",'H');
+                    dialog.setArguments(args);
+                    dialog.show(((AppCompatActivity)parentContext).getSupportFragmentManager(), "Insert Course");
+                }
+            });
+            if (MainActivity.getTutorialMode() == true){
+                if (getAdapterPosition() == 0){
+                    expandingGroup.setVisibility(View.GONE);
+                }
+            }
         }
 
         @Override
@@ -178,6 +215,8 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             // Just here coz it needs to be overridden due to inheritance; we are using the following ones:
         }
 
+        ImageView favouriteTemp;    //used for the tooltips, need a public view for it
+        Button buttonTemp;   //same story as above
         private View.OnClickListener headerSectionListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,6 +225,30 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                     if (expandingGroup.getVisibility() == View.GONE) {
                         hiddenStateSparseBoolArray.put(adapterPosition, true);
                         expandingGroup.setVisibility(View.VISIBLE);
+                        if (MainActivity.getTutorialMode() == true){
+                            if (getAdapterPosition() == 0){
+                                processTooltips(favouriteTemp);
+                            }
+                            if (ExpandableRecycler.tooltipState == 0){
+                                ((ExpandableRecycler)parentContext).nextToolTip();
+                            }
+                        }
+                        /*
+                        final Tooltip tool = new Tooltip.Builder(favourite, R.style.Tooltip)
+                                .setCancelable(false)
+                                .setDismissOnClick(false)
+                                .setCornerRadius(20f)
+                                .setGravity(Gravity.BOTTOM)
+                                .setText("You can Favourite your favourite labs")
+                                .setTextSize(R.dimen.toolTipSize)
+                                .show();
+                        tool.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(@NonNull Tooltip tooltip) {
+                                tool.dismiss();
+                            }
+                        });
+                        */
                     }
 
                     //Toast.makeText(context, "Visible", Toast.LENGTH_SHORT).show();
@@ -195,6 +258,9 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                         hiddenStateSparseBoolArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
 
+                        if (tool != null){
+                            tool.dismiss();
+                        }
                         //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 
                     }
@@ -227,24 +293,25 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         };
 
         // FIXME: Figure out the Logic later on --- Commented for now
-//        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int adapterPosition = getAdapterPosition();
-//                if (labDataModel.get(getAdapterPosition()).favourite == false) {
-//                    labDataModel.get(getAdapterPosition()).favourite = true;
-//                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    labDataModel.get(getAdapterPosition()).favourite = false;
-//                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed
-//                // then update that specific row rather than the whole dataset change
-//                notifyDataSetChanged();
-//                //notifyItemChanged(getAdapterPosition());
-//            }
-//        };
+        private View.OnClickListener favouriteStarListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LabDataModel data = labDataModel.get(getAdapterPosition());
+                nextToolTip();
+                if (data.isFavourite() == false) {
+                    data.setFavourite(true);
+                    Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                } else {
+                    data.setFavourite(false);
+                    Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
+                }
+
+                //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed
+                // then update that specific row rather than the whole dataset change
+                notifyDataSetChanged();
+                //notifyItemChanged(getAdapterPosition());
+            }
+        };
 
         // implementation found from here : https://github.com/Oziomajnr/RecyclerViewCheckBoxExample2/blob/with-sparse-boolean-array/app/src/main/java/ogbe/ozioma/com/recyclerviewcheckboxexample/Adapter.java
         void onRecycleHideExpandedSections(int position) {
@@ -272,6 +339,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        parentContext = context;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom Layout for each row and return as variable
@@ -343,6 +411,11 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         super.onViewAttachedToWindow(holder);
         // its works on the view that you are about to see - works well for my needs here
         // holder.expandingGroup.setVisibility(View.VISIBLE);
+        if (holder.expandingGroup.getVisibility() == View.VISIBLE){
+            if ((holder.getAdapterPosition() == 0)|| (ExpandableRecycler.tooltipState == 0)){
+                processTooltips(holder.favourite);
+            }
+        }
     }
 
     @Override
@@ -353,6 +426,53 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     }
 
     //==================== ============================= =============================
+
+    public static void initTooltips(){
+        ExpandableRecycler.listToolTipState = 0;
+    }
+    private void processTooltips(View v){
+        if (MainActivity.getTutorialMode() == true) {
+            switch (ExpandableRecycler.listToolTipState) {
+                case 0:
+                    buildToolTip("Click the Star to Favourite a Lab", Gravity.TOP, v);
+                    break;
+                case 1:
+                    //buildToolTip("You Can View the Specific Softwares Available in a Lab", Gravity.BOTTOM, v);
+                    break;
+                case 2:
+                    //buildToolTip("Press Here or Pull From Edge to Open Menu", Gravity.RIGHT, sortButton);
+                    break;
+
+                default:
+                    break;
+
+            }
+        }
+    }
+    private void buildToolTip(String text, int gravity, View v){
+        tool = new Tooltip.Builder(v, R.style.Tooltip)
+                .setCancelable(false)
+                .setDismissOnClick(false)
+                .setCornerRadius(20f)
+                .setGravity(gravity)
+                .setText(text)
+                .setTextSize(R.dimen.toolTipSize)
+                .show();
+        tool.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(@NonNull Tooltip tooltip) {
+                nextToolTip();
+            }
+        });
+    }
+
+    private void nextToolTip(){
+        if (tool != null){
+            tool.dismiss();
+        }
+        ExpandableRecycler.listToolTipState++;
+        //processTooltips();
+    }
 
 
 }

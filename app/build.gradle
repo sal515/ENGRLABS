@@ -44,6 +44,9 @@ dependencies {
 
     // recyclerview animator library
     implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
+
+    //Tooltips
+    implementation 'com.github.vihtarb:tooltip:0.2.0'
 }
 
 

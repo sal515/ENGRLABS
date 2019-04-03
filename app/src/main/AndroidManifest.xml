@@ -51,6 +51,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".notifications.AlarmReceiver">
+            <intent-filter>
+                <action android:name="mike.action.DISPLAY_NOTIDICATION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

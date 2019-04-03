@@ -1,14 +1,20 @@
 package ca.engrLabs_390.engrlabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Fade;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,15 +22,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.tooltip.OnClickListener;
+import com.tooltip.Tooltip;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.recyclerView_lastChangesAdapter;
@@ -51,8 +63,36 @@ public class ExpandableRecycler extends AppCompatActivity {
     static String text = "";
     CardView searchCard;
     ImageView sortButton;
+    List<String> suggestList = new ArrayList<>();
 
     // =========  Search bar stuff   ==========
+
+    // =========  Nav Drawer Stuff   ==========
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    MenuItem menu;
+    MenuItem homePageNavButton;
+    MenuItem labListNavButton;
+    MenuItem taLoginNavButton;
+    Switch tempUp;
+    Switch tempDown;
+    Switch peopleUp;
+    Switch peopleDown;
+    Switch eigthFloor;
+    Switch ninthFloor;
+    Switch favorites;
+    enum SortTypes {
+        NONE,
+        TEMP_UP,
+        TEMP_DOWN,
+        PEOPLE_UP,
+        PEOPLE_DOWN,
+    }
+    boolean favouriteFilter = false;
+    int floorFilter = 0;
+    SortTypes sortType = SortTypes.NONE;
+
+    // =========  Nav Drawer Stuff   ==========
 
     // ========= Firebase variables =================
 
@@ -94,6 +134,13 @@ public class ExpandableRecycler extends AppCompatActivity {
     // RecyclerView Reference variable
     RecyclerView recyclerViewVar;
 
+    //Tooltips
+    //Handles Tutorial Mode
+    public static int tooltipState = 0; //local state machine to control active tooltip
+    private Tooltip tool;   //local tooltip
+
+    public static int listToolTipState = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +163,8 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
+
+        processTooltips();
 
     }
 
@@ -142,6 +191,8 @@ public class ExpandableRecycler extends AppCompatActivity {
         // Initialize RecyclerView variable
         recyclerViewVar = findViewById(R.id.expandingRecyclerView);
 
+        // Init Nav Drawer
+        initNavBar();
         //Dummy Class List
 //        floorMode = 0;
 //        filterSelection = "";
@@ -162,10 +213,193 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     }
 
+    private void initNavBar(){
+        drawer = findViewById(R.id.drawerContainer);
+        navigationView = findViewById(R.id.nav_view);
+
+        homePageNavButton = findViewById(R.id.homepage);
+        labListNavButton = findViewById(R.id.lablist);
+        taLoginNavButton = findViewById(R.id.taSection);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.homepage:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        break;
+                    case R.id.lablist:
+                        startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        break;
+                    case R.id.taSection:
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
+        List<Switch> floorSwitches = new ArrayList<>();;
+        eigthFloor = navigationView.getMenu().findItem(R.id.eighthFloor).getActionView().findViewById(R.id.switcher);
+        ninthFloor = navigationView.getMenu().findItem(R.id.ninthFloor).getActionView().findViewById(R.id.switcher);
+        floorSwitches.add(eigthFloor);
+        floorSwitches.add(ninthFloor);
+        for(int i = 0;i<floorSwitches.size();i++){
+            sortInitForSwitchesInAGroup(floorSwitches,i);
+        }
+
+        List<Switch> favouriteSwitches = new ArrayList<>();
+        favorites = navigationView.getMenu().findItem(R.id.favourites).getActionView().findViewById(R.id.switcher);
+        favouriteSwitches.add(favorites);
+        for(int i = 0;i<favouriteSwitches.size();i++){
+            sortInitForSwitchesInAGroup(favouriteSwitches,i);
+        }
+
+        List<Switch> sortSwitches = new ArrayList<>();
+        tempUp = navigationView.getMenu().findItem(R.id.tempUp).getActionView().findViewById(R.id.switcher);
+        tempDown = navigationView.getMenu().findItem(R.id.tempDown).getActionView().findViewById(R.id.switcher);
+        peopleUp = navigationView.getMenu().findItem(R.id.freeUp).getActionView().findViewById(R.id.switcher);
+        peopleDown = navigationView.getMenu().findItem(R.id.freeDown).getActionView().findViewById(R.id.switcher);
+        sortSwitches.add(tempUp);
+        sortSwitches.add(tempDown);
+        sortSwitches.add(peopleUp);
+        sortSwitches.add(peopleDown);
+        for(int i = 0;i<sortSwitches.size();i++){
+            sortInitForSwitchesInAGroup(sortSwitches,i);
+        }
+
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                if (MainActivity.getTutorialMode() == true) {
+                    if (tool!=null){
+                        tool.dismiss();
+                    }
+                    /*
+                    if (tooltipState == 2){
+                        nextToolTip();
+                    }
+                    else if ((tooltipState == 0 )||(tooltipState == 1 )){
+                        tool.dismiss();
+                    }
+                    */
+                }
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                if ((tooltipState == 0 )||(tooltipState == 1 )){
+                    processTooltips();
+                }
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+    }
+
+    private void sortInitForSwitchesInAGroup(final List<Switch> switchList, int switchIndex){
+        switchList.get(switchIndex).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean turnOnFlag = false;
+                if (((Switch)v).isChecked()){
+                    turnOnFlag = true;
+                }
+                for(int i = 0;i<switchList.size();i++){
+                    if (switchList.get(i).isChecked()){
+                        switchList.get(i).toggle();
+                    }
+                }
+                if (turnOnFlag == true){
+                    ((Switch)v).toggle();
+                }
+                navSwitchPressed((Switch) v,turnOnFlag);
+            }
+        });
+    }
+
+    private void navSwitchPressed(Switch pressedSwitch, boolean switchOn){
+        if (pressedSwitch == tempUp){
+            if (switchOn == true) {
+                Toast.makeText(getApplicationContext(), "TempUp", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (pressedSwitch == tempDown){
+            if (switchOn == true) {
+                Toast.makeText(getApplicationContext(), "TempDown", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (pressedSwitch == peopleUp){
+            if (switchOn == true) {
+                Toast.makeText(getApplicationContext(), "PeopleUp", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (pressedSwitch == peopleDown){
+            if (switchOn == true) {
+                Toast.makeText(getApplicationContext(), "PeopleDown", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (pressedSwitch == eigthFloor){
+            if (switchOn == true) {
+                floorFilter = 8;
+                Toast.makeText(getApplicationContext(), "EigthFloor", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                floorFilter = 0;
+                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (pressedSwitch == ninthFloor){
+            if (switchOn == true) {
+                floorFilter = 9;
+                Toast.makeText(getApplicationContext(), "NinthFloor", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                floorFilter = 0;
+                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (pressedSwitch == favorites){
+            if (switchOn == true) {
+                favouriteFilter = true;
+                Toast.makeText(getApplicationContext(), "Favourites", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                favouriteFilter = false;
+                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+            }
+        }
+        updateData();
+    }
+
     private void setListeneres() {
 
         // Setting the bottom nav bar onItemSelection Listener
-//        sortButton.setOnClickListener(sortButtonListener);
+        sortButton.setOnClickListener(sortButtonListener);
         materialSearchBar.setOnSearchActionListener(materialOnSearchListener);
 
     }
@@ -288,7 +522,15 @@ public class ExpandableRecycler extends AppCompatActivity {
                     tempDynamicDataList.add(tempDynamicDataObj);
                 }
 
-                recyclerViewAdapter.updateLabData(tempDynamicDataList);
+
+                    ////****************************YABZ CODE*****************************//
+                for(int i = 0;i<tempDynamicDataList.size();i++){
+                    tempDynamicDataList.get(i).setFloor((tempDynamicDataList.get(i).getRoomCode()).charAt(1)-48);
+                    System.out.println(tempDynamicDataList.get(i).getFloor());
+                }
+                    ////****************************YABZ CODE*****************************//w
+
+                updateData();
 
                 if (!labKeysList.isEmpty()) {
                     labKeysList.clear();
@@ -326,8 +568,8 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     private void searchBarLogic() {
         materialSearchBar.setHint("Enter your software or 'all'");
-        searchCard.setVisibility(View.GONE);
-//        materialSearchBar.setLastSuggestions(suggestList);
+        //searchCard.setVisibility(View.GONE);
+        materialSearchBar.setLastSuggestions(suggestList);
         materialSearchBar.setCardViewElevation(10);
         materialSearchBar.addTextChangeListener(new TextWatcher() {
             @Override
@@ -337,7 +579,8 @@ public class ExpandableRecycler extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //When user type their text, the suggestion list will update
-//                materialSearchBar.updateLastSuggestions(suggestList);
+                updateSuggestList(materialSearchBar.getText());
+                materialSearchBar.updateLastSuggestions(suggestList);
             }
 
             @Override
@@ -346,27 +589,27 @@ public class ExpandableRecycler extends AppCompatActivity {
         });
     }
 
-//    private void updateSuggestList(String inputString){
-//        suggestList.clear();
-//        if (inputString.length()<3) {    //if no text was entered, no substring searching needed
-//            materialSearchBar.clearSuggestions();
-//            return;
-//        }
-//        suggestList.addAll(fullSuggestList);    //all should print out everything as a suggestion
-//        if (inputString.toLowerCase().equals("all")){
-//            return;
-//        }
-//        for(int i =0;i<suggestList.size();i++){ //iterate through suggestList
-//            String temp = suggestList.get(i).toLowerCase();
-//            if (!temp.contains(inputString.toLowerCase())){
-//                suggestList.remove(i);   //remove anything that isn't a match
-//                i--;
-//            }
-//        }
-//        if (suggestList.size() == 0){   //if nothings left that means there were no matches, just output No Matches
-//            suggestList.add("No Results");
-//        }
-//    }
+    private void updateSuggestList(String inputString){
+        suggestList.clear();
+        if (inputString.length()<3) {    //if no text was entered, no substring searching needed
+            materialSearchBar.clearSuggestions();
+            return;
+        }
+        suggestList.addAll(SIngleton2ShareData.getSoftwareList());    //all should print out everything as a suggestion
+        if (inputString.toLowerCase().equals("all")){
+            return;
+        }
+        for(int i =0;i<suggestList.size();i++){ //iterate through suggestList
+            String temp = suggestList.get(i).toLowerCase();
+            if (!temp.contains(inputString.toLowerCase())){
+                suggestList.remove(i);   //remove anything that isn't a match
+                i--;
+            }
+        }
+        if (suggestList.size() == 0){   //if nothings left that means there were no matches, just output No Matches
+            suggestList.add("No Results");
+        }
+    }
 
     private MaterialSearchBar.OnSearchActionListener materialOnSearchListener
             = new MaterialSearchBar.OnSearchActionListener() {
@@ -416,10 +659,22 @@ public class ExpandableRecycler extends AppCompatActivity {
         }
     };
 
+    private ImageView.OnClickListener sortButtonListener
+            = new View.OnClickListener() {
+        public void onClick(View v) {
+            //SoftwareListFragment dialog = new SoftwareListFragment();
+            drawer.openDrawer(GravityCompat.START);
+            //MenuItem checkable = navigationView.getMenu().findItem(R.id.tempDown);
+            //checkable.setChecked(true);
+            //dialog.show(getSupportFragmentManager(), "Insert Course");
+            // your code here
+        }
+    };
+
 //    private ImageView.OnClickListener sortButtonListener
 //            = new View.OnClickListener() {
 //        public void onClick(View v) {
-//            LabSortFragment dialog = new LabSortFragment();
+//            SoftwareListFragment dialog = new SoftwareListFragment();
 //            dialog.show(getSupportFragmentManager(), "Insert Course");
 //            // your code here
 //        }
@@ -476,8 +731,55 @@ public class ExpandableRecycler extends AppCompatActivity {
 //      The animator fixes the program of Flickering screen
         RecyclerView.ItemAnimator itemAnimator = new LandingAnimator(new OvershootInterpolator(1f));
         recyclerViewVar.setItemAnimator(itemAnimator);
-
     }
+
+    private void updateData(){
+        //final List<LabDataModel> unsortedList = tempDynamicDataList;
+        List<LabDataModel> sortedList = tempDynamicDataList;
+
+        if (floorFilter != 0){
+            sortedList = filterByFloor(sortedList);
+        }
+
+        if (favouriteFilter == true){
+            sortedList = filterByFavourite(sortedList);
+        }
+
+        if (sortType != SortTypes.NONE){
+            sortedList = sortLabList(sortedList);
+        }
+
+        recyclerViewAdapter.updateLabData(sortedList);
+    }
+
+    private List<LabDataModel> filterByFloor(List<LabDataModel> input){
+        List<LabDataModel> output = new ArrayList<>();
+        for(int i = 0;i<input.size();i++){
+            //System.out.println(input.get(i).getFloor());
+            input.get(i).getRoomCode();
+            if ((input.get(i).getFloor() == floorFilter)|| (floorFilter == 0)){
+                output.add(input.get(i));
+            }
+        }
+        return output;
+    }
+
+    private List<LabDataModel> filterByFavourite(List<LabDataModel> input){
+        List<LabDataModel> output = new ArrayList<>();
+        for(int i = 0;i<input.size();i++){
+            //System.out.println(input.get(i).isFavourite());
+            if (input.get(i).isFavourite()){
+                output.add(input.get(i));
+            }
+        }
+        return output;
+    }
+
+    private List<LabDataModel> sortLabList(List<LabDataModel> input){
+        return input;
+    }
+
+
 
     // FIXME: Not sure if we will need it
 //    private List<LabDataModel> filterClasses(List<LabDataModel> input){
@@ -497,4 +799,49 @@ public class ExpandableRecycler extends AppCompatActivity {
 //        return returnClassList;
 //    }
 
+    public static void initTooltips(){
+        tooltipState = 0;
+        listToolTipState = 0;
+    }
+    private void processTooltips(){
+        if (MainActivity.getTutorialMode() == true) {
+            switch (tooltipState) {
+                case 0:
+                    buildToolTip("Press a Lab to Expand for More Info", Gravity.TOP, recyclerViewVar);
+                    break;
+                case 1:
+                    buildToolTip("You can Search for a Specific Software", Gravity.BOTTOM, searchCard);
+                    break;
+                case 2:
+                    buildToolTip("Press Here or Pull From Edge to Open Menu", Gravity.RIGHT, sortButton);
+                    break;
+
+                default:
+                    break;
+
+            }
+        }
+    }
+    private void buildToolTip(String text, int gravity, View v){
+        tool = new Tooltip.Builder(v, R.style.Tooltip)
+                .setCancelable(false)
+                .setDismissOnClick(false)
+                .setCornerRadius(20f)
+                .setGravity(gravity)
+                .setText(text)
+                .setTextSize(R.dimen.toolTipSize)
+                .show();
+        tool.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(@NonNull Tooltip tooltip) {
+                nextToolTip();
+            }
+        });
+    }
+
+    public void nextToolTip(){
+        tool.dismiss();
+        tooltipState++;
+        processTooltips();
+    }
 }

@@ -11,4 +11,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Tooltip">
+        <item name="android:text">qwqwrqwfqwfqwfqwfqwf</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingExtra">5dp</item>
+        <item name="backgroundColor">@color/yabzGreen</item>
+        <item name="cornerRadius">13dp</item>
+    </style>
+
 </resources>

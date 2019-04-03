@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.tooltip.OnClickListener;
 import com.tooltip.Tooltip;
@@ -39,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private static int tooltipState = 0; //local state machine to control active tooltip
     private Tooltip tool;   //local tooltip
 
+    //Handles demo mode
+    private Switch demoModeSwitch;
+    public static boolean demoMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         notificationManager = NotificationManagerCompat.from(this);
 
-        setScheduledNotification(Calendar.MONDAY,22,45,0);  //Monday at 10:45pm
+        //setScheduledNotification(Calendar.TUESDAY,23,42,0);  //Monday at 10:45pm
     }
 
     @Override
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         logo = findViewById(R.id.logo);
         logo.setImageResource(R.drawable.ic_logo_better);
         tutorialModeSwitch = findViewById(R.id.tutorialMode);
+        demoModeSwitch = findViewById(R.id.demoMode);
     }
 
     void initializeListeners() {
@@ -99,6 +105,19 @@ public class MainActivity extends AppCompatActivity {
                     if (tool != null){
                         tool.dismiss();
                     }
+                }
+            }
+        });
+        demoModeSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                demoMode = demoModeSwitch.isChecked();
+                setTimedNotification(10);
+                if (demoModeSwitch.isChecked()){
+                    Toast.makeText(getApplicationContext(), "Demo Mode Enabled", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Demo Mode Disabled", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -147,6 +166,19 @@ public class MainActivity extends AppCompatActivity {
         cal.set(Calendar.SECOND,second);
 
         //cal.add(Calendar.MINUTE, 1);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcast);
+    }
+
+    public void setTimedNotification(int seconds){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent notificationIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.add(Calendar.SECOND, seconds);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcast);
     }

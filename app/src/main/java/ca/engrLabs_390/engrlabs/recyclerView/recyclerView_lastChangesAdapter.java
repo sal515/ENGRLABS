@@ -54,7 +54,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     //Tooltips
     //Handles Tutorial Mode
    // private static int tooltipState = 0; //local state machine to control active tooltip
-    private Tooltip tool;   //local tooltip
+    public static Tooltip tool;   //local tooltip
 
     // Array list of the DataModel
     List<LabDataModel> labDataModel;
@@ -394,7 +394,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         if (!data.isFavourite()) {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
         } else {
-            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_yellow_24dp);
         }
     }
 

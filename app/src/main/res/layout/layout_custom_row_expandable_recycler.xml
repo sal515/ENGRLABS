@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!-- The following CardView tag has a dependency that was added in the build.gradle (module:app) file --><!-- This is similar to the LinearLayout tag-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recycler_row_constrainet_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -64,6 +65,16 @@
                     app:layout_constraintHorizontal_bias="0.563"
                     app:layout_constraintStart_toEndOf="@+id/roomNumberEdit"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/roomFraction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0/99"
+                    android:textAlignment="center"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    tools:layout_editor_absoluteX="83dp"
+                    tools:layout_editor_absoluteY="16dp" />
 
                 <ImageView
                     android:id="@+id/imageView"

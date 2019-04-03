@@ -144,7 +144,7 @@ public class ExpandableRecycler extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expandable_recycler_with_bottom_nav);
+        setContentView(R.layout.activity_expandable_recycler);
 //        setupWindowAnimations();
 
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"
@@ -282,6 +282,11 @@ public class ExpandableRecycler extends AppCompatActivity {
                     if (tool!=null){
                         tool.dismiss();
                     }
+                    if (recyclerView_lastChangesAdapter.tool != null){
+                        if (recyclerView_lastChangesAdapter.tool.isShowing()){
+                            recyclerView_lastChangesAdapter.tool.dismiss();
+                        }
+                    }
                     /*
                     if (tooltipState == 2){
                         nextToolTip();
@@ -298,6 +303,9 @@ public class ExpandableRecycler extends AppCompatActivity {
             public void onDrawerClosed(@NonNull View drawerView) {
                 if ((tooltipState == 0 )||(tooltipState == 1 )){
                     processTooltips();
+                }
+                if (listToolTipState == 0 && MainActivity.getTutorialMode() == true){
+                    recyclerView_lastChangesAdapter.tool.show();
                 }
 
             }
@@ -621,6 +629,11 @@ public class ExpandableRecycler extends AppCompatActivity {
             if (!enabled) {
                 //materialSearchBar.setText("");
                 sortButton.setVisibility(View.VISIBLE);
+                if (MainActivity.getTutorialMode() == true){
+                    if((tooltipState == 2)&&(tool!=null)){
+                        tool.show();
+                    }
+                }
                 text = materialSearchBar.getText();
                 //materialSearchBar.setText("");
                 //filterSelection = "";
@@ -748,6 +761,16 @@ public class ExpandableRecycler extends AppCompatActivity {
         if (sortType != SortTypes.NONE){
             sortedList = sortLabList(sortedList);
         }
+
+        findViewById(R.id.noLabsMessage).setVisibility(View.GONE);
+        findViewById(R.id.disableFavourites).setVisibility(View.GONE);
+        if (sortedList.size() == 0){
+            findViewById(R.id.noLabsMessage).setVisibility(View.VISIBLE);
+            if(favouriteFilter == true){
+                findViewById(R.id.disableFavourites).setVisibility(View.VISIBLE);
+            }
+        }
+
 
         recyclerViewAdapter.updateLabData(sortedList);
     }

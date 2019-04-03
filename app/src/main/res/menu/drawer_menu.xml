@@ -23,6 +23,20 @@
         </menu>
 
     </item>
+
+    <item
+        android:title="Favourites Options"
+        android:id="@+id/FavouriteOptionsHeader">
+        <menu>
+            <item
+                android:id="@+id/favourites"
+                android:icon="@drawable/ic_star_border_black_24dp"
+                android:title="Show Favourites Only"
+                app:actionLayout="@layout/drawer_switch_item"/>
+        </menu>
+
+    </item>
+
     <item
         android:title="Filter Options"
         android:id="@+id/FilterOptionsHeader">
@@ -36,11 +50,6 @@
                 android:id="@+id/ninthFloor"
                 android:icon="@drawable/ic_floor_9_black_24dp"
                 android:title="9th Floor Only"
-                app:actionLayout="@layout/drawer_switch_item"/>
-            <item
-                android:id="@+id/favourites"
-                android:icon="@drawable/ic_star_border_black_24dp"
-                android:title="Show Favourites Only"
                 app:actionLayout="@layout/drawer_switch_item"/>
         </menu>
 

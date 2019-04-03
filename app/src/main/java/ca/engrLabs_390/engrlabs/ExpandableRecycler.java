@@ -365,32 +365,35 @@ public class ExpandableRecycler extends AppCompatActivity {
         }
         else if (pressedSwitch == eigthFloor){
             if (switchOn == true) {
+                floorFilter = 8;
                 Toast.makeText(getApplicationContext(), "EigthFloor", Toast.LENGTH_SHORT).show();
             }
             else{
+                floorFilter = 0;
                 Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         else if (pressedSwitch == ninthFloor){
             if (switchOn == true) {
+                floorFilter = 9;
                 Toast.makeText(getApplicationContext(), "NinthFloor", Toast.LENGTH_SHORT).show();
             }
             else{
+                floorFilter = 0;
                 Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         else if (pressedSwitch == favorites){
             if (switchOn == true) {
                 favouriteFilter = true;
-                updateData();
                 Toast.makeText(getApplicationContext(), "Favourites", Toast.LENGTH_SHORT).show();
             }
             else{
                 favouriteFilter = false;
-                updateData();
                 Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
+        updateData();
     }
 
     private void setListeneres() {
@@ -518,6 +521,14 @@ public class ExpandableRecycler extends AppCompatActivity {
                     // Adding the tempDynamicData object created to the List
                     tempDynamicDataList.add(tempDynamicDataObj);
                 }
+
+
+                    ////****************************YABZ CODE*****************************//
+                for(int i = 0;i<tempDynamicDataList.size();i++){
+                    tempDynamicDataList.get(i).setFloor((tempDynamicDataList.get(i).getRoomCode()).charAt(1)-48);
+                    System.out.println(tempDynamicDataList.get(i).getFloor());
+                }
+                    ////****************************YABZ CODE*****************************//w
 
                 updateData();
 
@@ -744,8 +755,9 @@ public class ExpandableRecycler extends AppCompatActivity {
     private List<LabDataModel> filterByFloor(List<LabDataModel> input){
         List<LabDataModel> output = new ArrayList<>();
         for(int i = 0;i<input.size();i++){
-            System.out.println(input.get(i).getFloor());
-            if (input.get(i).getFloor() == -1){
+            //System.out.println(input.get(i).getFloor());
+            input.get(i).getRoomCode();
+            if ((input.get(i).getFloor() == floorFilter)|| (floorFilter == 0)){
                 output.add(input.get(i));
             }
         }
@@ -755,7 +767,7 @@ public class ExpandableRecycler extends AppCompatActivity {
     private List<LabDataModel> filterByFavourite(List<LabDataModel> input){
         List<LabDataModel> output = new ArrayList<>();
         for(int i = 0;i<input.size();i++){
-            System.out.println(input.get(i).isFavourite());
+            //System.out.println(input.get(i).isFavourite());
             if (input.get(i).isFavourite()){
                 output.add(input.get(i));
             }

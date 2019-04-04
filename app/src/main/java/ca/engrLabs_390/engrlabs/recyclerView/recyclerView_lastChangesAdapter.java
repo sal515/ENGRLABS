@@ -396,7 +396,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         if (!data.isFavourite()) {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
         } else {
-            viewHolder.favourite.setImageResource(R.drawable.ic_star_yellow_24dp);
+            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_yellow_24dp);
         }
 
         if (position % 3 == 0){

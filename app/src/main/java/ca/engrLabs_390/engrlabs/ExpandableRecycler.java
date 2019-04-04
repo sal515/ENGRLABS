@@ -365,7 +365,9 @@ public class ExpandableRecycler extends AppCompatActivity {
                     processTooltips();
                 }
                 if (listToolTipState == 0 && MainActivity.getTutorialMode() == true){
-                    recyclerView_lastChangesAdapter.tool.show();
+                    if (recyclerView_lastChangesAdapter.tool!= null){
+                        recyclerView_lastChangesAdapter.tool.show();
+                    }
                 }
 
             }
@@ -714,6 +716,12 @@ public class ExpandableRecycler extends AppCompatActivity {
             } else {
                 sortButton.setVisibility(View.GONE);
                 materialSearchBar.setText(text);
+                if (MainActivity.getTutorialMode() == true){
+                    if((tooltipState == 1)&&(tool!=null)){
+                        nextToolTip();
+                    }
+                }
+
                 //materialSearchBar.setText("");
             }
         }
@@ -822,11 +830,12 @@ public class ExpandableRecycler extends AppCompatActivity {
         //final List<LabDataModel> unsortedList = tempDynamicDataList;
         List<LabDataModel> sortedList = tempDynamicDataList;
 
-        if (sortedList.size() > 0){
-            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+        if (sortedList.size() == 0){
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            return;
         }
         else{
-            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
         }
 
         if (floorFilter != 0){

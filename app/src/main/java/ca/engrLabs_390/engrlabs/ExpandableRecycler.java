@@ -187,9 +187,6 @@ public class ExpandableRecycler extends AppCompatActivity {
             floorFilter = profile.filterType;
             favouriteFilter = profile.favouriteFilter;
             favouriteList = profile.favouriteList;
-            if (recyclerViewAdapter != null){
-                updateData();
-            }
 
             if (favouriteFilter == true){
                 favoritesSwitch.setChecked(true);
@@ -645,6 +642,7 @@ public class ExpandableRecycler extends AppCompatActivity {
         // set the listener for the db
         databaseDynamicDataRef.addValueEventListener(labDetailsListener);
         labDetailsListenerVar = labDetailsListener;
+        updateData();
     }
 
     @Override
@@ -991,4 +989,5 @@ public class ExpandableRecycler extends AppCompatActivity {
         }
         sharedPreferenceHelper.saveSettings(profile);
     }
+
 }

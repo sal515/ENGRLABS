@@ -27,10 +27,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.ExpandableRecycler;
+import ca.engrLabs_390.engrlabs.LabFavourite;
 import ca.engrLabs_390.engrlabs.MainActivity;
 import ca.engrLabs_390.engrlabs.R;
+import ca.engrLabs_390.engrlabs.Settings;
+import ca.engrLabs_390.engrlabs.SharedPreferenceHelper;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModelDiffCallback;
+import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 
 // For more details of recycler or recycler adapter follow the link below:
 // https://guides.codepath.com/android/using-the-recyclerview
@@ -50,11 +54,12 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
     Context parentContext;
+    //SharedPreferenceHelper sharedPreferenceHelper;
 
     //Tooltips
     //Handles Tutorial Mode
    // private static int tooltipState = 0; //local state machine to control active tooltip
-    private Tooltip tool;   //local tooltip
+    public static Tooltip tool;   //local tooltip
 
     // Array list of the DataModel
     List<LabDataModel> labDataModel;
@@ -152,6 +157,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         private TextView numOfStudentsRoomEdit;
         private TextView roomCapacityEdit;
         private TextView upcomingClassEdit;
+        private ImageView availabilityImage;
 
         private Button softwareListButton;
 
@@ -184,6 +190,9 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
             roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
+            availabilityImage = itemView.findViewById(R.id.imageView);
+
+            //sharedPreferenceHelper = new SharedPreferenceHelper(parentContext);
 
             softwareListButton = itemView.findViewById(R.id.listOfSoftwareButton);
             buttonTemp = softwareListButton;
@@ -301,9 +310,11 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 if (data.isFavourite() == false) {
                     data.setFavourite(true);
                     Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                    ((ExpandableRecycler)parentContext).addFavourite(data.getRoomCode());
                 } else {
                     data.setFavourite(false);
                     Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
+                    ((ExpandableRecycler)parentContext).deleteFavourite(data.getRoomCode());
                 }
 
                 //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed
@@ -395,6 +406,16 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
         } else {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+        }
+
+        if (position % 3 == 0){
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_clear_red_24dp);
+        }
+        else if (position % 3 == 1){
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_check_green_24dp);
+        }
+        else if (position % 3 == 2){
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
         }
     }
 

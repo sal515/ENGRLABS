@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -80,7 +81,9 @@ public class ExpandableRecycler extends AppCompatActivity {
     Switch peopleDown;
     Switch eigthFloor;
     Switch ninthFloor;
-    Switch favorites;
+    Switch favoritesSwitch;
+    public SharedPreferenceHelper sharedPreferenceHelper;
+    /*
     enum SortTypes {
         NONE,
         TEMP_UP,
@@ -88,9 +91,12 @@ public class ExpandableRecycler extends AppCompatActivity {
         PEOPLE_UP,
         PEOPLE_DOWN,
     }
+    */
     boolean favouriteFilter = false;
     int floorFilter = 0;
-    SortTypes sortType = SortTypes.NONE;
+    Settings.SortTypes sortType = Settings.SortTypes.NONE;
+    List<LabFavourite> favouriteList = new ArrayList<>();
+    public Settings profile;
 
     // =========  Nav Drawer Stuff   ==========
 
@@ -144,8 +150,10 @@ public class ExpandableRecycler extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expandable_recycler_with_bottom_nav);
+        setContentView(R.layout.activity_expandable_recycler);
 //        setupWindowAnimations();
+
+        ProgressBar loading = findViewById(R.id.progressBar);
 
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"
         initializeAllReferences();
@@ -159,8 +167,65 @@ public class ExpandableRecycler extends AppCompatActivity {
 //        FirebaseDatabase databaseRootRef = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = databaseRootRef.getReference("/");
 
+        sharedPreferenceHelper = new SharedPreferenceHelper(this);
+        profile = sharedPreferenceHelper.getSettings();
+        if(profile == null){
+            //Toast.makeText(getApplicationContext(), "created" /*String.valueOf(profile.favouriteFilter)*/, Toast.LENGTH_SHORT).show();
+            profile = new Settings();
+            profile.favouriteFilter = false;
+            profile.filterType = 0;
+            profile.sortType = Settings.SortTypes.NONE;
+            profile.favouriteList = new ArrayList<>();
+            //profile.favouriteList.add(new LabFavourite("H841",true));
+            //profile.favouriteList.add(new LabFavourite("H821",true));
+            sharedPreferenceHelper.saveSettings(profile);
+        }
+        //goToProfileActivity();
+        else{
+            Toast.makeText(getApplicationContext(), "Settings Loaded" /*String.valueOf(profile.favouriteFilter)*/, Toast.LENGTH_SHORT).show();
+            sortType = profile.sortType;
+            floorFilter = profile.filterType;
+            favouriteFilter = profile.favouriteFilter;
+            favouriteList = profile.favouriteList;
+
+            if (favouriteFilter == true){
+                favoritesSwitch.setChecked(true);
+            }
+            if (sortType != Settings.SortTypes.NONE){
+                if (sortType == Settings.SortTypes.PEOPLE_DOWN){
+                    if (!peopleDown.isChecked()){
+                        peopleDown.toggle();
+                    }
+                }
+                else if (sortType == Settings.SortTypes.PEOPLE_UP){
+                    if (!peopleUp.isChecked()) {
+                        peopleUp.toggle();
+                    }
+                }
+                else if (sortType == Settings.SortTypes.TEMP_DOWN){
+                    if (!tempDown.isChecked()) {
+                        tempDown.toggle();
+                    }
+                }
+                else if (sortType == Settings.SortTypes.TEMP_UP){
+                    if (!peopleUp.isChecked()) {
+                        tempUp.toggle();
+                    }
+                }
+            }
+            if (floorFilter != 0){
+                if (floorFilter == 8){
+                    eigthFloor.setChecked(true);
+                }
+                else if (floorFilter == 9){
+                    ninthFloor.setChecked(true);
+                }
+            }
+        }
+
         databaseRootRef = FirebaseDatabase.getInstance().getReference();
 
+        //loading.setVisibility(View.INVISIBLE);
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
 
@@ -251,8 +316,8 @@ public class ExpandableRecycler extends AppCompatActivity {
         }
 
         List<Switch> favouriteSwitches = new ArrayList<>();
-        favorites = navigationView.getMenu().findItem(R.id.favourites).getActionView().findViewById(R.id.switcher);
-        favouriteSwitches.add(favorites);
+        favoritesSwitch = navigationView.getMenu().findItem(R.id.favourites).getActionView().findViewById(R.id.switcher);
+        favouriteSwitches.add(favoritesSwitch);
         for(int i = 0;i<favouriteSwitches.size();i++){
             sortInitForSwitchesInAGroup(favouriteSwitches,i);
         }
@@ -282,6 +347,11 @@ public class ExpandableRecycler extends AppCompatActivity {
                     if (tool!=null){
                         tool.dismiss();
                     }
+                    if (recyclerView_lastChangesAdapter.tool != null){
+                        if (recyclerView_lastChangesAdapter.tool.isShowing()){
+                            recyclerView_lastChangesAdapter.tool.dismiss();
+                        }
+                    }
                     /*
                     if (tooltipState == 2){
                         nextToolTip();
@@ -298,6 +368,11 @@ public class ExpandableRecycler extends AppCompatActivity {
             public void onDrawerClosed(@NonNull View drawerView) {
                 if ((tooltipState == 0 )||(tooltipState == 1 )){
                     processTooltips();
+                }
+                if (listToolTipState == 0 && MainActivity.getTutorialMode() == true){
+                    if (recyclerView_lastChangesAdapter.tool!= null){
+                        recyclerView_lastChangesAdapter.tool.show();
+                    }
                 }
 
             }
@@ -333,66 +408,78 @@ public class ExpandableRecycler extends AppCompatActivity {
     private void navSwitchPressed(Switch pressedSwitch, boolean switchOn){
         if (pressedSwitch == tempUp){
             if (switchOn == true) {
-                Toast.makeText(getApplicationContext(), "TempUp", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.TEMP_UP;
+                //Toast.makeText(getApplicationContext(), "TempUp", Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.NONE;
+                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         else if (pressedSwitch == tempDown){
             if (switchOn == true) {
-                Toast.makeText(getApplicationContext(), "TempDown", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.TEMP_DOWN;
+                //Toast.makeText(getApplicationContext(), "TempDown", Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.NONE;
+                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         else if (pressedSwitch == peopleUp){
             if (switchOn == true) {
-                Toast.makeText(getApplicationContext(), "PeopleUp", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.PEOPLE_UP;
+                //Toast.makeText(getApplicationContext(), "PeopleUp", Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.NONE;
+                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         else if (pressedSwitch == peopleDown){
             if (switchOn == true) {
-                Toast.makeText(getApplicationContext(), "PeopleDown", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.PEOPLE_DOWN;
+                //Toast.makeText(getApplicationContext(), "PeopleDown", Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+                sortType = Settings.SortTypes.NONE;
+                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         else if (pressedSwitch == eigthFloor){
             if (switchOn == true) {
                 floorFilter = 8;
-                Toast.makeText(getApplicationContext(), "EigthFloor", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "EigthFloor", Toast.LENGTH_SHORT).show();
             }
             else{
                 floorFilter = 0;
-                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         else if (pressedSwitch == ninthFloor){
             if (switchOn == true) {
                 floorFilter = 9;
-                Toast.makeText(getApplicationContext(), "NinthFloor", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "NinthFloor", Toast.LENGTH_SHORT).show();
             }
             else{
                 floorFilter = 0;
-                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
-        else if (pressedSwitch == favorites){
+        else if (pressedSwitch == favoritesSwitch){
             if (switchOn == true) {
                 favouriteFilter = true;
-                Toast.makeText(getApplicationContext(), "Favourites", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Favourites", Toast.LENGTH_SHORT).show();
             }
             else{
                 favouriteFilter = false;
-                Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
+        profile.sortType = sortType;
+        profile.filterType = floorFilter;
+        profile.favouriteFilter = favouriteFilter;
+        sharedPreferenceHelper.saveSettings(profile);
         updateData();
     }
 
@@ -528,6 +615,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                     tempDynamicDataList.get(i).setFloor((tempDynamicDataList.get(i).getRoomCode()).charAt(1)-48);
                     System.out.println(tempDynamicDataList.get(i).getFloor());
                 }
+
                     ////****************************YABZ CODE*****************************//w
 
                 updateData();
@@ -554,6 +642,7 @@ public class ExpandableRecycler extends AppCompatActivity {
         // set the listener for the db
         databaseDynamicDataRef.addValueEventListener(labDetailsListener);
         labDetailsListenerVar = labDetailsListener;
+        updateData();
     }
 
     @Override
@@ -621,6 +710,11 @@ public class ExpandableRecycler extends AppCompatActivity {
             if (!enabled) {
                 //materialSearchBar.setText("");
                 sortButton.setVisibility(View.VISIBLE);
+                if (MainActivity.getTutorialMode() == true){
+                    if((tooltipState == 2)&&(tool!=null)){
+                        tool.show();
+                    }
+                }
                 text = materialSearchBar.getText();
                 //materialSearchBar.setText("");
                 //filterSelection = "";
@@ -629,6 +723,12 @@ public class ExpandableRecycler extends AppCompatActivity {
             } else {
                 sortButton.setVisibility(View.GONE);
                 materialSearchBar.setText(text);
+                if (MainActivity.getTutorialMode() == true){
+                    if((tooltipState == 1)&&(tool!=null)){
+                        nextToolTip();
+                    }
+                }
+
                 //materialSearchBar.setText("");
             }
         }
@@ -735,7 +835,29 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     private void updateData(){
         //final List<LabDataModel> unsortedList = tempDynamicDataList;
+
+        //Sync with Favourite List
+        for(int i = 0;i<tempDynamicDataList.size();i++){
+            for (int j = 0; j < favouriteList.size();j++){
+                if (tempDynamicDataList.get(i).getRoomCode().equals(favouriteList.get(j).labCode)){
+                    tempDynamicDataList.get(i).setFavourite(favouriteList.get(j).favourite);
+                    break;
+                }
+            }
+        }
+
         List<LabDataModel> sortedList = tempDynamicDataList;
+
+        if (sortedList.size() == 0){
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            findViewById(R.id.loading).setVisibility(View.VISIBLE);
+            return;
+        }
+        else{
+            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+            findViewById(R.id.loading).setVisibility(View.INVISIBLE);
+        }
+        //recyclerViewAdapter.notifyDataSetChanged();
 
         if (floorFilter != 0){
             sortedList = filterByFloor(sortedList);
@@ -745,11 +867,22 @@ public class ExpandableRecycler extends AppCompatActivity {
             sortedList = filterByFavourite(sortedList);
         }
 
-        if (sortType != SortTypes.NONE){
+        if (sortType != Settings.SortTypes.NONE){
             sortedList = sortLabList(sortedList);
         }
 
+        findViewById(R.id.noLabsMessage).setVisibility(View.GONE);
+        findViewById(R.id.disableFavourites).setVisibility(View.GONE);
+        if (sortedList.size() == 0){
+            findViewById(R.id.noLabsMessage).setVisibility(View.VISIBLE);
+            if(favouriteFilter == true){
+                findViewById(R.id.disableFavourites).setVisibility(View.VISIBLE);
+            }
+        }
+
+
         recyclerViewAdapter.updateLabData(sortedList);
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     private List<LabDataModel> filterByFloor(List<LabDataModel> input){
@@ -844,4 +977,19 @@ public class ExpandableRecycler extends AppCompatActivity {
         tooltipState++;
         processTooltips();
     }
+
+    public void addFavourite(String room){
+        profile.favouriteList.add(new LabFavourite(room,true));
+        sharedPreferenceHelper.saveSettings(profile);
+    }
+    public void deleteFavourite(String room){
+        for (int i=0;i<profile.favouriteList.size();i++){
+            if (profile.favouriteList.get(i).labCode.equals(room)){
+                profile.favouriteList.remove(i);
+                break;
+            }
+        }
+        sharedPreferenceHelper.saveSettings(profile);
+    }
+
 }

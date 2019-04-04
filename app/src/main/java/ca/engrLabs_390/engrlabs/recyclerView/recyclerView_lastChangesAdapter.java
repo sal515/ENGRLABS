@@ -152,6 +152,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         private TextView numOfStudentsRoomEdit;
         private TextView roomCapacityEdit;
         private TextView upcomingClassEdit;
+        private ImageView availabilityImage;
 
         private Button softwareListButton;
 
@@ -184,6 +185,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             numOfStudentsRoomEdit = itemView.findViewById(R.id.numOfStudentsEdit);
             roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
+            availabilityImage = itemView.findViewById(R.id.imageView);
 
             softwareListButton = itemView.findViewById(R.id.listOfSoftwareButton);
             buttonTemp = softwareListButton;
@@ -395,6 +397,16 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
         } else {
             viewHolder.favourite.setImageResource(R.drawable.ic_star_yellow_24dp);
+        }
+
+        if (position % 3 == 0){
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_clear_red_24dp);
+        }
+        else if (position % 3 == 1){
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_check_green_24dp);
+        }
+        else if (position % 3 == 2){
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
         }
     }
 

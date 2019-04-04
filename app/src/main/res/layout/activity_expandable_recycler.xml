@@ -42,7 +42,8 @@
                 android:text="No Labs to Show"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/disableFavourites"

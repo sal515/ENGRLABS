@@ -850,10 +850,12 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         if (sortedList.size() == 0){
             findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            findViewById(R.id.loading).setVisibility(View.VISIBLE);
             return;
         }
         else{
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+            findViewById(R.id.loading).setVisibility(View.INVISIBLE);
         }
         //recyclerViewAdapter.notifyDataSetChanged();
 

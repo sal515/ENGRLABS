@@ -33,6 +33,13 @@ public class SoftwareListFragment extends DialogFragment {
         int floor = getArguments().getInt("Floor");
         int room = getArguments().getInt("Room");
         char building = getArguments().getChar("Building");
+        closeButton = view.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDialog().dismiss();
+            }
+        });
 
         list = view.findViewById(R.id.softwareList);
         //softwareList.add(Integer.toString(floor));

@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
             }
             processTooltips();
         }
+        if ((demoMode == true)&&(!demoModeSwitch.isChecked())){
+            demoModeSwitch.setChecked(true);
+        }
     }
 
     // Slide animation between activity

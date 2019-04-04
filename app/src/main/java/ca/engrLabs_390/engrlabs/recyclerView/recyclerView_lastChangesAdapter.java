@@ -27,10 +27,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.ExpandableRecycler;
+import ca.engrLabs_390.engrlabs.LabFavourite;
 import ca.engrLabs_390.engrlabs.MainActivity;
 import ca.engrLabs_390.engrlabs.R;
+import ca.engrLabs_390.engrlabs.Settings;
+import ca.engrLabs_390.engrlabs.SharedPreferenceHelper;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModelDiffCallback;
+import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 
 // For more details of recycler or recycler adapter follow the link below:
 // https://guides.codepath.com/android/using-the-recyclerview
@@ -50,6 +54,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
     private Queue<Integer> openedQueue;
     RecyclerView.LayoutManager layoutManager;
     Context parentContext;
+    //SharedPreferenceHelper sharedPreferenceHelper;
 
     //Tooltips
     //Handles Tutorial Mode
@@ -187,6 +192,8 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
             availabilityImage = itemView.findViewById(R.id.imageView);
 
+            //sharedPreferenceHelper = new SharedPreferenceHelper(parentContext);
+
             softwareListButton = itemView.findViewById(R.id.listOfSoftwareButton);
             buttonTemp = softwareListButton;
             // setting the layout listeners
@@ -303,9 +310,11 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 if (data.isFavourite() == false) {
                     data.setFavourite(true);
                     Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                    ((ExpandableRecycler)parentContext).addFavourite(data.getRoomCode());
                 } else {
                     data.setFavourite(false);
                     Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
+                    ((ExpandableRecycler)parentContext).deleteFavourite(data.getRoomCode());
                 }
 
                 //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed

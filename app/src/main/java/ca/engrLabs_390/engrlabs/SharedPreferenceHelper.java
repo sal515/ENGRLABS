@@ -27,6 +27,21 @@ public class SharedPreferenceHelper {
         return gson.fromJson(json, Settings.class);
     }
 
+    public void addFavourite(String roomCode){
+        Settings profile = getSettings();
+        profile.favouriteList.add(new LabFavourite(roomCode,true));
+        saveSettings(profile);
+    }
+    public void removeFavourite(String roomCode){
+        Settings profile = getSettings();
+        for(int i=0;i<profile.favouriteList.size();i++){
+            if (roomCode.equals(profile.favouriteList.get(i).labCode)){
+                profile.favouriteList.remove(i);
+            }
+        }
+        saveSettings(profile);
+    }
+
     public void clearPreferences(Context context){
         sharedPreferences.edit().clear().apply();
     }

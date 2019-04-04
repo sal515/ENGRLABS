@@ -1,5 +1,7 @@
 package ca.engrLabs_390.engrlabs;
 
+import java.util.List;
+
 public class Settings {
 
     public enum SortTypes {
@@ -13,4 +15,5 @@ public class Settings {
     public SortTypes sortType;
     public int filterType;
     public boolean favouriteFilter;
+    public List<LabFavourite> favouriteList;
 }

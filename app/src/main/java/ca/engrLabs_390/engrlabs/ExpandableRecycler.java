@@ -82,7 +82,7 @@ public class ExpandableRecycler extends AppCompatActivity {
     Switch eigthFloor;
     Switch ninthFloor;
     Switch favoritesSwitch;
-    protected SharedPreferenceHelper sharedPreferenceHelper;
+    public SharedPreferenceHelper sharedPreferenceHelper;
     /*
     enum SortTypes {
         NONE,
@@ -95,7 +95,8 @@ public class ExpandableRecycler extends AppCompatActivity {
     boolean favouriteFilter = false;
     int floorFilter = 0;
     Settings.SortTypes sortType = Settings.SortTypes.NONE;
-    Settings profile;
+    List<LabFavourite> favouriteList = new ArrayList<>();
+    public Settings profile;
 
     // =========  Nav Drawer Stuff   ==========
 
@@ -174,14 +175,21 @@ public class ExpandableRecycler extends AppCompatActivity {
             profile.favouriteFilter = false;
             profile.filterType = 0;
             profile.sortType = Settings.SortTypes.NONE;
+            profile.favouriteList = new ArrayList<>();
+            //profile.favouriteList.add(new LabFavourite("H841",true));
+            //profile.favouriteList.add(new LabFavourite("H821",true));
             sharedPreferenceHelper.saveSettings(profile);
         }
         //goToProfileActivity();
         else{
-            //Toast.makeText(getApplicationContext(), "loaded" /*String.valueOf(profile.favouriteFilter)*/, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Settings Loaded" /*String.valueOf(profile.favouriteFilter)*/, Toast.LENGTH_SHORT).show();
             sortType = profile.sortType;
             floorFilter = profile.filterType;
             favouriteFilter = profile.favouriteFilter;
+            favouriteList = profile.favouriteList;
+            if (recyclerViewAdapter != null){
+                updateData();
+            }
 
             if (favouriteFilter == true){
                 favoritesSwitch.setChecked(true);
@@ -610,6 +618,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                     tempDynamicDataList.get(i).setFloor((tempDynamicDataList.get(i).getRoomCode()).charAt(1)-48);
                     System.out.println(tempDynamicDataList.get(i).getFloor());
                 }
+
                     ////****************************YABZ CODE*****************************//w
 
                 updateData();
@@ -828,6 +837,17 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     private void updateData(){
         //final List<LabDataModel> unsortedList = tempDynamicDataList;
+
+        //Sync with Favourite List
+        for(int i = 0;i<tempDynamicDataList.size();i++){
+            for (int j = 0; j < favouriteList.size();j++){
+                if (tempDynamicDataList.get(i).getRoomCode().equals(favouriteList.get(j).labCode)){
+                    tempDynamicDataList.get(i).setFavourite(favouriteList.get(j).favourite);
+                    break;
+                }
+            }
+        }
+
         List<LabDataModel> sortedList = tempDynamicDataList;
 
         if (sortedList.size() == 0){
@@ -837,6 +857,7 @@ public class ExpandableRecycler extends AppCompatActivity {
         else{
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
         }
+        //recyclerViewAdapter.notifyDataSetChanged();
 
         if (floorFilter != 0){
             sortedList = filterByFloor(sortedList);
@@ -861,6 +882,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
 
         recyclerViewAdapter.updateLabData(sortedList);
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     private List<LabDataModel> filterByFloor(List<LabDataModel> input){
@@ -954,5 +976,19 @@ public class ExpandableRecycler extends AppCompatActivity {
         tool.dismiss();
         tooltipState++;
         processTooltips();
+    }
+
+    public void addFavourite(String room){
+        profile.favouriteList.add(new LabFavourite(room,true));
+        sharedPreferenceHelper.saveSettings(profile);
+    }
+    public void deleteFavourite(String room){
+        for (int i=0;i<profile.favouriteList.size();i++){
+            if (profile.favouriteList.get(i).labCode.equals(room)){
+                profile.favouriteList.remove(i);
+                break;
+            }
+        }
+        sharedPreferenceHelper.saveSettings(profile);
     }
 }

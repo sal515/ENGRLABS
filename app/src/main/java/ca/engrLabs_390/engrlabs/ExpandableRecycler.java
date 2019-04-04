@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -151,6 +152,8 @@ public class ExpandableRecycler extends AppCompatActivity {
         setContentView(R.layout.activity_expandable_recycler);
 //        setupWindowAnimations();
 
+        ProgressBar loading = findViewById(R.id.progressBar);
+
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"
         initializeAllReferences();
 
@@ -217,6 +220,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         databaseRootRef = FirebaseDatabase.getInstance().getReference();
 
+        //loading.setVisibility(View.INVISIBLE);
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
 
@@ -817,6 +821,13 @@ public class ExpandableRecycler extends AppCompatActivity {
     private void updateData(){
         //final List<LabDataModel> unsortedList = tempDynamicDataList;
         List<LabDataModel> sortedList = tempDynamicDataList;
+
+        if (sortedList.size() > 0){
+            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+        }
+        else{
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        }
 
         if (floorFilter != 0){
             sortedList = filterByFloor(sortedList);

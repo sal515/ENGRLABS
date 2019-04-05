@@ -828,8 +828,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     private void updateData(){
 
-        List<LabDataModel> sortedList = new ArrayList<>();
-        sortedList.addAll(tempDynamicDataList);
+        List<LabDataModel> sortedList = new ArrayList<>(tempDynamicDataList);
 
         if (sortedList.size() == 0){
             findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
@@ -869,7 +868,9 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         recyclerViewAdapter.updateLabData(sortedList);
         recyclerViewAdapter.notifyDataSetChanged();
-        recyclerViewVar.smoothScrollToPosition(0);
+        if (sortedList.size() > 0){
+            recyclerViewVar.getLayoutManager().scrollToPosition(0);
+        }
     }
 
     private List<LabDataModel> filterByFloor(List<LabDataModel> input){

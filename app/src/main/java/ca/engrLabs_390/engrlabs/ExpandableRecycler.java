@@ -407,73 +407,52 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     private void navSwitchPressed(Switch pressedSwitch, boolean switchOn){
         if (pressedSwitch == tempUp){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.TEMP_UP;
                 //Toast.makeText(getApplicationContext(), "TempUp", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == tempDown){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.TEMP_DOWN;
                 //Toast.makeText(getApplicationContext(), "TempDown", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == peopleUp){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.PEOPLE_UP;
                 //Toast.makeText(getApplicationContext(), "PeopleUp", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == peopleDown){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.PEOPLE_DOWN;
                 //Toast.makeText(getApplicationContext(), "PeopleDown", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == eigthFloor){
+            floorFilter = 0;
             if (switchOn == true) {
                 floorFilter = 8;
                 //Toast.makeText(getApplicationContext(), "EigthFloor", Toast.LENGTH_SHORT).show();
             }
-            else{
-                floorFilter = 0;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == ninthFloor){
+            floorFilter = 0;
             if (switchOn == true) {
                 floorFilter = 9;
                 //Toast.makeText(getApplicationContext(), "NinthFloor", Toast.LENGTH_SHORT).show();
             }
-            else{
-                floorFilter = 0;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == favoritesSwitch){
+            favouriteFilter = false;
             if (switchOn == true) {
                 favouriteFilter = true;
                 //Toast.makeText(getApplicationContext(), "Favourites", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                favouriteFilter = false;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         profile.sortType = sortType;

@@ -310,11 +310,11 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 if (data.isFavourite() == false) {
                     data.setFavourite(true);
                     Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
-                    ((ExpandableRecycler)parentContext).addFavourite(data.getRoomCode());
+                    ((ExpandableRecycler)parentContext).addFavouriteToSharedPreference(data.getRoomCode());
                 } else {
                     data.setFavourite(false);
                     Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show();
-                    ((ExpandableRecycler)parentContext).deleteFavourite(data.getRoomCode());
+                    ((ExpandableRecycler)parentContext).deleteFavouriteFromSharedPreference(data.getRoomCode());
                 }
 
                 //FIXME: The getAdapgerPosition() should be used to identify the row where the data is changed

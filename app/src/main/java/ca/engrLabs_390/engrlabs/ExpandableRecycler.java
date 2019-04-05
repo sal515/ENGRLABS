@@ -284,6 +284,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         homePageNavButton = findViewById(R.id.homepage);
         labListNavButton = findViewById(R.id.lablist);
+        navigationView.getMenu().findItem(R.id.lablist).setChecked(true);
         taLoginNavButton = findViewById(R.id.taSection);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -294,7 +295,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         break;
                     case R.id.lablist:
-                        startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        //startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
                         break;
                     case R.id.taSection:
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -868,9 +869,6 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         recyclerViewAdapter.updateLabData(sortedList);
         recyclerViewAdapter.notifyDataSetChanged();
-        if (sortedList.size() > 0){
-            recyclerViewVar.getLayoutManager().scrollToPosition(0);
-        }
     }
 
     private List<LabDataModel> filterByFloor(List<LabDataModel> input){

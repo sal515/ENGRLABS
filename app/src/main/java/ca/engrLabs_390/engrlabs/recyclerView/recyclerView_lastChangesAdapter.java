@@ -293,6 +293,9 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                     if (expandingGroup.getVisibility() == View.VISIBLE) {
                         hiddenStateSparseBoolArray.put(adapterPosition, false);
                         expandingGroup.setVisibility(View.GONE);
+                        if (tool != null){
+                            tool.dismiss();
+                        }
                     }
                     //Toast.makeText(context, "Invisible", Toast.LENGTH_SHORT).show();
 

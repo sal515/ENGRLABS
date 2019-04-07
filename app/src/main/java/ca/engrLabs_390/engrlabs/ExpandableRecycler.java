@@ -65,7 +65,7 @@ public class ExpandableRecycler extends AppCompatActivity {
     CardView searchCard;
     ImageView sortButton;
     List<String> suggestList = new ArrayList<>();
-    String searchFilterSelection = "";
+    static String searchFilterSelection = "";
 
     // =========  Search bar stuff   ==========
 

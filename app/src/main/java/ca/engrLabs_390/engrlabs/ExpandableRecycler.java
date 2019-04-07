@@ -35,7 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
-import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
+import ca.engrLabs_390.engrlabs.dataModels.Singleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.recyclerView_lastChangesAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
@@ -143,6 +143,10 @@ public class ExpandableRecycler extends AppCompatActivity {
         // calling the recycler binding function -- !!Should be called only once!!
         bindingAdapterToRecycleViewer();
 
+
+        List<String> labList = new ArrayList<>(Singleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
+
+        int test = 0;
     }
 
     // window animation between activities
@@ -380,7 +384,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
 
 //        int asdaf = 0;
-//        List<LabDataModel> tempTest = new ArrayList(SIngleton2ShareData.getLabDynamicDataObjects());
+//        List<LabDataModel> tempTest = new ArrayList(Singleton2ShareData.getLabDynamicDataObjects());
 //
 //        for (int i = 0; i < tempTest.size(); i++) {
 //            Log.w(TAG, String.valueOf(tempTest.get(i)));
@@ -554,7 +558,7 @@ public class ExpandableRecycler extends AppCompatActivity {
             materialSearchBar.clearSuggestions();
             return;
         }
-        suggestList.addAll(SIngleton2ShareData.getSoftwareList());    //all should print out everything as a suggestion
+        suggestList.addAll(Singleton2ShareData.getSoftwareList());    //all should print out everything as a suggestion
         if (inputString.toLowerCase().equals("all")){
             return;
         }
@@ -660,7 +664,7 @@ public class ExpandableRecycler extends AppCompatActivity {
         try {
 //            tempDynamicDataList = new ArrayList<>();
 
-             tempDynamicDataList = new ArrayList<>(SIngleton2ShareData.getLabDynamicDataObjects());
+             tempDynamicDataList = new ArrayList<>(Singleton2ShareData.getLabDynamicDataObjects());
             Log.w(TAG, "Data Filled From SingleTon Class");
             int i = 0;
         } catch (Exception e) {

@@ -1,7 +1,6 @@
 package ca.engrLabs_390.engrlabs.dataModels;
 
 import android.app.Application;
-import android.os.Handler;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -14,13 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SIngleton2ShareData extends Application {
+public class Singleton2ShareData extends Application {
 
     private static final String TAG = "SingleTon";
 
 
     private static List<LabDataModel> labDynamicDataObjects;
     private static List<String> softwareList;
+    private static HashMap softwareMap;
 
 
     // references to the database
@@ -45,10 +45,10 @@ public class SIngleton2ShareData extends Application {
 
         labDynamicDataObjects = new ArrayList<LabDataModel>();
 
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        final Handler handler = new Handler();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
                 ValueEventListener labDetailsListener = new ValueEventListener() {
                     @Override
@@ -155,15 +155,15 @@ public class SIngleton2ShareData extends Application {
                 dynamicDataRef.addListenerForSingleValueEvent(labDetailsListener);
 //                labDetailsListenerVar = labDetailsListener;
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI stuff can be done during the computation thread is running
-
-                    }
-                });
-            }
-        }).start();
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // UI stuff can be done during the computation thread is running
+//
+//                    }
+//                });
+//            }
+//        }).start();
 
 //        if (labDetailsListenerVar != null) {
 //            databaseRootRef.removeEventListener(labDetailsListenerVar);
@@ -175,10 +175,10 @@ public class SIngleton2ShareData extends Application {
 
         softwareList = new ArrayList<String>();
 
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        final Handler handler = new Handler();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
                 // Downloading the parsed software data from the dabase
                 ValueEventListener labDetailsListener = new ValueEventListener() {
@@ -187,7 +187,7 @@ public class SIngleton2ShareData extends Application {
                         Log.w(TAG, "Software Parsing Data download function called ");
 
 
-                        HashMap softwaresMap;
+//                        HashMap softwareMap;
                         List<String> softwareKeysList;
 //                        softwareKeysList = new ArrayList<String>();
 
@@ -196,9 +196,13 @@ public class SIngleton2ShareData extends Application {
                         Object labObj = dataSnapshot.getValue();
                         // Check if the object is of type HashMap, if it is cast it to HashMap
                         if (labObj instanceof HashMap) {
-                            softwaresMap = new HashMap((HashMap) labObj);
-                            softwareList = new ArrayList<String>(softwaresMap.keySet());
+                            softwareMap = new HashMap((HashMap) labObj);
+                            softwareList = new ArrayList<String>(softwareMap.keySet());
+
                         }
+
+//                        String softwareName = "AGI32_18_3_PTBPE_193";
+//                        HashMap labs = new HashMap((HashMap)((HashMap) softwareMap.get(softwareName)).get("Labs"));
 
                         String i = "Work";
                     }
@@ -210,23 +214,38 @@ public class SIngleton2ShareData extends Application {
                 };
                 softwaresRef.addListenerForSingleValueEvent(labDetailsListener);
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI stuff can be done at the end of the actual computation in the thread
-                    }
-                });
-            }
-        }).start();
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // UI stuff can be done at the end of the actual computation in the thread
+//                    }
+//                });
+//            }
+//        }).start();
 
     }
 
-    public static List<LabDataModel> getLabDynamicDataObjects() {
+    public static List<String> getLabList(String softwareName) {
+
+        List<String> labList;
+        labList = new ArrayList<String>() ;
+
+        try {
+            // softwareName = "AGI32_18_3_PTBPE_193";
+            HashMap labsMap = new HashMap((HashMap)((HashMap) softwareMap.get(softwareName)).get("Labs"));
+            labList = new ArrayList<String>(labsMap.keySet()) ;
+        } catch (Exception e) {
+            Log.w(TAG, "Error getting the list of labs for the searched Software");
+        }
+        return labList;
+    }
+
+        public static List<LabDataModel> getLabDynamicDataObjects() {
         return labDynamicDataObjects;
     }
 
     public static void setLabDynamicDataObjects(List<LabDataModel> labDynamicDataObjects) {
-        SIngleton2ShareData.labDynamicDataObjects = labDynamicDataObjects;
+        Singleton2ShareData.labDynamicDataObjects = labDynamicDataObjects;
     }
 
     public static List<String> getSoftwareList() {
@@ -234,6 +253,14 @@ public class SIngleton2ShareData extends Application {
     }
 
     public static void setSoftwareList(List<String> softwareList) {
-        SIngleton2ShareData.softwareList = softwareList;
+        Singleton2ShareData.softwareList = softwareList;
+    }
+
+    public static HashMap getSoftwareMap() {
+        return softwareMap;
+    }
+
+    public static void setSoftwareMap(HashMap softwareMap) {
+        Singleton2ShareData.softwareMap = softwareMap;
     }
 }

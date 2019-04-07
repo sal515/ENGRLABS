@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
-import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
+import ca.engrLabs_390.engrlabs.dataModels.Singleton2ShareData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().hide();
 //        setupWindowAnimations();
 
-        SIngleton2ShareData.downloadDynamicDataForRecyclerStartUp();
-        SIngleton2ShareData.extractParsedSoftwareData();
+        Singleton2ShareData.downloadDynamicDataForRecyclerStartUp();
+        Singleton2ShareData.extractParsedSoftwareData();
 
         initializeReferences();
         initializeListeners();

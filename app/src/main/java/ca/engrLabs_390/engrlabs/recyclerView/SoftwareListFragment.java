@@ -46,9 +46,15 @@ public class SoftwareListFragment extends DialogFragment {
         //softwareList.add(Integer.toString(room));
         //softwareList.add(String.valueOf(building));
 
+        /*
         List<String> masterList= SIngleton2ShareData.getSoftwareList();
         for (int i = 0;i< masterList.size();i++){
             softwareList.add(masterList.get(i));
+        }
+        */
+        List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
+        for (int i = 0;i< labList.size();i++){
+            softwareList.add(labList.get(i));
         }
 
         ArrayAdapter arrayAdapter=new ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,softwareList);

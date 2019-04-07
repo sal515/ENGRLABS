@@ -65,6 +65,7 @@ public class ExpandableRecycler extends AppCompatActivity {
     CardView searchCard;
     ImageView sortButton;
     List<String> suggestList = new ArrayList<>();
+    String searchFilterSelection = "";
 
     // =========  Search bar stuff   ==========
 
@@ -231,7 +232,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         processTooltips();
 
-        List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
+        //List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
 
         int test = 0;
 
@@ -733,8 +734,8 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         @Override
         public void onSearchConfirmed(CharSequence text) {
-//            filterSelection = materialSearchBar.getText();
-
+            searchFilterSelection = materialSearchBar.getText();
+            updateData();
             // This is where you set the state for the recyclerview
 
 
@@ -855,6 +856,12 @@ public class ExpandableRecycler extends AppCompatActivity {
         }
 
         sortedList = sortLabList(sortedList);
+
+        if (searchFilterSelection != null){
+            if (!searchFilterSelection.equals("")){
+                sortedList = searchFilter(sortedList);
+            }
+        }
         /*
         if (sortType != Settings.SortTypes.NONE){
             sortedList = sortLabList(sortedList);
@@ -873,6 +880,20 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         recyclerViewAdapter.updateLabData(sortedList);
         recyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    private List<LabDataModel> searchFilter(List<LabDataModel> input){
+        List<LabDataModel> output = new ArrayList<>();
+        List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList(searchFilterSelection));
+        for(int i = 0;i<input.size();i++){
+            for(int j = 0;j<labList.size();j++){
+                if (labList.get(j).equals(input.get(i).getRoomCode())){
+                    output.add(input.get(i));
+                    break;
+                }
+            }
+        }
+        return output;
     }
 
     private List<LabDataModel> filterByFloor(List<LabDataModel> input){

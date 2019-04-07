@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.tooltip.OnClickListener;
 import com.tooltip.Tooltip;
 
@@ -22,6 +24,7 @@ import java.util.Calendar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import ca.engrLabs_390.engrlabs.TA_Section.LoginActivity;
 import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.notifications.AlarmReceiver;
@@ -43,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
     //Handles demo mode
     private Switch demoModeSwitch;
     public static boolean demoMode;
+
+    // =========  Nav Drawer Stuff   ==========
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    MenuItem homePageNavButton;
+    MenuItem labListNavButton;
+    MenuItem taLoginNavButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +101,16 @@ public class MainActivity extends AppCompatActivity {
         logo.setImageResource(R.drawable.ic_logo_better);
         tutorialModeSwitch = findViewById(R.id.tutorialMode);
         demoModeSwitch = findViewById(R.id.demoMode);
+        drawer = findViewById(R.id.drawerContainer);
+        navigationView = findViewById(R.id.nav_view);
+
+        homePageNavButton = findViewById(R.id.homepage);
+        navigationView.getMenu().findItem(R.id.homepage).setChecked(true);
+        labListNavButton = findViewById(R.id.lablist);
+        taLoginNavButton = findViewById(R.id.taSection);
+        navigationView.getMenu().getItem(1).setVisible(false);
+        navigationView.getMenu().getItem(2).setVisible(false);
+        navigationView.getMenu().getItem(3).setVisible(false);
     }
 
     void initializeListeners() {
@@ -122,6 +142,26 @@ public class MainActivity extends AppCompatActivity {
                 else{
                     Toast.makeText(getApplicationContext(), "Demo Mode Disabled", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.homepage:
+                        //startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        break;
+                    case R.id.lablist:
+                        startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        break;
+                    case R.id.taSection:
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        break;
+                    default:
+                        break;
+                }
+                return true;
             }
         });
     }

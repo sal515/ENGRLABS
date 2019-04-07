@@ -284,6 +284,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         homePageNavButton = findViewById(R.id.homepage);
         labListNavButton = findViewById(R.id.lablist);
+        navigationView.getMenu().findItem(R.id.lablist).setChecked(true);
         taLoginNavButton = findViewById(R.id.taSection);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -294,7 +295,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         break;
                     case R.id.lablist:
-                        startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        //startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
                         break;
                     case R.id.taSection:
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -407,79 +408,59 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     private void navSwitchPressed(Switch pressedSwitch, boolean switchOn){
         if (pressedSwitch == tempUp){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.TEMP_UP;
                 //Toast.makeText(getApplicationContext(), "TempUp", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == tempDown){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.TEMP_DOWN;
                 //Toast.makeText(getApplicationContext(), "TempDown", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == peopleUp){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.PEOPLE_UP;
                 //Toast.makeText(getApplicationContext(), "PeopleUp", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == peopleDown){
+            sortType = Settings.SortTypes.NONE;
             if (switchOn == true) {
                 sortType = Settings.SortTypes.PEOPLE_DOWN;
                 //Toast.makeText(getApplicationContext(), "PeopleDown", Toast.LENGTH_SHORT).show();
             }
-            else{
-                sortType = Settings.SortTypes.NONE;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == eigthFloor){
+            floorFilter = 0;
             if (switchOn == true) {
                 floorFilter = 8;
                 //Toast.makeText(getApplicationContext(), "EigthFloor", Toast.LENGTH_SHORT).show();
             }
-            else{
-                floorFilter = 0;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == ninthFloor){
+            floorFilter = 0;
             if (switchOn == true) {
                 floorFilter = 9;
                 //Toast.makeText(getApplicationContext(), "NinthFloor", Toast.LENGTH_SHORT).show();
             }
-            else{
-                floorFilter = 0;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (pressedSwitch == favoritesSwitch){
+            favouriteFilter = false;
             if (switchOn == true) {
                 favouriteFilter = true;
                 //Toast.makeText(getApplicationContext(), "Favourites", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                favouriteFilter = false;
-                //Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
             }
         }
         profile.sortType = sortType;
         profile.filterType = floorFilter;
         profile.favouriteFilter = favouriteFilter;
         sharedPreferenceHelper.saveSettings(profile);
+        syncFavouriteList();
         updateData();
     }
 
@@ -615,6 +596,19 @@ public class ExpandableRecycler extends AppCompatActivity {
                     tempDynamicDataList.get(i).setFloor((tempDynamicDataList.get(i).getRoomCode()).charAt(1)-48);
                     System.out.println(tempDynamicDataList.get(i).getFloor());
                 }
+
+                syncFavouriteList();
+                /*
+                //Sync with Favourite List
+                for(int i = 0;i<tempDynamicDataList.size();i++){
+                    for (int j = 0; j < favouriteList.size();j++){
+                        if (tempDynamicDataList.get(i).getRoomCode().equals(favouriteList.get(j).labCode)){
+                            tempDynamicDataList.get(i).setFavourite(favouriteList.get(j).favourite);
+                            break;
+                        }
+                    }
+                }
+                */
 
                     ////****************************YABZ CODE*****************************//w
 
@@ -834,19 +828,8 @@ public class ExpandableRecycler extends AppCompatActivity {
     }
 
     private void updateData(){
-        //final List<LabDataModel> unsortedList = tempDynamicDataList;
 
-        //Sync with Favourite List
-        for(int i = 0;i<tempDynamicDataList.size();i++){
-            for (int j = 0; j < favouriteList.size();j++){
-                if (tempDynamicDataList.get(i).getRoomCode().equals(favouriteList.get(j).labCode)){
-                    tempDynamicDataList.get(i).setFavourite(favouriteList.get(j).favourite);
-                    break;
-                }
-            }
-        }
-
-        List<LabDataModel> sortedList = tempDynamicDataList;
+        List<LabDataModel> sortedList = new ArrayList<>(tempDynamicDataList);
 
         if (sortedList.size() == 0){
             findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
@@ -867,9 +850,12 @@ public class ExpandableRecycler extends AppCompatActivity {
             sortedList = filterByFavourite(sortedList);
         }
 
+        sortedList = sortLabList(sortedList);
+        /*
         if (sortType != Settings.SortTypes.NONE){
             sortedList = sortLabList(sortedList);
         }
+        */
 
         findViewById(R.id.noLabsMessage).setVisibility(View.GONE);
         findViewById(R.id.disableFavourites).setVisibility(View.GONE);
@@ -909,7 +895,47 @@ public class ExpandableRecycler extends AppCompatActivity {
     }
 
     private List<LabDataModel> sortLabList(List<LabDataModel> input){
-        return input;
+        List<LabDataModel> output = new ArrayList<>();
+        while(input.size() > 0) {   //basically a selection sort
+            int index = 0;
+            int referenceParameter = 0;
+            boolean ascending = false; //if true then the sort method is ascending,  The sorting always works in ascending but if this flag is set the "next value" will be placed at the beginning of the list instead of the end, essentially making the output in ascending order
+            for (int i = 0; i < input.size(); i++) {
+                int compareValue = 0;
+                switch (sortType){  //depending on the sort type requested, the key value being compared will change.  By default it sorts in descending order  (biggest first)
+                    case NONE:
+                        ascending = true;
+                        compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        break;
+                    case TEMP_UP:
+                        ascending = true;
+                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        break;
+                    case TEMP_DOWN:
+                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        break;
+                    case PEOPLE_UP:
+                        ascending = true;
+                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        break;
+                    case PEOPLE_DOWN:
+                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        break;
+                }
+                if (compareValue > referenceParameter){
+                    referenceParameter = compareValue;
+                    index = i;
+                }
+            }
+            if (ascending == true){
+                output.add(0,input.get(index));
+            }
+            else{
+                output.add(input.get(index));
+            }
+            input.remove(index);
+        }
+        return output;
     }
 
 
@@ -978,11 +1004,11 @@ public class ExpandableRecycler extends AppCompatActivity {
         processTooltips();
     }
 
-    public void addFavourite(String room){
+    public void addFavouriteToSharedPreference(String room){
         profile.favouriteList.add(new LabFavourite(room,true));
         sharedPreferenceHelper.saveSettings(profile);
     }
-    public void deleteFavourite(String room){
+    public void deleteFavouriteFromSharedPreference(String room){
         for (int i=0;i<profile.favouriteList.size();i++){
             if (profile.favouriteList.get(i).labCode.equals(room)){
                 profile.favouriteList.remove(i);
@@ -990,6 +1016,17 @@ public class ExpandableRecycler extends AppCompatActivity {
             }
         }
         sharedPreferenceHelper.saveSettings(profile);
+    }
+
+    private void syncFavouriteList(){
+        for(int i = 0;i<tempDynamicDataList.size();i++){
+            for (int j = 0; j < favouriteList.size();j++){
+                if (tempDynamicDataList.get(i).getRoomCode().equals(favouriteList.get(j).labCode)){
+                    tempDynamicDataList.get(i).setFavourite(favouriteList.get(j).favourite);
+                    break;
+                }
+            }
+        }
     }
 
 }

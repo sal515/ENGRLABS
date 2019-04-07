@@ -231,6 +231,10 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         processTooltips();
 
+        List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
+
+        int test = 0;
+
     }
 
     // window animation between activities

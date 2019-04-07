@@ -1,7 +1,6 @@
 package ca.engrLabs_390.engrlabs.dataModels;
 
 import android.app.Application;
-import android.os.Handler;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +20,7 @@ public class SIngleton2ShareData extends Application {
 
     private static List<LabDataModel> labDynamicDataObjects;
     private static List<String> softwareList;
+    private static HashMap softwareMap;
 
 
     // references to the database
@@ -45,10 +45,10 @@ public class SIngleton2ShareData extends Application {
 
         labDynamicDataObjects = new ArrayList<LabDataModel>();
 
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        final Handler handler = new Handler();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
                 ValueEventListener labDetailsListener = new ValueEventListener() {
                     @Override
@@ -155,15 +155,15 @@ public class SIngleton2ShareData extends Application {
                 dynamicDataRef.addListenerForSingleValueEvent(labDetailsListener);
 //                labDetailsListenerVar = labDetailsListener;
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI stuff can be done during the computation thread is running
-
-                    }
-                });
-            }
-        }).start();
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // UI stuff can be done during the computation thread is running
+//
+//                    }
+//                });
+//            }
+//        }).start();
 
 //        if (labDetailsListenerVar != null) {
 //            databaseRootRef.removeEventListener(labDetailsListenerVar);
@@ -175,10 +175,10 @@ public class SIngleton2ShareData extends Application {
 
         softwareList = new ArrayList<String>();
 
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        final Handler handler = new Handler();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
                 // Downloading the parsed software data from the dabase
                 ValueEventListener labDetailsListener = new ValueEventListener() {
@@ -187,7 +187,7 @@ public class SIngleton2ShareData extends Application {
                         Log.w(TAG, "Software Parsing Data download function called ");
 
 
-                        HashMap softwaresMap;
+//                        HashMap softwaresMap;
                         List<String> softwareKeysList;
 //                        softwareKeysList = new ArrayList<String>();
 
@@ -196,8 +196,8 @@ public class SIngleton2ShareData extends Application {
                         Object labObj = dataSnapshot.getValue();
                         // Check if the object is of type HashMap, if it is cast it to HashMap
                         if (labObj instanceof HashMap) {
-                            softwaresMap = new HashMap((HashMap) labObj);
-                            softwareList = new ArrayList<String>(softwaresMap.keySet());
+                            softwareMap = new HashMap((HashMap) labObj);
+                            softwareList = new ArrayList<String>(softwareMap.keySet());
                         }
 
                         String i = "Work";
@@ -210,15 +210,30 @@ public class SIngleton2ShareData extends Application {
                 };
                 softwaresRef.addListenerForSingleValueEvent(labDetailsListener);
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI stuff can be done at the end of the actual computation in the thread
-                    }
-                });
-            }
-        }).start();
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // UI stuff can be done at the end of the actual computation in the thread
+//                    }
+//                });
+//            }
+//        }).start();
 
+    }
+
+    public static List<String> getLabList(String softwareName) {
+
+        List<String> labList;
+        labList = new ArrayList<String>() ;
+
+        try {
+            // softwareName = "AGI32_18_3_PTBPE_193";
+            HashMap labsMap = new HashMap((HashMap)((HashMap) softwareMap.get(softwareName)).get("Labs"));
+            labList = new ArrayList<String>(labsMap.keySet()) ;
+        } catch (Exception e) {
+            Log.w(TAG, "Error getting the list of labs for the searched Software");
+        }
+        return labList;
     }
 
     public static List<LabDataModel> getLabDynamicDataObjects() {

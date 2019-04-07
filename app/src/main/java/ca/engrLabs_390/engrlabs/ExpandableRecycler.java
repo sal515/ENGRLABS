@@ -29,6 +29,7 @@ import com.tooltip.Tooltip;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +43,8 @@ import ca.engrLabs_390.engrlabs.dataModels.LabDataModel;
 import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.recyclerView_lastChangesAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
+
+import static com.mancj.materialsearchbar.MaterialSearchBar.BUTTON_BACK;
 
 public class ExpandableRecycler extends AppCompatActivity {
 
@@ -65,6 +68,7 @@ public class ExpandableRecycler extends AppCompatActivity {
     CardView searchCard;
     ImageView sortButton;
     List<String> suggestList = new ArrayList<>();
+    static String searchFilterSelection = "";
 
     // =========  Search bar stuff   ==========
 
@@ -231,7 +235,7 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         processTooltips();
 
-        List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
+        //List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
 
         int test = 0;
 
@@ -714,6 +718,8 @@ public class ExpandableRecycler extends AppCompatActivity {
                     }
                 }
                 text = materialSearchBar.getText();
+                searchFilterSelection = "";//materialSearchBar.getText();
+                updateData();
                 //materialSearchBar.setText("");
                 //filterSelection = "";
                 //FIXME: Avoid called this whole recycler initializer function
@@ -733,27 +739,22 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         @Override
         public void onSearchConfirmed(CharSequence text) {
-//            filterSelection = materialSearchBar.getText();
-
+            searchFilterSelection = materialSearchBar.getText();
+            updateData();
             // This is where you set the state for the recyclerview
-
-
-            //FIXME: Avoid called this whole recycler initializer function
-//                bindingAdapterToRecycleViewer();
 
         }
 
         @Override
         public void onButtonClicked(int buttonCode) {
             //***************doesn't work, don't know why
-                /*
+
+            /*
                 if (buttonCode == BUTTON_BACK){
-                    materialSearchBar.setText(null);
-                    filterSelection = null;
-                    //FIXME: Avoid called this whole recycler initializer function
-                    bindingAdapterToRecycleViewer();
+                    searchFilterSelection = materialSearchBar.getText();
+                    updateData();
                 }
-                */
+            */
         }
     };
 
@@ -844,23 +845,38 @@ public class ExpandableRecycler extends AppCompatActivity {
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             findViewById(R.id.loading).setVisibility(View.INVISIBLE);
         }
-        //recyclerViewAdapter.notifyDataSetChanged();
 
+        //**********************************DEMO-MODE**************************************//
+        if (MainActivity.demoMode == true){
+            sortedList = demoModeFilter(sortedList);
+        }
+        //*********************************DEMO-MODE-END***********************************//
+
+        //****************************************FILTERS********************************//
+
+        //Floor Filter
         if (floorFilter != 0){
             sortedList = filterByFloor(sortedList);
         }
 
+        //Favourite Filter
         if (favouriteFilter == true){
             sortedList = filterByFavourite(sortedList);
         }
 
-        sortedList = sortLabList(sortedList);
-        /*
-        if (sortType != Settings.SortTypes.NONE){
-            sortedList = sortLabList(sortedList);
+        //Search Filter
+        if (searchFilterSelection != null){
+            if (!searchFilterSelection.equals("")){
+                sortedList = searchFilter(sortedList);
+            }
         }
-        */
+        //************************************FILTERS-END********************************//
 
+        //**********************************SORTING**************************************//
+        sortedList = sortLabList(sortedList);
+        //*********************************SORTING-END***********************************//
+
+        //Update Sync List
         findViewById(R.id.noLabsMessage).setVisibility(View.GONE);
         findViewById(R.id.disableFavourites).setVisibility(View.GONE);
         if (sortedList.size() == 0){
@@ -870,9 +886,41 @@ public class ExpandableRecycler extends AppCompatActivity {
             }
         }
 
-
+        //Update data
         recyclerViewAdapter.updateLabData(sortedList);
         recyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    private List<LabDataModel> demoModeFilter(List<LabDataModel> input){
+        for (int i = 0; i < input.size(); i++) {
+            int fakeTemperature;
+            int fakeOccupancy;
+
+            Random rand = new Random();
+            fakeTemperature = rand.nextInt(12) + 18;
+            fakeOccupancy = rand.nextInt(30);
+            if (fakeOccupancy > Integer.parseInt(input.get(i).getTotalCapacity())){
+                fakeOccupancy = Integer.parseInt(input.get(i).getTotalCapacity());
+            }
+
+            input.get(i).setNumberOfStudentsPresent(Integer.toString(fakeOccupancy));
+            input.get(i).setTemperature(Integer.toString(fakeTemperature));
+        }
+        return input;
+    }
+
+    private List<LabDataModel> searchFilter(List<LabDataModel> input){
+        List<LabDataModel> output = new ArrayList<>();
+        List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList(searchFilterSelection));
+        for(int i = 0;i<input.size();i++){
+            for(int j = 0;j<labList.size();j++){
+                if (labList.get(j).equals(input.get(i).getRoomCode())){
+                    output.add(input.get(i));
+                    break;
+                }
+            }
+        }
+        return output;
     }
 
     private List<LabDataModel> filterByFloor(List<LabDataModel> input){
@@ -898,50 +946,57 @@ public class ExpandableRecycler extends AppCompatActivity {
         return output;
     }
 
-    private List<LabDataModel> sortLabList(List<LabDataModel> input){
+    private List<LabDataModel> sortLabList(List<LabDataModel> input) {
         List<LabDataModel> output = new ArrayList<>();
-        while(input.size() > 0) {   //basically a selection sort
+        while (input.size() > 0) {   //basically a selection sort
             int index = 0;
             int referenceParameter = 0;
             boolean ascending = false; //if true then the sort method is ascending,  The sorting always works in ascending but if this flag is set the "next value" will be placed at the beginning of the list instead of the end, essentially making the output in ascending order
             for (int i = 0; i < input.size(); i++) {
                 int compareValue = 0;
-                switch (sortType){  //depending on the sort type requested, the key value being compared will change.  By default it sorts in descending order  (biggest first)
+                switch (sortType) {  //depending on the sort type requested, the key value being compared will change.  By default it sorts in descending order  (biggest first)
                     case NONE:
                         ascending = true;
                         compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
                         break;
                     case TEMP_UP:
                         ascending = true;
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
-                        break;
                     case TEMP_DOWN:
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
-                        break;
-                    case PEOPLE_UP:
-                        ascending = true;
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        String stringTemp = input.get(i).getTemperature();
+                        if (!stringTemp.contains("?")){
+                            compareValue = Integer.parseInt(stringTemp);
+                        }
+                        else{
+                            compareValue = 999;
+                        }
                         break;
                     case PEOPLE_DOWN:
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        ascending = true;  //logic needs to be flipped (Down sets the ascending flag) since this sorting is based on a subtraction
+                    case PEOPLE_UP:
+                        String stringPeople = input.get(i).getNumberOfStudentsPresent();
+                        String stringTotalPeople = input.get(i).getTotalCapacity();
+                        if (!stringPeople.contains("?")){
+                            compareValue = Integer.parseInt(stringTotalPeople) - Integer.parseInt(stringPeople);
+                        }
+                        else{
+                            compareValue = -1;
+                        }
                         break;
                 }
-                if (compareValue > referenceParameter){
+                if (compareValue > referenceParameter) {
                     referenceParameter = compareValue;
                     index = i;
                 }
             }
-            if (ascending == true){
-                output.add(0,input.get(index));
-            }
-            else{
+            if (ascending == true) {
+                output.add(0, input.get(index));
+            } else {
                 output.add(input.get(index));
             }
             input.remove(index);
         }
         return output;
     }
-
 
 
     // FIXME: Not sure if we will need it

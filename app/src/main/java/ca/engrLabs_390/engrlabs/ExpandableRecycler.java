@@ -43,6 +43,8 @@ import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.recyclerView_lastChangesAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
+import static com.mancj.materialsearchbar.MaterialSearchBar.BUTTON_BACK;
+
 public class ExpandableRecycler extends AppCompatActivity {
 
     private static final String TAG = "RecyclerViewActivity";
@@ -715,6 +717,8 @@ public class ExpandableRecycler extends AppCompatActivity {
                     }
                 }
                 text = materialSearchBar.getText();
+                searchFilterSelection = "";//materialSearchBar.getText();
+                updateData();
                 //materialSearchBar.setText("");
                 //filterSelection = "";
                 //FIXME: Avoid called this whole recycler initializer function
@@ -738,23 +742,18 @@ public class ExpandableRecycler extends AppCompatActivity {
             updateData();
             // This is where you set the state for the recyclerview
 
-
-            //FIXME: Avoid called this whole recycler initializer function
-//                bindingAdapterToRecycleViewer();
-
         }
 
         @Override
         public void onButtonClicked(int buttonCode) {
             //***************doesn't work, don't know why
-                /*
+
+            /*
                 if (buttonCode == BUTTON_BACK){
-                    materialSearchBar.setText(null);
-                    filterSelection = null;
-                    //FIXME: Avoid called this whole recycler initializer function
-                    bindingAdapterToRecycleViewer();
+                    searchFilterSelection = materialSearchBar.getText();
+                    updateData();
                 }
-                */
+            */
         }
     };
 

@@ -529,6 +529,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                 String BuildingCode;
                 String LocationCode;
                 HashMap<String, String> upcomingClass = new HashMap<String, String>();
+                long upcomingclassTime;
 
 
 
@@ -562,8 +563,13 @@ public class ExpandableRecycler extends AppCompatActivity {
                     // setting the temperature
                     Temperature = (String) ((HashMap) labsDynamicDataMap.get(labKeysList.get(j))).get("Temperature");
                     TotalCapacity = (String) ((HashMap) labsDynamicDataMap.get(labKeysList.get(j))).get("TotalCapacity");
+
+
                     // setting the number of students
                     NumberOfStudentsPresent = (String) ((HashMap) labsDynamicDataMap.get(labKeysList.get(j))).get("NumberOfStudentsPresent");
+                    upcomingclassTime =  (long)((HashMap) labsDynamicDataMap.get(labKeysList.get(j))).get("UpcomingClassTime");
+//                    Log.w(TAG,  (((HashMap) labsDynamicDataMap.get(labKeysList.get(j))).get("UpcomingClassTime")).getClass().getCanonicalName());
+//                    Log.w(TAG,  (((HashMap) labsDynamicDataMap.get(labKeysList.get(j))).get("UpcomingClassTime")).toString());
 
 
                     tempDynamicDataObj.setAvailableSpots(AvailableSpots);
@@ -574,20 +580,18 @@ public class ExpandableRecycler extends AppCompatActivity {
                     tempDynamicDataObj.setRoomCode(RoomCode);
                     tempDynamicDataObj.setTemperature(Temperature);
                     tempDynamicDataObj.setTotalCapacity(TotalCapacity);
+                    tempDynamicDataObj.setUpcomingclassTime(upcomingclassTime);
+//                    tempDynamicDataObj.setUpcomingclassTime((long) -1);
 
                     // setting the Room number
 //                    tempDynamicDataObj.setRoomStr(labKeysList.get(j));
                     // NumberOfStudentsPresent = (String) ((HashMap) labsDynamicDataMap.get("B204")).get("NumberOfStudentsPresent");
                     tempDynamicDataObj.setNumberOfStudentsPresent(NumberOfStudentsPresent);
 
-                    // if
 
                     // Sort the array here: According to user selection
                     // if temperature sort ascending === true
                         // sortAscendingTemp()
-
-
-
 
 
                     // Adding the tempDynamicData object created to the List

@@ -24,6 +24,8 @@ public class LabDataModel implements Cloneable {
     private String BuildingCode;
     private String LocationCode;
     private HashMap<String, String> upcomingClass = new HashMap<String, String>();
+    private long upcomingclassTime;
+
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -83,6 +85,7 @@ public class LabDataModel implements Cloneable {
         this.clicked = false;
         this.timeStamp = "";
         this.LabAvailability = "";
+        this.upcomingclassTime = Long.valueOf(-1);
 //        this.upcomingClass = null;
         this.upcomingClass.put("Category", "");
         this.upcomingClass.put("StartHour", "");
@@ -220,5 +223,13 @@ public class LabDataModel implements Cloneable {
 
     public void setUpcomingClass(HashMap<String, String> upcomingClass) {
         this.upcomingClass = upcomingClass;
+    }
+
+    public long getUpcomingclassTime() {
+        return upcomingclassTime;
+    }
+
+    public void setUpcomingclassTime(long upcomingclassTime) {
+        this.upcomingclassTime = upcomingclassTime;
     }
 }

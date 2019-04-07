@@ -29,6 +29,7 @@ import com.tooltip.Tooltip;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -844,29 +845,38 @@ public class ExpandableRecycler extends AppCompatActivity {
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             findViewById(R.id.loading).setVisibility(View.INVISIBLE);
         }
-        //recyclerViewAdapter.notifyDataSetChanged();
 
+        //**********************************DEMO-MODE**************************************//
+        if (MainActivity.demoMode == true){
+            sortedList = demoModeFilter(sortedList);
+        }
+        //*********************************DEMO-MODE-END***********************************//
+
+        //****************************************FILTERS********************************//
+
+        //Floor Filter
         if (floorFilter != 0){
             sortedList = filterByFloor(sortedList);
         }
 
+        //Favourite Filter
         if (favouriteFilter == true){
             sortedList = filterByFavourite(sortedList);
         }
 
-        sortedList = sortLabList(sortedList);
-
+        //Search Filter
         if (searchFilterSelection != null){
             if (!searchFilterSelection.equals("")){
                 sortedList = searchFilter(sortedList);
             }
         }
-        /*
-        if (sortType != Settings.SortTypes.NONE){
-            sortedList = sortLabList(sortedList);
-        }
-        */
+        //************************************FILTERS-END********************************//
 
+        //**********************************SORTING**************************************//
+        sortedList = sortLabList(sortedList);
+        //*********************************SORTING-END***********************************//
+
+        //Update Sync List
         findViewById(R.id.noLabsMessage).setVisibility(View.GONE);
         findViewById(R.id.disableFavourites).setVisibility(View.GONE);
         if (sortedList.size() == 0){
@@ -876,9 +886,27 @@ public class ExpandableRecycler extends AppCompatActivity {
             }
         }
 
-
+        //Update data
         recyclerViewAdapter.updateLabData(sortedList);
         recyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    private List<LabDataModel> demoModeFilter(List<LabDataModel> input){
+        for (int i = 0; i < input.size(); i++) {
+            int fakeTemperature;
+            int fakeOccupancy;
+
+            Random rand = new Random();
+            fakeTemperature = rand.nextInt(12) + 18;
+            fakeOccupancy = rand.nextInt(30);
+            if (fakeOccupancy > Integer.parseInt(input.get(i).getTotalCapacity())){
+                fakeOccupancy = Integer.parseInt(input.get(i).getTotalCapacity());
+            }
+
+            input.get(i).setNumberOfStudentsPresent(Integer.toString(fakeOccupancy));
+            input.get(i).setTemperature(Integer.toString(fakeTemperature));
+        }
+        return input;
     }
 
     private List<LabDataModel> searchFilter(List<LabDataModel> input){
@@ -918,50 +946,57 @@ public class ExpandableRecycler extends AppCompatActivity {
         return output;
     }
 
-    private List<LabDataModel> sortLabList(List<LabDataModel> input){
+    private List<LabDataModel> sortLabList(List<LabDataModel> input) {
         List<LabDataModel> output = new ArrayList<>();
-        while(input.size() > 0) {   //basically a selection sort
+        while (input.size() > 0) {   //basically a selection sort
             int index = 0;
             int referenceParameter = 0;
             boolean ascending = false; //if true then the sort method is ascending,  The sorting always works in ascending but if this flag is set the "next value" will be placed at the beginning of the list instead of the end, essentially making the output in ascending order
             for (int i = 0; i < input.size(); i++) {
                 int compareValue = 0;
-                switch (sortType){  //depending on the sort type requested, the key value being compared will change.  By default it sorts in descending order  (biggest first)
+                switch (sortType) {  //depending on the sort type requested, the key value being compared will change.  By default it sorts in descending order  (biggest first)
                     case NONE:
                         ascending = true;
                         compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
                         break;
                     case TEMP_UP:
                         ascending = true;
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
-                        break;
                     case TEMP_DOWN:
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
-                        break;
-                    case PEOPLE_UP:
-                        ascending = true;
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        String stringTemp = input.get(i).getTemperature();
+                        if (!stringTemp.contains("?")){
+                            compareValue = Integer.parseInt(stringTemp);
+                        }
+                        else{
+                            compareValue = 999;
+                        }
                         break;
                     case PEOPLE_DOWN:
-                        //compareValue = Integer.parseInt(input.get(i).getRoomCode().substring(1));
+                        ascending = true;  //logic needs to be flipped (Down sets the ascending flag) since this sorting is based on a subtraction
+                    case PEOPLE_UP:
+                        String stringPeople = input.get(i).getNumberOfStudentsPresent();
+                        String stringTotalPeople = input.get(i).getTotalCapacity();
+                        if (!stringPeople.contains("?")){
+                            compareValue = Integer.parseInt(stringTotalPeople) - Integer.parseInt(stringPeople);
+                        }
+                        else{
+                            compareValue = -1;
+                        }
                         break;
                 }
-                if (compareValue > referenceParameter){
+                if (compareValue > referenceParameter) {
                     referenceParameter = compareValue;
                     index = i;
                 }
             }
-            if (ascending == true){
-                output.add(0,input.get(index));
-            }
-            else{
+            if (ascending == true) {
+                output.add(0, input.get(index));
+            } else {
                 output.add(input.get(index));
             }
             input.remove(index);
         }
         return output;
     }
-
 
 
     // FIXME: Not sure if we will need it

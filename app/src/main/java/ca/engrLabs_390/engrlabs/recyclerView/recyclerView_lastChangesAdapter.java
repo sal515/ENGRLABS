@@ -18,6 +18,7 @@ import com.tooltip.Tooltip;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
@@ -417,6 +418,13 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         }
 
 
+        Calendar calendar = Calendar.getInstance();
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutesOfDay = (hourOfDay*60)+calendar.get(Calendar.MINUTE);
+        //viewHolder.availabilityEdit.setText(Long.toString(data.getUpcomingclassTime()));
+
+        long nextClassTime = data.getUpcomingclassTime();
+
         if (data.getLabAvailability() == "false")
         {
             viewHolder.availabilityImage.setImageResource(R.drawable.ic_clear_red_24dp);
@@ -437,7 +445,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
                 viewHolder.availabilityEdit.setText("Lab Almost Full");
             }
-            else if((data.getUpcomingclassTime() < 60)&&(data.getUpcomingclassTime() > -1)){
+            else if((nextClassTime - minutesOfDay < 60) && (data.getUpcomingclassTime() > -1)){
                 viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
                 viewHolder.availabilityEdit.setText("Tutorial Starting Soon");
             }

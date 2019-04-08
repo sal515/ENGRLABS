@@ -505,7 +505,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         if (MainActivity.getTutorialMode() == true) {
             switch (ExpandableRecycler.listToolTipState) {
                 case 0:
-                    buildToolTip("Click the Star to Favourite a Lab", Gravity.TOP, v);
+                    buildToolTip("Click the Heart to Favourite a Lab", Gravity.TOP, v);
                     break;
                 case 1:
                     //buildToolTip("You Can View the Specific Softwares Available in a Lab", Gravity.BOTTOM, v);

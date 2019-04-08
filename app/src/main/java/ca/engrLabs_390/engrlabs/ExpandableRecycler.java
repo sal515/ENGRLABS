@@ -44,8 +44,6 @@ import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.recyclerView_lastChangesAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
-import static com.mancj.materialsearchbar.MaterialSearchBar.BUTTON_BACK;
-
 public class ExpandableRecycler extends AppCompatActivity {
 
     private static final String TAG = "RecyclerViewActivity";
@@ -954,10 +952,10 @@ public class ExpandableRecycler extends AppCompatActivity {
         List<LabDataModel> output = new ArrayList<>();
         while (input.size() > 0) {   //basically a selection sort
             int index = 0;
-            int referenceParameter = 0;
+            float referenceParameter = 0;
             boolean ascending = false; //if true then the sort method is ascending,  The sorting always works in ascending but if this flag is set the "next value" will be placed at the beginning of the list instead of the end, essentially making the output in ascending order
             for (int i = 0; i < input.size(); i++) {
-                int compareValue = 0;
+                float compareValue = 0;
                 switch (sortType) {  //depending on the sort type requested, the key value being compared will change.  By default it sorts in descending order  (biggest first)
                     case NONE:
                         ascending = true;
@@ -968,7 +966,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                     case TEMP_DOWN:
                         String stringTemp = input.get(i).getTemperature();
                         if (!stringTemp.contains("?")){
-                            compareValue = Integer.parseInt(stringTemp);
+                            compareValue = Float.parseFloat(stringTemp);
                         }
                         else{
                             compareValue = 999;

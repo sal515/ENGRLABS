@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -12,95 +14,154 @@
     tools:context=".TA_Section.LoginActivity">
 
     <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical:>
 
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="346dp"
-        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/login_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="57dp"
+            android:layout_height="41dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <ScrollView
+            android:id="@+id/login_form"
+            android:layout_width="346dp"
+            android:layout_height="652dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <AutoCompleteTextView
-                android:id="@+id/fieldEmail"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true" />
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/fieldPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:imeActionId="6"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
+                <AutoCompleteTextView
+                    android:id="@+id/fieldEmail"
+                    android:layout_width="324dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/prompt_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    app:layout_constraintBottom_toTopOf="@+id/fieldPassword"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.49" />
 
-            <Button
-                android:id="@+id/emailSignInButton"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Login"
-                android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/fieldPassword"
+                    android:layout_width="324dp"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/prompt_password"
+                    android:imeActionId="6"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    app:layout_constraintBottom_toTopOf="@+id/emailSignInButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldEmail" />
 
-            <Button
-                android:id="@+id/emailCreateAccountButton"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Sign Up"
-                android:textStyle="bold" />
+                <Button
+                    android:id="@+id/emailSignInButton"
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Login"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/verifyEmailButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldPassword" />
 
-            <Button
-                android:id="@+id/verifyEmailButton"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Verify Email"
-                android:textStyle="bold" />
+                <Button
+                    android:id="@+id/emailCreateAccountButton"
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Sign Up"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.863"
+                    app:layout_constraintStart_toEndOf="@+id/emailSignInButton"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldPassword" />
 
-            <Button
-                android:id="@+id/signOutButtonInstructorPage"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Sign Out"
-                android:textStyle="bold" />
+                <Button
+                    android:id="@+id/verifyEmailButton"
+                    android:layout_width="324dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="15dp"
+                    android:enabled="false"
+                    android:text="Verify Email"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/signOutButtonInstructorPage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/emailCreateAccountButton" />
 
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Status" />
+                <Button
+                    android:id="@+id/signOutButtonInstructorPage"
+                    android:layout_width="324dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="16dp"
+                    android:enabled="false"
+                    android:text="Sign Out"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/status"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/verifyEmailButton" />
 
-            <TextView
-                android:id="@+id/detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Detail" />
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="324dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Status"
+                    app:layout_constraintBottom_toTopOf="@+id/detail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/signOutButtonInstructorPage" />
 
-        </LinearLayout>
-    </ScrollView>
+                <TextView
+                    android:id="@+id/detail"
+                    android:layout_width="324dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Detail"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/status" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

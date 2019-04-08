@@ -239,6 +239,10 @@ public class LoginActivity extends Activity implements
 
             findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
         } else {
+
+            Toast.makeText(LoginActivity.this, "User not Logged in", Toast.LENGTH_SHORT).show();
+
+
             mStatusTextView.setText("Signed Out");
             mDetailTextView.setText(null);
 
@@ -333,6 +337,20 @@ public class LoginActivity extends Activity implements
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //    @Override

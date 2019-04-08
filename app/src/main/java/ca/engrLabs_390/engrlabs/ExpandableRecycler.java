@@ -241,6 +241,14 @@ public class ExpandableRecycler extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.getMenu().findItem(R.id.lablist).setChecked(true);
+        navigationView.getMenu().findItem(R.id.homepage).setChecked(false);
+        navigationView.getMenu().findItem(R.id.taSection).setChecked(false);
+    }
+
     // window animation between activities
     private void setupWindowAnimations() {
         Fade fade = new Fade();
@@ -292,7 +300,6 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         homePageNavButton = findViewById(R.id.homepage);
         labListNavButton = findViewById(R.id.lablist);
-        navigationView.getMenu().findItem(R.id.lablist).setChecked(true);
         taLoginNavButton = findViewById(R.id.taSection);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -301,12 +308,14 @@ public class ExpandableRecycler extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.homepage:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        navigationView.getMenu().findItem(R.id.lablist).setChecked(false);
                         break;
                     case R.id.lablist:
                         //startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
                         break;
                     case R.id.taSection:
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        navigationView.getMenu().findItem(R.id.lablist).setChecked(false);
                         break;
                     default:
                         break;

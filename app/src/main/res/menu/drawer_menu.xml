@@ -30,7 +30,7 @@
         <menu>
             <item
                 android:id="@+id/favourites"
-                android:icon="@drawable/ic_star_border_black_24dp"
+                android:icon="@drawable/ic_favorite_border_black_24dp"
                 android:title="Show Favourites Only"
                 app:actionLayout="@layout/drawer_switch_item"/>
         </menu>

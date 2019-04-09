@@ -1,6 +1,7 @@
 package ca.engrLabs_390.engrlabs;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ import java.util.Random;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -154,7 +156,10 @@ public class ExpandableRecycler extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expandable_recycler);
 //        setupWindowAnimations();
-
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.navBar)); // Navigation bar the soft bottom of some phones like nexus and some Samsung note series
+            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.status)); //status bar or the time bar at the top
+        }
         ProgressBar loading = findViewById(R.id.progressBar);
 
         // Calling the initial setup functions -> "ORDER of CALL MATTERS"

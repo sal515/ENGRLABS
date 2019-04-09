@@ -28,7 +28,8 @@
         <activity
             android:name=".TA_Section.LoginActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name="ca.engrLabs_390.engrlabs.ExpandableRecycler"
             android:screenOrientation="portrait"

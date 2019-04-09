@@ -6,4 +6,6 @@
     <color name="yabzGrey">#E3E8E7</color>
     <color name="yabzBlue">#355485</color>
     <color name="yabzGreen">#9C2233</color>
+    <color name="navBar">#355485</color>
+    <color name="status">#355485</color>
 </resources>

@@ -2,9 +2,11 @@ package ca.engrLabs_390.engrlabs.TA_Section;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,11 +15,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import ca.engrLabs_390.engrlabs.ExpandableRecycler;
+import ca.engrLabs_390.engrlabs.MainActivity;
 import ca.engrLabs_390.engrlabs.R;
 
 /**
@@ -38,10 +45,22 @@ public class LoginActivity extends Activity implements
 
     private FirebaseAuth mAuth;
 
+    // =========  Nav Drawer Stuff   ==========
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    MenuItem homePageNavButton;
+    MenuItem labListNavButton;
+    MenuItem taLoginNavButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.navBar)); // Navigation bar the soft bottom of some phones like nexus and some Samsung note series
+            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.status)); //status bar or the time bar at the top
+        }
 
         // initialize the firebase authentication database
         mAuth = FirebaseAuth.getInstance();
@@ -69,6 +88,37 @@ public class LoginActivity extends Activity implements
 //        List<String> sectionStartTime = new ArrayList<>(SIngleton2ShareData.getTimeOfSection("AERO-455", "TI-X"));
 
         int debug = 0;
+
+        drawer = findViewById(R.id.drawerContainer);
+        navigationView = findViewById(R.id.nav_view);
+
+        homePageNavButton = findViewById(R.id.homepage);
+        labListNavButton = findViewById(R.id.lablist);
+        taLoginNavButton = findViewById(R.id.taSection);
+        navigationView.getMenu().getItem(1).setVisible(false);
+        navigationView.getMenu().getItem(2).setVisible(false);
+        navigationView.getMenu().getItem(3).setVisible(false);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.homepage:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        navigationView.getMenu().findItem(R.id.taSection).setChecked(false);
+                        break;
+                    case R.id.lablist:
+                        startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        navigationView.getMenu().findItem(R.id.taSection).setChecked(false);
+                        break;
+                    case R.id.taSection:
+                        //tartActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -104,6 +154,10 @@ public class LoginActivity extends Activity implements
         // saveUser2DB();
 
         updateUI(currentUser);
+
+        navigationView.getMenu().findItem(R.id.lablist).setChecked(false);
+        navigationView.getMenu().findItem(R.id.homepage).setChecked(false);
+        navigationView.getMenu().findItem(R.id.taSection).setChecked(true);
 
 
     }

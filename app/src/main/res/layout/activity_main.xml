@@ -58,6 +58,7 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="false"
+        android:theme="@style/Theme.MyTheme"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
@@ -68,6 +69,7 @@
         android:id="@+id/demoMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:theme="@style/Theme.MyTheme"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="Demo Mode" />

@@ -5,9 +5,7 @@
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-    <!--Getting user permission for internet access -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- Getting user permission for internet access -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -20,28 +18,29 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".TA_Section.CourseSectionSelection"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ExpandableRecycler"
+            android:name=".TA_Section.insertCourseActivity"
             android:theme="@style/Theme.AppCompat.Light"
-            />
+        />
+        <activity
+            android:name=".TA_Section.CourseSectionSelection"
+            android:parentActivityName=".ExpandableRecycler"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".TA_Section.LoginActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
-            android:name="ca.engrLabs_390.engrlabs.ExpandableRecycler"
-            android:screenOrientation="portrait"
+            android:name=".ExpandableRecycler"
             android:label="@string/title_activity_expandable_recycler_with_bottom_nav"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity
             android:name=".TA_Section.FirebaseEmailPasswordAuth"
-            android:screenOrientation="portrait"
             android:label="EmailPasswordAuthen"
-            android:theme="@style/Theme.MaterialComponents.Light">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MaterialComponents.Light"></activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
@@ -52,9 +51,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".notifications.AlarmReceiver">
             <intent-filter>
-                <action android:name="mike.action.DISPLAY_NOTIDICATION"/>
+                <action android:name="mike.action.DISPLAY_NOTIDICATION" />
             </intent-filter>
         </receiver>
     </application>

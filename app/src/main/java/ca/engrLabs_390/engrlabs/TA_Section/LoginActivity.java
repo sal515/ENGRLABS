@@ -19,6 +19,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -43,6 +45,10 @@ public class LoginActivity extends Activity implements
     private EditText mEmailField;
     private EditText mPasswordField;
 
+    private DatabaseReference mDatabase;
+
+
+
     private FirebaseAuth mAuth;
 
     // =========  Nav Drawer Stuff   ==========
@@ -64,6 +70,7 @@ public class LoginActivity extends Activity implements
 
         // initialize the firebase authentication database
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
         // Views
@@ -349,8 +356,14 @@ public class LoginActivity extends Activity implements
         if (user != null) {
 
 
+
             Intent intent = new Intent(this, CourseSectionSelection.class);
             startActivity(intent);
+
+
+
+
+
 
             mStatusTextView.setText("User Found from the email and pass: " + user.getEmail() + user.isEmailVerified());
             mDetailTextView.setText("userID: " + user.getUid());

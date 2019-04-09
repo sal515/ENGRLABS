@@ -74,8 +74,19 @@ public class insertCourseActivity extends AppCompatActivity {
                     }
                 }
                 else if(state == 1){
-
                     if ((!textBoxCourseName.equals(""))&&(!textBoxSection.equals(""))){
+                        boolean valid = false;
+                        /*
+                        for(int i=0;i<SIngleton2ShareData.getCoursesList().size();i++){
+                            if (textBoxSection.equals(SIngleton2ShareData.getCoursesList().get(i))){
+                                valid = true;
+                            }
+                        }
+                        if (valid == false){
+                            Toast.makeText(getApplicationContext(), "Invalid Section", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        */
                         profile = sharedPreferenceHelper.getSettings();
                         if(profile == null){
                             profile = new Settings();
@@ -85,11 +96,12 @@ public class insertCourseActivity extends AppCompatActivity {
                             profile.favouriteList = new ArrayList<>();
                             profile.courseList = new ArrayList<>();
                             sharedPreferenceHelper.saveSettings(profile);
-
                         }
                         profile.courseList.add(new courseObject(textBoxCourseName,textBoxSection));
                         //sharedPreferenceHelper.saveSettings(profile);
+                        sharedPreferenceHelper.saveSettings(profile);
                         Intent insertCourseIntent = new Intent(getApplicationContext(), CourseSectionSelection.class);
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                         startActivity(insertCourseIntent);
                     }
                     else{

@@ -9,45 +9,32 @@
     android:backgroundTint="@color/yabzGrey"
     tools:context=".TA_Section.CourseSectionSelection">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <Button
+        android:id="@+id/signOutButtonInstructorPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/holo_red_dark"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:padding="0dp"
+        android:paddingStart="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="0dp"
+        android:text="@string/sign_out"
+        android:textSize="18sp" />
 
-        <ListView
-            android:id="@+id/addedCourseListView"
-            android:layout_width="373dp"
-            android:layout_height="571dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/signOutButtonInstructorPage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.666" />
-
-        <Button
-            android:id="@+id/signOutButtonInstructorPage"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:background="@android:color/holo_red_dark"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:padding="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:text="@string/sign_out"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ListView
+        android:id="@+id/addedCourseListView"
+        android:layout_width="373dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/signOutButtonInstructorPage"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
 </RelativeLayout>

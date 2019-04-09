@@ -6,16 +6,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import ca.engrLabs_390.engrlabs.R;
+import ca.engrLabs_390.engrlabs.Settings;
 import ca.engrLabs_390.engrlabs.SharedPreferenceHelper;
 
 public class CourseSectionSelection extends AppCompatActivity {
@@ -25,6 +29,7 @@ public class CourseSectionSelection extends AppCompatActivity {
     Button signOutButton;
     ListView classList;
     public SharedPreferenceHelper sharedPreferenceHelper;
+    ArrayList<String> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,8 @@ public class CourseSectionSelection extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        classList = findViewById(R.id.addedCourseListView);
+        sharedPreferenceHelper = new SharedPreferenceHelper(this);
     }
 
     //Creates ActionBar Menu
@@ -71,6 +78,26 @@ public class CourseSectionSelection extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+
+        Settings profile = sharedPreferenceHelper.getSettings();
+        list.clear();
+        if (profile != null){
+            if (profile.courseList.size() > 0){
+                for (int i=0;i<profile.courseList.size();i++){
+                    list.add(profile.courseList.get(i).courseName + "     " + profile.courseList.get(i).sectionName);
+                }
+            }
+            else{
+                list.add("No Courses Added");
+            }
+        }
+        else{
+            list.add("No Courses Added");
+        }
+        ArrayAdapter arrayAdapter=new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,list);
+        arrayAdapter.notifyDataSetChanged();
+        classList.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
     }
 
     //Handles action button

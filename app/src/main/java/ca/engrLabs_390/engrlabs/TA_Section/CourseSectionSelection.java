@@ -10,14 +10,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import ca.engrLabs_390.engrlabs.ExpandableRecycler;
+import ca.engrLabs_390.engrlabs.MainActivity;
 import ca.engrLabs_390.engrlabs.R;
 import ca.engrLabs_390.engrlabs.Settings;
 import ca.engrLabs_390.engrlabs.SharedPreferenceHelper;
@@ -30,6 +35,13 @@ public class CourseSectionSelection extends AppCompatActivity {
     ListView classList;
     public SharedPreferenceHelper sharedPreferenceHelper;
     ArrayList<String> list = new ArrayList<>();
+
+    // =========  Nav Drawer Stuff   ==========
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    MenuItem homePageNavButton;
+    MenuItem labListNavButton;
+    MenuItem taLoginNavButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +73,37 @@ public class CourseSectionSelection extends AppCompatActivity {
         });
         classList = findViewById(R.id.addedCourseListView);
         sharedPreferenceHelper = new SharedPreferenceHelper(this);
+
+        drawer = findViewById(R.id.drawerContainer);
+        navigationView = findViewById(R.id.nav_view);
+
+        homePageNavButton = findViewById(R.id.homepage);
+        labListNavButton = findViewById(R.id.lablist);
+        taLoginNavButton = findViewById(R.id.taSection);
+        navigationView.getMenu().getItem(1).setVisible(false);
+        navigationView.getMenu().getItem(2).setVisible(false);
+        navigationView.getMenu().getItem(3).setVisible(false);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.homepage:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        navigationView.getMenu().findItem(R.id.taSection).setChecked(false);
+                        break;
+                    case R.id.lablist:
+                        startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        navigationView.getMenu().findItem(R.id.taSection).setChecked(false);
+                        break;
+                    case R.id.taSection:
+                        //tartActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     //Creates ActionBar Menu
@@ -98,6 +141,10 @@ public class CourseSectionSelection extends AppCompatActivity {
         arrayAdapter.notifyDataSetChanged();
         classList.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
+
+        navigationView.getMenu().findItem(R.id.lablist).setChecked(false);
+        navigationView.getMenu().findItem(R.id.homepage).setChecked(false);
+        navigationView.getMenu().findItem(R.id.taSection).setChecked(true);
     }
 
     //Handles action button

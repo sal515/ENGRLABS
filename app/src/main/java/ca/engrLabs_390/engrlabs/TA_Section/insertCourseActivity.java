@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -24,6 +25,8 @@ public class insertCourseActivity extends AppCompatActivity {
     int state;
     public SharedPreferenceHelper sharedPreferenceHelper;
     public Settings profile;
+    AutoCompleteTextView sectionAutoCom;
+    AutoCompleteTextView courseNameNcodeAutoCom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +38,8 @@ public class insertCourseActivity extends AppCompatActivity {
         }
         sharedPreferenceHelper = new SharedPreferenceHelper(this);
 
-        final AutoCompleteTextView courseNameNcodeAutoCom = findViewById(R.id.courseNameNCodeAutoComplete);
-        final AutoCompleteTextView sectionAutoCom = findViewById(R.id.section);
+        courseNameNcodeAutoCom = findViewById(R.id.courseNameNCodeAutoComplete);
+        sectionAutoCom = findViewById(R.id.section);
         Button addButton = findViewById(R.id.addCourseButton);
         Button cancelButton = findViewById(R.id.cancelButtonAddCourse);
 
@@ -44,8 +47,7 @@ public class insertCourseActivity extends AppCompatActivity {
         courseNameNcodeAutoCom.setAdapter(courseNameNCodeAdapter);
 
 
-        ArrayAdapter<String> sectionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, SIngleton2ShareData.getSections("AERO-455"));
-        sectionAutoCom.setAdapter(sectionAdapter);
+        //ArrayAdapter<String> sectionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, SIngleton2ShareData.getSections("AERO-455"));//courseNameNcodeAutoCom.getText().toString()));
 
 
         cancelButton.setOnClickListener(new Button.OnClickListener() {
@@ -66,6 +68,18 @@ public class insertCourseActivity extends AppCompatActivity {
                 String textBoxSection = sectionAutoCom.getText().toString();
                 if (state == 0){
                     if (!textBoxCourseName.equals("")){
+                        boolean valid = false;
+                        for(int i=0;i<SIngleton2ShareData.getCoursesList().size();i++){
+                            if (textBoxCourseName.equals(SIngleton2ShareData.getCoursesList().get(i))){
+                                valid = true;
+                            }
+                        }
+                        if (valid == false){
+                            Toast.makeText(getApplicationContext(), "Invalid Course", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        courseNameNcodeAutoCom.setEnabled(false);
+                        setAdapter(courseNameNcodeAutoCom.getText().toString());
                         state++;
                         findViewById(R.id.section).setVisibility(View.VISIBLE);
                     }
@@ -74,11 +88,11 @@ public class insertCourseActivity extends AppCompatActivity {
                     }
                 }
                 else if(state == 1){
-                    if ((!textBoxCourseName.equals(""))&&(!textBoxSection.equals(""))){
+                    if (!textBoxSection.equals("")){
+                        List<String> coursesectionList = new ArrayList<>(SIngleton2ShareData.getSections(textBoxCourseName));
                         boolean valid = false;
-                        /*
-                        for(int i=0;i<SIngleton2ShareData.getCoursesList().size();i++){
-                            if (textBoxSection.equals(SIngleton2ShareData.getCoursesList().get(i))){
+                        for(int i=0;i<coursesectionList.size();i++){
+                            if (textBoxSection.equals(coursesectionList.get(i))){
                                 valid = true;
                             }
                         }
@@ -86,7 +100,6 @@ public class insertCourseActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Invalid Section", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        */
                         profile = sharedPreferenceHelper.getSettings();
                         if(profile == null){
                             profile = new Settings();
@@ -115,13 +128,17 @@ public class insertCourseActivity extends AppCompatActivity {
             }
         });
 
-
     }
     @Override
     protected void onResume() {
         super.onResume();
         state = 0;
         findViewById(R.id.section).setVisibility(View.INVISIBLE);
+    }
+
+    private void setAdapter(String input){
+        ArrayAdapter<String> sectionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, SIngleton2ShareData.getSections(input));//courseNameNcodeAutoCom.getText().toString()));
+        sectionAutoCom.setAdapter(sectionAdapter);
     }
 }
 

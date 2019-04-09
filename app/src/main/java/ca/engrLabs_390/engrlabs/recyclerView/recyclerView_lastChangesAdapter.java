@@ -206,6 +206,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                     args.putInt("Floor",labDataModel.get(getAdapterPosition()).getFloor());
                     args.putInt("Class",labDataModel.get(getAdapterPosition()).getRoom());
                     args.putChar("Building",'H');
+                    args.putString("classRoom",labDataModel.get(getAdapterPosition()).getRoomCode());
                     dialog.setArguments(args);
                     dialog.show(((AppCompatActivity)parentContext).getSupportFragmentManager(), "Insert Course");
                 }

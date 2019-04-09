@@ -30,6 +30,7 @@ public class SoftwareListFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflator, @Nullable ViewGroup container, Bundle savedInstanceState){
         View view = inflator.inflate(R.layout.fragment_lab_software, container, false);
 
+        String labRoom = getArguments().getString("classRoom");
         int floor = getArguments().getInt("Floor");
         int room = getArguments().getInt("Room");
         char building = getArguments().getChar("Building");
@@ -52,9 +53,12 @@ public class SoftwareListFragment extends DialogFragment {
             softwareList.add(masterList.get(i));
         }
         */
-        List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
+        List<String> labList = new ArrayList<>(SIngleton2ShareData.getSoftwareList(labRoom));
         for (int i = 0;i< labList.size();i++){
             softwareList.add(labList.get(i));
+        }
+        if (labList.size() == 0){
+            softwareList.add("No Unique Software in This Lab!");
         }
 
         ArrayAdapter arrayAdapter=new ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,softwareList);

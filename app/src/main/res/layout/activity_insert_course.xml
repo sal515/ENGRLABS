@@ -28,6 +28,7 @@
         android:completionHint="Select the section of the course"
         android:completionThreshold="1"
         android:hint="Select the section"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

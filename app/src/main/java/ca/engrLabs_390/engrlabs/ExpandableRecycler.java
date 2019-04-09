@@ -225,6 +225,18 @@ public class ExpandableRecycler extends AppCompatActivity {
                     ninthFloor.setChecked(true);
                 }
             }
+            findViewById(R.id.checkWifi).postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (tempDynamicDataList != null){
+                        if (tempDynamicDataList.size() == 0){
+                            findViewById(R.id.checkWifi).setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }, 4000);
         }
 
         databaseRootRef = FirebaseDatabase.getInstance().getReference();
@@ -860,6 +872,7 @@ public class ExpandableRecycler extends AppCompatActivity {
         else{
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             findViewById(R.id.loading).setVisibility(View.INVISIBLE);
+            findViewById(R.id.checkWifi).setVisibility(View.INVISIBLE);
         }
 
         //**********************************DEMO-MODE**************************************//

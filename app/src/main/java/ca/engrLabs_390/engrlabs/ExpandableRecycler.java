@@ -44,8 +44,6 @@ import ca.engrLabs_390.engrlabs.dataModels.SIngleton2ShareData;
 import ca.engrLabs_390.engrlabs.recyclerView.recyclerView_lastChangesAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
-import static com.mancj.materialsearchbar.MaterialSearchBar.BUTTON_BACK;
-
 public class ExpandableRecycler extends AppCompatActivity {
 
     private static final String TAG = "RecyclerViewActivity";

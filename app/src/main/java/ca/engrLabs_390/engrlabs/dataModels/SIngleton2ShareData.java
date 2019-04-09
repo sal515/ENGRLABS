@@ -23,6 +23,9 @@ public class SIngleton2ShareData extends Application {
     private static HashMap softwareMap;
     private static HashMap labsMap;
 
+    private static HashMap currentSemesterCoursesMap;
+
+
     // references to the database
     private static FirebaseDatabase database;
     private static DatabaseReference databaseRootRef;
@@ -42,6 +45,9 @@ public class SIngleton2ShareData extends Application {
         dynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
         softwaresRef = databaseRootRef.child("/PUBLIC_DATA/Softwares");
         LabsRef = databaseRootRef.child("/PUBLIC_DATA/Labs");
+
+
+        currentSemesterCoursesRef = databaseRootRef.child("/PUBLIC_DATA/CurrentSemesterCourses");
 
 
         labDynamicDataObjects = new ArrayList<LabDataModel>();
@@ -246,6 +252,67 @@ public class SIngleton2ShareData extends Application {
 //        }).start();
 
     }
+
+
+    public static void grabCurrentSemesterCourses() {
+        ValueEventListener currentSemesterCoursesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> labsKeyList;
+                Object courseObj = dataSnapshot.getValue();
+                if (courseObj instanceof HashMap) {
+                    currentSemesterCoursesMap = new HashMap((HashMap) courseObj);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+
+        };
+        currentSemesterCoursesRef.addListenerForSingleValueEvent(currentSemesterCoursesListener);
+    }
+
+
+    public static List<String> getCoursesList() {
+        List<String> coursesList = new ArrayList<String>();
+        try {
+
+            coursesList = new ArrayList<String>(currentSemesterCoursesMap.keySet());
+        } catch (Exception e) {
+            Log.w(TAG, "Error getting the list of labs for the searched Software");
+        }
+
+        return coursesList;
+    }
+
+    public static List<String> getSections(String courseNameCode) {
+        List<String> sectionsList = new ArrayList<String>();
+        try {
+            HashMap coursesMap = new HashMap((HashMap) ((HashMap) currentSemesterCoursesMap.get(courseNameCode)).get("Sections"));
+            sectionsList = new ArrayList<String>(coursesMap.keySet());
+        } catch (Exception e) {
+            Log.w(TAG, "Error getting the list of labs for the searched Software");
+        }
+        return sectionsList;
+    }
+
+    public static List<String> getTimeOfSection(String courseNameCode, String sectionCode) {
+        List<String> sectionStartTime = new ArrayList<String>();
+        try {
+            HashMap sectionDetailsMap = new HashMap((HashMap)((HashMap) ((HashMap) currentSemesterCoursesMap.get(courseNameCode)).get("Sections")).get(sectionCode));
+            sectionStartTime = new ArrayList<String>();
+            sectionStartTime.add((String) sectionDetailsMap.get("StartHour"));
+            sectionStartTime.add((String) sectionDetailsMap.get("StartMin"));
+            sectionStartTime.add((String) sectionDetailsMap.get("StartSecond"));
+
+        } catch (Exception e) {
+            Log.w(TAG, "Error getting the list of labs for the searched Software");
+        }
+        return sectionStartTime;
+    }
+
 
     public static List<String> getLabList(String softwareName) {
 

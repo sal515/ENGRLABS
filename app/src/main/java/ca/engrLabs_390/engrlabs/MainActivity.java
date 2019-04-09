@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         SIngleton2ShareData.extractParsedSoftwareData();
         SIngleton2ShareData.grabLabsWithSoftwareData();
 
+
+
+
+        SIngleton2ShareData.grabCurrentSemesterCourses();
+
         initializeReferences();
         initializeListeners();
 

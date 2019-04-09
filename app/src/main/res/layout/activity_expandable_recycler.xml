@@ -67,6 +67,17 @@
                 android:textColor="@color/common_google_signin_btn_text_dark_default"
                 android:textSize="30sp" />
 
+            <TextView
+                android:id="@+id/checkWifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/loading"
+                android:layout_centerHorizontal="true"
+                android:text="(Check Your Internet Connection)"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="100dp"

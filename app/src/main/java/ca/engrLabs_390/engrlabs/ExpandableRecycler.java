@@ -271,7 +271,10 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         // Initialize RecyclerView variable
         recyclerViewVar = findViewById(R.id.expandingRecyclerView);
-
+        /*LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        llm.setAutoMeasureEnabled(false);
+        recyclerViewVar.setLayoutManager(llm);
+*/
         // Init Nav Drawer
         initNavBar();
         //Dummy Class List
@@ -344,13 +347,13 @@ public class ExpandableRecycler extends AppCompatActivity {
         tempUp = navigationView.getMenu().findItem(R.id.tempUp).getActionView().findViewById(R.id.switcher);
         tempDown = navigationView.getMenu().findItem(R.id.tempDown).getActionView().findViewById(R.id.switcher);
         peopleUp = navigationView.getMenu().findItem(R.id.freeUp).getActionView().findViewById(R.id.switcher);
-        peopleDown = navigationView.getMenu().findItem(R.id.freeDown).getActionView().findViewById(R.id.switcher);
-        sortSwitches.add(tempUp);
-        sortSwitches.add(tempDown);
-        sortSwitches.add(peopleUp);
-        sortSwitches.add(peopleDown);
-        for(int i = 0;i<sortSwitches.size();i++){
-            sortInitForSwitchesInAGroup(sortSwitches,i);
+            peopleDown = navigationView.getMenu().findItem(R.id.freeDown).getActionView().findViewById(R.id.switcher);
+            sortSwitches.add(tempUp);
+            sortSwitches.add(tempDown);
+            sortSwitches.add(peopleUp);
+            sortSwitches.add(peopleDown);
+            for(int i = 0;i<sortSwitches.size();i++){
+                sortInitForSwitchesInAGroup(sortSwitches,i);
         }
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -902,6 +905,14 @@ public class ExpandableRecycler extends AppCompatActivity {
         //Update data
         recyclerViewAdapter.updateLabData(sortedList);
         recyclerViewAdapter.notifyDataSetChanged();
+        recyclerViewVar.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                recyclerViewVar.smoothScrollToPosition(0);
+            }
+        }, 500);
     }
 
     private List<LabDataModel> demoModeFilter(List<LabDataModel> input){
@@ -918,6 +929,20 @@ public class ExpandableRecycler extends AppCompatActivity {
 
             input.get(i).setNumberOfStudentsPresent(Integer.toString(fakeOccupancy));
             input.get(i).setTemperature(Integer.toString(fakeTemperature));
+
+            int classTimeRandSeed = rand.nextInt(10);
+            if (classTimeRandSeed < 4){
+                input.get(i).setUpcomingclassTime(-1);
+            }
+            else if (classTimeRandSeed < 6){
+                input.get(i).setLabAvailability("false");
+            }
+            else if (classTimeRandSeed < 8){
+                input.get(i).setUpcomingclassTime(rand.nextInt(60));
+            }
+            else{
+                input.get(i).setUpcomingclassTime(rand.nextInt(400) + 60);
+            }
         }
         return input;
     }
@@ -963,10 +988,10 @@ public class ExpandableRecycler extends AppCompatActivity {
         List<LabDataModel> output = new ArrayList<>();
         while (input.size() > 0) {   //basically a selection sort
             int index = 0;
-            int referenceParameter = 0;
+            float referenceParameter = 0;
             boolean ascending = false; //if true then the sort method is ascending,  The sorting always works in ascending but if this flag is set the "next value" will be placed at the beginning of the list instead of the end, essentially making the output in ascending order
             for (int i = 0; i < input.size(); i++) {
-                int compareValue = 0;
+                float compareValue = 0;
                 switch (sortType) {  //depending on the sort type requested, the key value being compared will change.  By default it sorts in descending order  (biggest first)
                     case NONE:
                         ascending = true;
@@ -977,7 +1002,7 @@ public class ExpandableRecycler extends AppCompatActivity {
                     case TEMP_DOWN:
                         String stringTemp = input.get(i).getTemperature();
                         if (!stringTemp.contains("?")){
-                            compareValue = Integer.parseInt(stringTemp);
+                            compareValue = Float.parseFloat(stringTemp);
                         }
                         else{
                             compareValue = 999;

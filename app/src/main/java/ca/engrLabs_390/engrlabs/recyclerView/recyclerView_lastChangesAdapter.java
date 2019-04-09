@@ -109,7 +109,6 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 });
             }
         }).start();
-
     }
 
     // This method is called when the background thread's work is done
@@ -394,12 +393,19 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         // FIXME: Set up the map properly and then set the value
         //        upcomingClassTextView.setText(Integer.toString(data.getUpcomingClass().));
         if (data.getUpcomingclassTime() >= 0){
-            upcomingClassTextView.setText(Long.toString(data.getUpcomingclassTime()) + " minutes");
+            if (data.getUpcomingclassTime() > 60){
+                int hours = ((int)data.getUpcomingclassTime())/60;
+                int minutes = ((int)data.getUpcomingclassTime())%60;
+                upcomingClassTextView.setText(Integer.toString(hours) + " hours " + Integer.toString(minutes) + " minutes");
+            }
+            else{
+                int minutes = ((int)data.getUpcomingclassTime())%60;
+                upcomingClassTextView.setText(Integer.toString(minutes) + " minutes");
+            }
         }
         else{
             upcomingClassTextView.setText("No More Tutorials Today");
         }
-
 
         TextView temperatureTextView = viewHolder.temperatureEdit;
         temperatureTextView.setText(data.getTemperature() + "°C");
@@ -441,13 +447,13 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 viewHolder.availabilityImage.setImageResource(R.drawable.ic_clear_red_24dp);
                 viewHolder.availabilityEdit.setText("Lab Full");
             }
+            else if((data.getUpcomingclassTime() < 60) && (data.getUpcomingclassTime() > -1)){
+                viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
+                viewHolder.availabilityEdit.setText("Tutorial Starting Soon");
+            }
             else if (percentageFull > 0.7){
                 viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
                 viewHolder.availabilityEdit.setText("Lab Almost Full");
-            }
-            else if((nextClassTime - minutesOfDay < 60) && (data.getUpcomingclassTime() > -1)){
-                viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
-                viewHolder.availabilityEdit.setText("Tutorial Starting Soon");
             }
             else{
                 viewHolder.availabilityImage.setImageResource(R.drawable.ic_check_green_24dp);
@@ -467,6 +473,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
         }
         */
+        //((ExpandableRecycler)parentContext).recyclerViewAdapter.layoutManager.scrollToPosition(0);
     }
 
     @Override

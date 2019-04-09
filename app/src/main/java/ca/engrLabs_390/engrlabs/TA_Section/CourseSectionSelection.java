@@ -18,7 +18,6 @@ public class CourseSectionSelection extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-
     Button signOutButton;
     ListView classList;
 
@@ -30,8 +29,6 @@ public class CourseSectionSelection extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        //List
-        classList = findViewById(R.id.selectedList);
 
         //format ActionBar and Content
         ActionBar ab = getSupportActionBar();   //get the Action Bar object
@@ -65,8 +62,12 @@ public class CourseSectionSelection extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_course:
-                ChooseCourseDialogFragment dialog = new ChooseCourseDialogFragment();
-                dialog.show(getSupportFragmentManager(), "Insert Course");
+
+                Intent insertCourseIntent = new Intent(getApplicationContext(), insertCourseActivity.class);
+                startActivity(insertCourseIntent);
+
+//                ChooseCourseDialogFragment dialog = new ChooseCourseDialogFragment();
+//                dialog.show(getSupportFragmentManager(), "Insert Course");
                 return true;
 
             default:

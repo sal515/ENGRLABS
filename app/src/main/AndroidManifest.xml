@@ -23,7 +23,7 @@
         />
         <activity
             android:name=".TA_Section.CourseSectionSelection"
-            android:parentActivityName=".ExpandableRecycler"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity

@@ -223,6 +223,18 @@ public class ExpandableRecycler extends AppCompatActivity {
                     ninthFloor.setChecked(true);
                 }
             }
+            findViewById(R.id.checkWifi).postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (tempDynamicDataList != null){
+                        if (tempDynamicDataList.size() == 0){
+                            findViewById(R.id.checkWifi).setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }, 4000);
         }
 
         databaseRootRef = FirebaseDatabase.getInstance().getReference();
@@ -235,8 +247,20 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         //List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
 
+        // !!! the softwareList ---> will be EMPTY if the lab is not found!!!!
+        List<String> softwareList = new ArrayList<>(SIngleton2ShareData.getSoftwareList("H807"));
+
+
         int test = 0;
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.getMenu().findItem(R.id.lablist).setChecked(true);
+        navigationView.getMenu().findItem(R.id.homepage).setChecked(false);
+        navigationView.getMenu().findItem(R.id.taSection).setChecked(false);
     }
 
     // window animation between activities
@@ -261,7 +285,10 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         // Initialize RecyclerView variable
         recyclerViewVar = findViewById(R.id.expandingRecyclerView);
-
+        /*LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        llm.setAutoMeasureEnabled(false);
+        recyclerViewVar.setLayoutManager(llm);
+*/
         // Init Nav Drawer
         initNavBar();
         //Dummy Class List
@@ -290,7 +317,6 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         homePageNavButton = findViewById(R.id.homepage);
         labListNavButton = findViewById(R.id.lablist);
-        navigationView.getMenu().findItem(R.id.lablist).setChecked(true);
         taLoginNavButton = findViewById(R.id.taSection);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -299,12 +325,14 @@ public class ExpandableRecycler extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.homepage:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        navigationView.getMenu().findItem(R.id.lablist).setChecked(false);
                         break;
                     case R.id.lablist:
                         //startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
                         break;
                     case R.id.taSection:
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        navigationView.getMenu().findItem(R.id.lablist).setChecked(false);
                         break;
                     default:
                         break;
@@ -333,13 +361,13 @@ public class ExpandableRecycler extends AppCompatActivity {
         tempUp = navigationView.getMenu().findItem(R.id.tempUp).getActionView().findViewById(R.id.switcher);
         tempDown = navigationView.getMenu().findItem(R.id.tempDown).getActionView().findViewById(R.id.switcher);
         peopleUp = navigationView.getMenu().findItem(R.id.freeUp).getActionView().findViewById(R.id.switcher);
-        peopleDown = navigationView.getMenu().findItem(R.id.freeDown).getActionView().findViewById(R.id.switcher);
-        sortSwitches.add(tempUp);
-        sortSwitches.add(tempDown);
-        sortSwitches.add(peopleUp);
-        sortSwitches.add(peopleDown);
-        for(int i = 0;i<sortSwitches.size();i++){
-            sortInitForSwitchesInAGroup(sortSwitches,i);
+            peopleDown = navigationView.getMenu().findItem(R.id.freeDown).getActionView().findViewById(R.id.switcher);
+            sortSwitches.add(tempUp);
+            sortSwitches.add(tempDown);
+            sortSwitches.add(peopleUp);
+            sortSwitches.add(peopleDown);
+            for(int i = 0;i<sortSwitches.size();i++){
+                sortInitForSwitchesInAGroup(sortSwitches,i);
         }
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -846,6 +874,7 @@ public class ExpandableRecycler extends AppCompatActivity {
         else{
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             findViewById(R.id.loading).setVisibility(View.INVISIBLE);
+            findViewById(R.id.checkWifi).setVisibility(View.INVISIBLE);
         }
 
         //**********************************DEMO-MODE**************************************//
@@ -891,6 +920,14 @@ public class ExpandableRecycler extends AppCompatActivity {
         //Update data
         recyclerViewAdapter.updateLabData(sortedList);
         recyclerViewAdapter.notifyDataSetChanged();
+        recyclerViewVar.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                recyclerViewVar.smoothScrollToPosition(0);
+            }
+        }, 500);
     }
 
     private List<LabDataModel> demoModeFilter(List<LabDataModel> input){
@@ -907,6 +944,20 @@ public class ExpandableRecycler extends AppCompatActivity {
 
             input.get(i).setNumberOfStudentsPresent(Integer.toString(fakeOccupancy));
             input.get(i).setTemperature(Integer.toString(fakeTemperature));
+
+            int classTimeRandSeed = rand.nextInt(10);
+            if (classTimeRandSeed < 4){
+                input.get(i).setUpcomingclassTime(-1);
+            }
+            else if (classTimeRandSeed < 6){
+                input.get(i).setLabAvailability("false");
+            }
+            else if (classTimeRandSeed < 8){
+                input.get(i).setUpcomingclassTime(rand.nextInt(60));
+            }
+            else{
+                input.get(i).setUpcomingclassTime(rand.nextInt(400) + 60);
+            }
         }
         return input;
     }

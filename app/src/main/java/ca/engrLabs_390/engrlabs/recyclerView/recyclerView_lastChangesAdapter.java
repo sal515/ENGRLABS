@@ -18,6 +18,7 @@ import com.tooltip.Tooltip;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
@@ -108,7 +109,6 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 });
             }
         }).start();
-
     }
 
     // This method is called when the background thread's work is done
@@ -154,6 +154,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         private TextView roomCapacityEdit;
         private TextView upcomingClassEdit;
         private ImageView availabilityImage;
+        private TextView availabilityFraction;
 
         private Button softwareListButton;
 
@@ -187,6 +188,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
             roomCapacityEdit = itemView.findViewById(R.id.roomCapacityEdit);
             upcomingClassEdit = itemView.findViewById(R.id.upcomingClassEdit);
             availabilityImage = itemView.findViewById(R.id.imageView);
+            availabilityFraction = itemView.findViewById(R.id.roomFraction);
 
             //sharedPreferenceHelper = new SharedPreferenceHelper(parentContext);
 
@@ -201,8 +203,8 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
                 public void onClick(View v) {
                     SoftwareListFragment dialog = new SoftwareListFragment();
                     Bundle args = new Bundle();
-                    args.putInt("Floor",8);
-                    args.putInt("Class",8);
+                    args.putInt("Floor",labDataModel.get(getAdapterPosition()).getFloor());
+                    args.putInt("Class",labDataModel.get(getAdapterPosition()).getRoom());
                     args.putChar("Building",'H');
                     dialog.setArguments(args);
                     dialog.show(((AppCompatActivity)parentContext).getSupportFragmentManager(), "Insert Course");
@@ -375,7 +377,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         TextView roomNumberTextView = viewHolder.roomNumberEdit;
 //        roomNumberTextView.setText("Room: " + Integer.toString(data.getRoom()));
 //        roomNumberTextView.setText("Room: " + data.getRoomStr());
-        roomNumberTextView.setText("Room: " + data.getRoomCode());
+        roomNumberTextView.setText(data.getRoomCode());//("Room: " + data.getRoomCode());
         //roomNumberTextView.setText(data.getName());
 
         TextView availabilityTextView = viewHolder.availabilityEdit;
@@ -390,8 +392,20 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         TextView upcomingClassTextView = viewHolder.upcomingClassEdit;
         // FIXME: Set up the map properly and then set the value
         //        upcomingClassTextView.setText(Integer.toString(data.getUpcomingClass().));
-        upcomingClassTextView.setText(Long.toString(data.getUpcomingclassTime()));
-
+        if (data.getUpcomingclassTime() >= 0){
+            if (data.getUpcomingclassTime() > 60){
+                int hours = ((int)data.getUpcomingclassTime())/60;
+                int minutes = ((int)data.getUpcomingclassTime())%60;
+                upcomingClassTextView.setText(Integer.toString(hours) + " hours " + Integer.toString(minutes) + " minutes");
+            }
+            else{
+                int minutes = ((int)data.getUpcomingclassTime())%60;
+                upcomingClassTextView.setText(Integer.toString(minutes) + " minutes");
+            }
+        }
+        else{
+            upcomingClassTextView.setText("No More Tutorials Today");
+        }
 
         TextView temperatureTextView = viewHolder.temperatureEdit;
         temperatureTextView.setText(data.getTemperature() + "°C");
@@ -404,11 +418,51 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         }
 
         if (!data.isFavourite()) {
-            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_black_24dp);
+            viewHolder.favourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         } else {
-            viewHolder.favourite.setImageResource(R.drawable.ic_star_border_yellow_24dp);
+            viewHolder.favourite.setImageResource(R.drawable.ic_favorite_black_24dp);
         }
 
+
+        Calendar calendar = Calendar.getInstance();
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutesOfDay = (hourOfDay*60)+calendar.get(Calendar.MINUTE);
+        //viewHolder.availabilityEdit.setText(Long.toString(data.getUpcomingclassTime()));
+
+        long nextClassTime = data.getUpcomingclassTime();
+
+        if (data.getLabAvailability() == "false")
+        {
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_clear_red_24dp);
+            viewHolder.availabilityEdit.setText("Ongoing Tutorial");
+        }
+        else if (data.getNumberOfStudentsPresent().contains("?")){
+            viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
+            viewHolder.availabilityEdit.setText("No Sensor Available");
+        }
+        else{
+            double percentageFull;
+            percentageFull = ((double)Integer.parseInt(data.getNumberOfStudentsPresent()))/((double)Integer.parseInt(data.getTotalCapacity()));
+            if (percentageFull == 1){
+                viewHolder.availabilityImage.setImageResource(R.drawable.ic_clear_red_24dp);
+                viewHolder.availabilityEdit.setText("Lab Full");
+            }
+            else if((data.getUpcomingclassTime() < 60) && (data.getUpcomingclassTime() > -1)){
+                viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
+                viewHolder.availabilityEdit.setText("Tutorial Starting Soon");
+            }
+            else if (percentageFull > 0.7){
+                viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
+                viewHolder.availabilityEdit.setText("Lab Almost Full");
+            }
+            else{
+                viewHolder.availabilityImage.setImageResource(R.drawable.ic_check_green_24dp);
+                viewHolder.availabilityEdit.setText("Lab Available");
+            }
+        }
+
+        viewHolder.availabilityFraction.setText(data.getNumberOfStudentsPresent() + "/" + data.getTotalCapacity());
+        /*
         if (position % 3 == 0){
             viewHolder.availabilityImage.setImageResource(R.drawable.ic_clear_red_24dp);
         }
@@ -418,6 +472,8 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         else if (position % 3 == 2){
             viewHolder.availabilityImage.setImageResource(R.drawable.ic_priority_high_yellow_24dp);
         }
+        */
+        //((ExpandableRecycler)parentContext).recyclerViewAdapter.layoutManager.scrollToPosition(0);
     }
 
     @Override
@@ -456,7 +512,7 @@ public class recyclerView_lastChangesAdapter extends RecyclerView.Adapter<recycl
         if (MainActivity.getTutorialMode() == true) {
             switch (ExpandableRecycler.listToolTipState) {
                 case 0:
-                    buildToolTip("Click the Star to Favourite a Lab", Gravity.TOP, v);
+                    buildToolTip("Click the Heart to Favourite a Lab", Gravity.TOP, v);
                     break;
                 case 1:
                     //buildToolTip("You Can View the Specific Softwares Available in a Lab", Gravity.BOTTOM, v);

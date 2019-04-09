@@ -21,7 +21,7 @@ public class SIngleton2ShareData extends Application {
     private static List<LabDataModel> labDynamicDataObjects;
     private static List<String> softwareList;
     private static HashMap softwareMap;
-
+    private static HashMap labsMap;
 
     private static HashMap currentSemesterCoursesMap;
 
@@ -31,6 +31,7 @@ public class SIngleton2ShareData extends Application {
     private static DatabaseReference databaseRootRef;
     private static DatabaseReference dynamicDataRef;
     private static DatabaseReference softwaresRef;
+    private static DatabaseReference LabsRef;
     private static DatabaseReference currentSemesterCoursesRef;
     private static DatabaseReference currentSemesterLabsRef;
     // valueEvent listener
@@ -43,6 +44,7 @@ public class SIngleton2ShareData extends Application {
         databaseRootRef = database.getReference();
         dynamicDataRef = databaseRootRef.child("/PUBLIC_DATA/DynamicData");
         softwaresRef = databaseRootRef.child("/PUBLIC_DATA/Softwares");
+        LabsRef = databaseRootRef.child("/PUBLIC_DATA/Labs");
 
 
         currentSemesterCoursesRef = databaseRootRef.child("/PUBLIC_DATA/CurrentSemesterCourses");
@@ -176,6 +178,31 @@ public class SIngleton2ShareData extends Application {
     }
 
 
+    public static void grabLabsWithSoftwareData() {
+        ValueEventListener labWithSoftwares = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> labsKeyList;
+                Object LabsObj = dataSnapshot.getValue();
+                if (LabsObj instanceof HashMap) {
+                    labsMap = new HashMap((HashMap) LabsObj);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+
+        };
+
+        LabsRef.addListenerForSingleValueEvent(labWithSoftwares);
+
+    }
+
+
     public static void extractParsedSoftwareData() {
 
         softwareList = new ArrayList<String>();
@@ -302,6 +329,22 @@ public class SIngleton2ShareData extends Application {
         return labList;
     }
 
+    // labRoomCode ="H807"
+    public static List<String> getSoftwareList(String labRoomCode) {
+
+        List<String> softwareList;
+        softwareList = new ArrayList<String>();
+
+        try {
+            // softwareName = "AGI32_18_3_PTBPE_193";
+            HashMap labSoftwareMap = new HashMap((HashMap) ((HashMap) labsMap.get(labRoomCode)).get("Softwares"));
+            softwareList = new ArrayList<String>(labSoftwareMap.keySet());
+        } catch (Exception e) {
+            Log.w(TAG, "Error getting the list of labs for the searched Software");
+        }
+        return softwareList;
+    }
+
     public static List<LabDataModel> getLabDynamicDataObjects() {
         return labDynamicDataObjects;
     }
@@ -317,4 +360,7 @@ public class SIngleton2ShareData extends Application {
     public static void setSoftwareList(List<String> softwareList) {
         SIngleton2ShareData.softwareList = softwareList;
     }
+
+
+
 }

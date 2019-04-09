@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         SIngleton2ShareData.downloadDynamicDataForRecyclerStartUp();
         SIngleton2ShareData.extractParsedSoftwareData();
+        SIngleton2ShareData.grabLabsWithSoftwareData();
 
 
 
@@ -92,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.getMenu().findItem(R.id.lablist).setChecked(false);
+        navigationView.getMenu().findItem(R.id.homepage).setChecked(true);
+        navigationView.getMenu().findItem(R.id.taSection).setChecked(false);
+    }
+
     // Slide animation between activity
     private void setupWindowAnimations() {
         Slide slide = new Slide();
@@ -110,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
 
         homePageNavButton = findViewById(R.id.homepage);
-        navigationView.getMenu().findItem(R.id.homepage).setChecked(true);
         labListNavButton = findViewById(R.id.lablist);
         taLoginNavButton = findViewById(R.id.taSection);
         navigationView.getMenu().getItem(1).setVisible(false);
@@ -159,9 +167,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.lablist:
                         startActivity(new Intent(getApplicationContext(), ExpandableRecycler.class));
+                        navigationView.getMenu().findItem(R.id.homepage).setChecked(false);
                         break;
                     case R.id.taSection:
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        navigationView.getMenu().findItem(R.id.homepage).setChecked(false);
                         break;
                     default:
                         break;

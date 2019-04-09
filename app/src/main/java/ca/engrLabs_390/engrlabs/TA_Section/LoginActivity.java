@@ -1,11 +1,7 @@
 package ca.engrLabs_390.engrlabs.TA_Section;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
-import ca.engrLabs_390.engrlabs.ExpandableRecycler;
 import ca.engrLabs_390.engrlabs.R;
 
 /**
@@ -59,8 +54,8 @@ public class LoginActivity extends Activity implements
         mPasswordField = findViewById(R.id.fieldPassword);
 
         // Buttons
-        findViewById(R.id.emailSignInButton).setOnClickListener(emailSignInBtnOnclickListener);
-        findViewById(R.id.emailCreateAccountButton).setOnClickListener(emailCreateAccountBtnOnclickListener);
+        findViewById(R.id.loginBtn).setOnClickListener(emailSignInBtnOnclickListener);
+        findViewById(R.id.signUpBtn).setOnClickListener(emailCreateAccountBtnOnclickListener);
         findViewById(R.id.signOutButtonInstructorPage).setOnClickListener(signOutBtnOnclickListener);
         findViewById(R.id.verifyEmailButton).setOnClickListener(verifyEmailBtnOnclickListener);
 
@@ -68,7 +63,17 @@ public class LoginActivity extends Activity implements
 //        mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
+
+//        List<String> coursesList = new ArrayList<>(SIngleton2ShareData.getCoursesList());
+//        List<String> coursesectionList = new ArrayList<>(SIngleton2ShareData.getSections("AERO-455"));
+//        List<String> sectionStartTime = new ArrayList<>(SIngleton2ShareData.getTimeOfSection("AERO-455", "TI-X"));
+
+        int debug = 0;
     }
+
+
+
+
 
 
     @Override
@@ -76,23 +81,87 @@ public class LoginActivity extends Activity implements
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        Toast.makeText(LoginActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(LoginActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
         // update the UI accordingly
+
+        // saveUser2DB();
+
         updateUI(currentUser);
 
 
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // Toast.makeText(LoginActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
+        // update the UI accordingly
+
+        // saveUser2DB();
+
+        updateUI(currentUser);
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.signUpBtn) {
+            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+        } else if (i == R.id.loginBtn) {
+            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+        } else if (i == R.id.signOutButtonInstructorPage) {
+            signOut();
+        } else if (i == R.id.verifyEmailButton) {
+            sendEmailVerification();
+        }
+    }
+
+    Button.OnClickListener emailCreateAccountBtnOnclickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+        }
+    };
+
+    Button.OnClickListener emailSignInBtnOnclickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+        }
+    };
+
+
+    Button.OnClickListener signOutBtnOnclickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            signOut();
+        }
+    };
+
+    Button.OnClickListener verifyEmailBtnOnclickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            sendEmailVerification();
+        }
+    };
+
+
+
+
+
+
+
     private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
+//        Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
             return;
         }
-
-//        showProgress(true);
-
-//        showProgressDialog();
 
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -112,10 +181,7 @@ public class LoginActivity extends Activity implements
                             updateUI(null);
                         }
 
-//                        showProgress(false);
-
                         // [START_EXCLUDE]
-//                        hideProgressDialog();
                         // [END_EXCLUDE]
                     }
                 });
@@ -232,18 +298,18 @@ public class LoginActivity extends Activity implements
             Intent intent = new Intent(this, CourseSectionSelection.class);
             startActivity(intent);
 
-//            mStatusTextView.setText("User Found from the email and pass: " + user.getEmail() + user.isEmailVerified());
-//
-//            mDetailTextView.setText("userID: " + user.getUid());
-//
-//            findViewById(R.id.emailSignInButton).setVisibility(View.GONE);
-//            findViewById(R.id.emailCreateAccountButton).setVisibility(View.GONE);
+            mStatusTextView.setText("User Found from the email and pass: " + user.getEmail() + user.isEmailVerified());
+            mDetailTextView.setText("userID: " + user.getUid());
 
+            findViewById(R.id.loginBtn).setVisibility(View.GONE);
+            findViewById(R.id.signUpBtn).setVisibility(View.GONE);
+//
 //            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
 //            findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
 //            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
 
-            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
+//            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
+//            findViewById(R.id.signOutButtonInstructorPage).setEnabled(user.isEmailVerified());
         } else {
 
             Toast.makeText(LoginActivity.this, "User not Logged in", Toast.LENGTH_SHORT).show();
@@ -252,8 +318,8 @@ public class LoginActivity extends Activity implements
             mStatusTextView.setText("Signed Out");
             mDetailTextView.setText(null);
 
-            findViewById(R.id.emailSignInButton).setVisibility(View.VISIBLE);
-            findViewById(R.id.emailCreateAccountButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.loginBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.signUpBtn).setVisibility(View.VISIBLE);
 
 
 //            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
@@ -262,49 +328,6 @@ public class LoginActivity extends Activity implements
         }
     }
 
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.emailCreateAccountButton) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.emailSignInButton) {
-            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.signOutButtonInstructorPage) {
-            signOut();
-        } else if (i == R.id.verifyEmailButton) {
-            sendEmailVerification();
-        }
-    }
-
-    Button.OnClickListener emailCreateAccountBtnOnclickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        }
-    };
-
-    Button.OnClickListener emailSignInBtnOnclickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        }
-    };
-
-
-    Button.OnClickListener signOutBtnOnclickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            signOut();
-        }
-    };
-
-    Button.OnClickListener verifyEmailBtnOnclickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            sendEmailVerification();
-        }
-    };
 
 
 //    /**
@@ -343,20 +366,6 @@ public class LoginActivity extends Activity implements
 //        }
 //    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //    @Override

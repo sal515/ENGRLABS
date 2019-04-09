@@ -30,7 +30,7 @@
             android:screenOrientation="portrait"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".ExpandableRecycler"
+            android:name="ca.engrLabs_390.engrlabs.ExpandableRecycler"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_expandable_recycler_with_bottom_nav"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

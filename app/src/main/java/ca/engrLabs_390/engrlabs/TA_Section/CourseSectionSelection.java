@@ -1,9 +1,5 @@
 package ca.engrLabs_390.engrlabs.TA_Section;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import ca.engrLabs_390.engrlabs.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,7 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import ca.engrLabs_390.engrlabs.R;
+
 public class CourseSectionSelection extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+
 
     Button signOutButton;
     ListView classList;
@@ -21,6 +26,9 @@ public class CourseSectionSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_section_selection);
+
+        mAuth = FirebaseAuth.getInstance();
+
 
         //List
         classList = findViewById(R.id.selectedList);
@@ -36,6 +44,9 @@ public class CourseSectionSelection extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //attemptLogin();
+
+                signOut();
+
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }
@@ -64,4 +75,10 @@ public class CourseSectionSelection extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void signOut() {
+        mAuth.signOut();
+//        updateUI(null);
+    }
+
 }

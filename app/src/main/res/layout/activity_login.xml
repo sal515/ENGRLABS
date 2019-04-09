@@ -57,14 +57,14 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
-            app:layout_constraintBottom_toTopOf="@+id/emailSignInButton"
+            app:layout_constraintBottom_toTopOf="@+id/loginBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fieldEmail" />
 
         <Button
-            android:id="@+id/emailSignInButton"
+            android:id="@+id/loginBtn"
             android:layout_width="150dp"
             android:layout_height="60dp"
             android:layout_marginTop="16dp"
@@ -72,14 +72,14 @@
             android:textStyle="bold"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/verifyEmailButton"
-            app:layout_constraintEnd_toStartOf="@+id/emailCreateAccountButton"
+            app:layout_constraintEnd_toStartOf="@+id/signUpBtn"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fieldPassword" />
 
         <Button
-            android:id="@+id/emailCreateAccountButton"
+            android:id="@+id/signUpBtn"
             android:layout_width="150dp"
             android:layout_height="60dp"
             android:layout_marginTop="16dp"
@@ -89,7 +89,7 @@
             app:layout_constraintBottom_toTopOf="@+id/verifyEmailButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/emailSignInButton"
+            app:layout_constraintStart_toEndOf="@+id/loginBtn"
             app:layout_constraintTop_toBottomOf="@+id/fieldPassword" />
 
         <Button
@@ -100,11 +100,12 @@
             android:enabled="false"
             android:text="Verify Email"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/signOutButtonInstructorPage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailSignInButton" />
+            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
         <Button
             android:id="@+id/signOutButtonInstructorPage"
@@ -113,6 +114,7 @@
             android:enabled="false"
             android:text="Sign Out"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/status"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -124,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Status"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/detail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -135,6 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Detail"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

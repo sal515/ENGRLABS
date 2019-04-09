@@ -249,6 +249,10 @@ public class ExpandableRecycler extends AppCompatActivity {
 
         //List<String> labList = new ArrayList<>(SIngleton2ShareData.getLabList("AGI32_18_3_PTBPE_193"));
 
+        // !!! the softwareList ---> will be EMPTY if the lab is not found!!!!
+        List<String> softwareList = new ArrayList<>(SIngleton2ShareData.getSoftwareList("H807"));
+
+
         int test = 0;
 
     }

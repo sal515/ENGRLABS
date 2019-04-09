@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         SIngleton2ShareData.downloadDynamicDataForRecyclerStartUp();
         SIngleton2ShareData.extractParsedSoftwareData();
+        SIngleton2ShareData.grabLabsWithSoftwareData();
 
         initializeReferences();
         initializeListeners();

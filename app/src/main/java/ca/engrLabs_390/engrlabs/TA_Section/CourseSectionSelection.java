@@ -1,6 +1,7 @@
 package ca.engrLabs_390.engrlabs.TA_Section;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,10 +10,13 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import ca.engrLabs_390.engrlabs.R;
+import ca.engrLabs_390.engrlabs.SharedPreferenceHelper;
 
 public class CourseSectionSelection extends AppCompatActivity {
 
@@ -20,15 +24,17 @@ public class CourseSectionSelection extends AppCompatActivity {
 
     Button signOutButton;
     ListView classList;
+    public SharedPreferenceHelper sharedPreferenceHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_section_selection);
-
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.navBar)); // Navigation bar the soft bottom of some phones like nexus and some Samsung note series
+            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.status)); //status bar or the time bar at the top
+        }
         mAuth = FirebaseAuth.getInstance();
-
-
 
         //format ActionBar and Content
         ActionBar ab = getSupportActionBar();   //get the Action Bar object
@@ -55,6 +61,16 @@ public class CourseSectionSelection extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_course_selection,menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     //Handles action button

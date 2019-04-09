@@ -5,6 +5,8 @@
     android:id="@+id/instructorProfileRelativeContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/yabzGrey"
+    android:backgroundTint="@color/yabzGrey"
     tools:context=".TA_Section.CourseSectionSelection">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +31,7 @@
             android:id="@+id/signOutButtonInstructorPage"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_height="47dp"
             android:background="@android:color/holo_red_dark"
             android:backgroundTint="@android:color/holo_red_dark"
             android:padding="0dp"
@@ -40,6 +42,7 @@
             android:paddingRight="0dp"
             android:paddingBottom="0dp"
             android:text="@string/sign_out"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

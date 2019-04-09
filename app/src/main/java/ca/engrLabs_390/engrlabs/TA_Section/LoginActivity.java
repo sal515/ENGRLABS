@@ -349,7 +349,7 @@ public class LoginActivity extends Activity implements
     }
 
     // Update the UI for the user
-    private void updateUI(FirebaseUser user) {
+    public void updateUI(FirebaseUser user) {
 //        hideProgressDialog();
 //        showProgress(false);
 

@@ -16,4 +16,5 @@ public class Settings {
     public int filterType;
     public boolean favouriteFilter;
     public List<LabFavourite> favouriteList;
+    public List<courseObject> courseList;
 }

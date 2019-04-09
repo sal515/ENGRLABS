@@ -183,9 +183,11 @@ public class ExpandableRecycler extends AppCompatActivity {
             profile.filterType = 0;
             profile.sortType = Settings.SortTypes.NONE;
             profile.favouriteList = new ArrayList<>();
+            profile.courseList = new ArrayList<>();
             //profile.favouriteList.add(new LabFavourite("H841",true));
             //profile.favouriteList.add(new LabFavourite("H821",true));
             sharedPreferenceHelper.saveSettings(profile);
+
         }
         //goToProfileActivity();
         else{
